@@ -1,145 +1,19 @@
 <!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BACKED · fund a trader, the contract holds the key</title>
-<meta name="description" content="Back a Hyperliquid trader with USDC. A HyperEVM contract checks every order before it is sent and flattens the account the moment your loss line is crossed. No operator key exists.">
-<style>:root{--bg:#0b0d0c;--panel:#121614;--line:#24302a;--ink:#e8efe9;--mute:#8a9a90;--acc:#c6f432;--red:#ff4d3d;--amber:#ffb02e;--mono:ui-monospace,SFMono-Regular,Menlo,monospace}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 Inter,system-ui,-apple-system,sans-serif}
-a{color:var(--acc)}code{font-family:var(--mono);font-size:.9em;color:var(--acc)}
-header{position:sticky;top:0;z-index:5;display:flex;gap:24px;align-items:center;padding:14px 28px;background:rgba(11,13,12,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.brand{font:800 22px/1 var(--mono);letter-spacing:.08em;color:var(--ink);text-decoration:none}.brand span{color:var(--acc)}
-nav{display:flex;gap:18px;flex:1}nav a{color:var(--mute);text-decoration:none;font-size:14px}nav a:hover{color:var(--ink)}
-.ribbon{padding:8px 28px;font-size:13px;color:var(--mute);border-bottom:1px solid var(--line)}
-main{max-width:1180px;margin:0 auto;padding:0 28px}section{padding:56px 0;border-bottom:1px solid var(--line)}
-h1{font-size:56px;line-height:1.02;margin:0 0 18px;letter-spacing:-.02em}h1 em{color:var(--acc);font-style:normal}h2{font-size:26px;margin:0 0 18px}h3{margin:0 0 12px;font-size:16px}
-.hero{display:grid;grid-template-columns:1.25fr 1fr;gap:40px;align-items:center}.lead{font-size:18px;color:#c3cec7;max-width:620px}
-.stats{display:flex;gap:28px;margin-top:26px}.stats b{display:block;font:700 30px var(--mono);color:var(--acc)}.stats span{color:var(--mute);font-size:13px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
-.row{display:flex;gap:12px;align-items:end;flex-wrap:wrap;margin:10px 0}.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-label{display:block;font-size:12px;color:var(--mute);margin:8px 0;text-transform:uppercase;letter-spacing:.05em}
-input,select{display:block;width:100%;margin-top:6px;padding:10px 12px;background:#0b0f0d;border:1px solid var(--line);border-radius:8px;color:var(--ink);font:14px var(--mono)}
-label.chk{display:flex;gap:8px;align-items:center;margin-top:30px}label.chk input{width:auto;margin:0}
-.btn{background:var(--acc);color:#0b0d0c;border:0;border-radius:9px;padding:11px 16px;font-weight:700;cursor:pointer;margin:6px 6px 0 0}.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}.btn.ghost:hover{border-color:var(--acc)}.btn.danger{background:var(--red);color:#fff}
-.tag{display:inline-block;font:700 10px var(--mono);padding:2px 6px;border-radius:4px;vertical-align:middle;letter-spacing:.06em;font-style:normal}.tag.real{background:var(--acc);color:#0b0d0c}.tag.sim{background:var(--amber);color:#0b0d0c}
-.muted{color:var(--mute)}.small{font-size:12px}.out{font:13px var(--mono);white-space:pre-wrap;word-break:break-all;color:var(--mute);min-height:1em}.out.err{color:var(--red)}.out.ok{color:var(--acc)}
-.badge{display:inline-block;font:800 14px var(--mono);letter-spacing:.12em;padding:6px 12px;border-radius:6px}.badge.ok{background:#1b2a14;color:var(--acc)}.badge.warn{background:#3a2a0a;color:var(--amber)}.badge.flat{background:var(--red);color:#fff;animation:pop .35s}
-@keyframes pop{0%{transform:scale(1.25)}100%{transform:scale(1)}}
-.gauge{position:relative;height:18px;background:#0b0f0d;border:1px solid var(--line);border-radius:9px;overflow:hidden;margin:14px 0}.gauge.big{height:46px;border-radius:12px}
-.gauge .fill{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#3d5a1a,var(--acc));transition:width .25s linear,background .2s}.gauge .fill.bad{background:linear-gradient(90deg,#5a1a14,var(--red))}
-.gauge .floor{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--red)}.gauge .floor span{position:absolute;top:2px;left:6px;font:10px var(--mono);color:var(--red);white-space:nowrap}
-.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font:13px var(--mono)}.kv span:nth-child(odd){color:var(--mute)}
-.rules{padding-left:18px;margin:0}.rules li{margin:6px 0}
-.replay{display:grid;grid-template-columns:1.4fr 1fr;gap:24px;align-items:center}.clock{font:700 40px var(--mono);margin:10px 0}
-.tl{padding-left:18px;font-size:14px}.tl li{margin:6px 0}.tl li b{color:var(--acc)}
-.ev{margin:14px 0}.ev h3{display:flex;gap:10px;align-items:center}.ev ul{list-style:none;padding:0;margin:0}.ev li{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px dashed var(--line);font:13px var(--mono)}
-table.vs{width:100%;border-collapse:collapse}.vs th,.vs td{text-align:left;padding:12px;border-bottom:1px solid var(--line);vertical-align:top}.vs th:last-child,.vs td:last-child{color:var(--acc)}.vs td:first-child{color:var(--mute);width:22%}
-footer{padding:28px;text-align:center;color:var(--mute);font-size:13px}
-@media(max-width:860px){.hero,.grid2,.replay{grid-template-columns:1fr}h1{font-size:40px}nav{display:none}.row3{grid-template-columns:1fr}}
-</style>
-<script type="module" src="app.js"></script>
-</head>
-<body>
-<header>
-  <a class="brand" href="#top">BACKED<span>/hl</span></a>
-  <nav><a href="#vault">Live vault</a><a href="#replay">Breach replay</a><a href="#back">Back a trader</a><a href="#trade">Trade</a><a href="#verify">Verify</a><a href="#keys">Who holds the key</a></nav>
-  <button id="connect" class="btn ghost">Connect wallet</button>
-</header>
-<div class="ribbon">Hyperliquid <b>testnet</b> (HyperEVM 998). Everything marked <span class="tag real">REAL</span> ran on testnet with real USDC margin (vault 0x6619…). Only the missed-fill retry, daily-loss and settle paths are <span class="tag sim">SIM</span> (simulated HyperCore).</div>
-<main>
-<section id="top" class="hero">
-  <div>
-    <h1>Fund a trader.<br><em>The contract holds the key.</em></h1>
-    <p class="lead">Your USDC sits in a HyperEVM contract that owns its own HyperCore perp account. The trader can only trade through it: every order is checked against your rules before it is sent, and when your loss line is crossed anyone can flatten the account.</p>
-    <div class="stats">
-      <div><b id="statLat">2.13 s</b><span>median breach → flat, 5/5 runs <i class="tag real">REAL</i></span></div>
-      <div><b>0</b><span>operator keys that can trade your capital</span></div>
-      <div><b>60 s+</b><span>a trusted API wallet stayed open after the same breach <i class="tag real">REAL</i></span></div>
-    </div>
-  </div>
-  <div class="card vaultcard" id="heroCard"></div>
-</section>
-
-<section id="vault">
-  <h2>Live vault <span class="tag real">REAL testnet</span></h2>
-  <div class="row"><label>Vault <select id="vaultSel"></select></label><label>or address <input id="vaultAddr" placeholder="0x…"></label><button class="btn ghost" id="loadVault">Load</button></div>
-  <div class="grid2">
-    <div class="card" id="vaultState"></div>
-    <div class="card"><h3>Rules this contract enforces</h3><ul id="rules" class="rules"></ul><p class="muted small">Read live from the contract and HyperCore precompiles 0x807 (oracle), 0x813 (position), 0x80F (account value).</p></div>
-  </div>
-</section>
-
-<section id="replay">
-  <h2>Breach replay</h2>
-  <p class="muted">Replays recorded runs at real speed. Pick the source.</p>
-  <div class="row"><button class="btn" data-replay="real">Replay real testnet run (V1 vault, 2029 ms)</button><button class="btn ghost" data-replay="sim">Replay simulated run (V3 + keeper, SIM)</button></div>
-  <div class="card replay"><div class="gauge big"><div class="fill" id="rFill"></div><div class="floor" id="rFloor"><span>loss line</span></div></div>
-    <div class="replaystate"><div id="rBadge" class="badge ok">ACTIVE</div><div id="rClock" class="clock">0 ms</div><ol id="rLog" class="tl"></ol></div></div>
-</section>
-
-<section id="back">
-  <h2>Back a trader <span class="tag real">testnet tx</span></h2>
-  <div class="grid2">
-    <form class="card" id="createForm">
-      <h3>1 · Create a vault</h3>
-      <label>Trader address <input name="trader" required placeholder="0x… (the wallet that will trade)"></label>
-      <div class="row3"><label>Markets <select name="markets"><option value="eth">ETH</option><option value="ethbtc" selected>ETH + BTC</option></select></label>
-      <label>Max leverage <input name="lev" type="number" value="3" min="1" max="20"></label>
-      <label>Loss line (USDC) <input name="floor" type="number" value="2" step="0.1" min="0"></label></div>
-      <div class="row3"><label>Daily loss (USDC, 0 = off) <input name="daily" type="number" value="1" step="0.1" min="0"></label>
-      <label>Trader profit share % <input name="share" type="number" value="20" min="0" max="100"></label>
-      <label>Flatten bounty (USDC) <input name="bounty" type="number" value="0.1" step="0.05" min="0"></label></div>
-      <button class="btn">Create vault</button><p class="out" id="createOut"></p>
-    </form>
-    <div class="card">
-      <h3>2 · Fund and control</h3>
-      <p class="muted small">Send USDC to the vault's HyperCore address (spot), then move it to perp margin. On testnet you need test USDC from the Hyperliquid testnet faucet. <span class="tag real">REAL</span> the live vault holds 20 USDC this way.</p>
-      <label>USDC to perp <input id="fundAmt" type="number" value="14" step="0.1"></label><button class="btn ghost" id="fundBtn">fundPerp</button>
-      <label>New loss line (USDC) <input id="floorAmt" type="number" value="2" step="0.1"></label><button class="btn ghost" id="floorBtn">setFloor</button>
-      <button class="btn danger" id="stopBtn">Stop backing (then anyone can flatten)</button>
-      <button class="btn ghost" id="flattenBtn">flatten() (anyone)</button> <button class="btn ghost" id="settleBtn">settle() (anyone)</button>
-      <p class="out" id="ctlOut"></p>
-    </div>
-  </div>
-</section>
-
-<section id="trade">
-  <h2>Trader ticket</h2>
-  <div class="grid2">
-    <form class="card" id="ticket">
-      <div class="row3"><label>Market <select name="asset"><option value="4">ETH</option><option value="3">BTC</option><option value="5">SOL (not allowed)</option></select></label>
-      <label>Side <select name="side"><option value="buy">Long</option><option value="sell">Short</option></select></label>
-      <label>Size <input name="sz" type="number" value="0.0140" step="0.0001"></label></div>
-      <div class="row3"><label>Limit price <input name="px" type="number" placeholder="oracle +2%"></label><label class="chk"><input type="checkbox" name="ro"> reduce-only</label><span></span></div>
-      <div class="row"><button type="button" class="btn ghost" id="checkBtn">Check against rules</button><button class="btn" id="sendBtn">Send order (tx)</button><button type="button" class="btn ghost" id="sigBtn">Sign gasless</button></div>
-      <div class="presets muted small">Try: <a href="#" data-preset="20x">20x long</a> · <a href="#" data-preset="fake">fake $1 limit</a> · <a href="#" data-preset="sol">SOL</a> · <a href="#" data-preset="ok">2.5x long</a></div>
-      <p class="out" id="ticketOut"></p>
-    </form>
-    <div class="card"><h3>What happens to your order</h3><ol class="tl static">
-      <li><b>You sign</b> a tx to <code>trade()</code>, or an EIP-712 order any relayer submits with <code>tradeBySig()</code>.</li>
-      <li><b>The contract checks</b> market list, aggregate notional of all positions at the oracle price ≤ max leverage × capital, equity above the loss line.</li>
-      <li><b>Only then</b> it sends the IOC to HyperCore through CoreWriter (≈0.4 s queue, p50 412 ms measured).</li>
-      <li>No one, including us, holds a key that can place an order for this account.</li></ol></div>
-  </div>
-</section>
-
-<section id="verify">
-  <h2>Verify</h2>
-  <p class="muted">Every claim on this page, with its transaction. REAL = HyperEVM/HyperCore testnet. SIM = local chain with a simulated HyperCore, used only for what testnet can't stage on demand (a missed IOC band, a day rollover, settle).</p>
-  <div id="evidence"></div>
-</section>
-
-<section id="keys">
-  <h2>Who holds the key?</h2>
-  <table class="vs"><thead><tr><th></th><th>Operator-gateway pools (e.g. Pools on Hyperliquid)</th><th>BACKED</th></tr></thead><tbody>
-  <tr><td>Signs trades</td><td>the operator's gateway holds every account's agent key</td><td><b>nobody</b>: the contract is the account</td></tr>
-  <tr><td>Backer's limits before a trade</td><td>platform caps only; account rules enforced after the fact</td><td><b>every order</b> checked on chain first</td></tr>
-  <tr><td>If the operator's host is compromised</td><td>"can trade those accounts … until someone stops them" (their README)</td><td>no host to compromise</td></tr>
-  <tr><td>Stop</td><td>keeper every 30 s + exchange stops the gateway places</td><td>permissionless, retryable <code>flatten()</code>; 2.13 s median measured</td></tr>
-  <tr><td>Trader pays</td><td>challenge fee + platform fee</td><td>nothing up front; share of profit at <code>settle()</code></td></tr>
-  </tbody></table>
-  <p class="muted small">Quotes from github.com/namixai/colosseum-pools README (Oct 2026). Their design trades faster through the native order path; ours trades through CoreWriter and removes the key.</p>
-</section>
-</main>
-<footer>BACKED · built for the Colosseum World's Fair, Hyperliquid track · testnet only · <a href="#verify">verify</a></footer>
-</body></html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="BACKED: a backed trading account on Hyperliquid. The vault contract checks every order and anyone can flatten below the backer's loss line." />
+    <meta name="theme-color" content="#14120f" />
+    <title>BACKED · vault controls on Hyperliquid</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%2314120f'/%3E%3Crect x='7' y='2' width='2' height='12' fill='%23ff5b35'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+    <script type="module" crossorigin src="./assets/index-CJxseTDD.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-Cu6REyWI.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

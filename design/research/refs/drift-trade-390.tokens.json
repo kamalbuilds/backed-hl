@@ -1,0 +1,66 @@
+{
+ "url": "https://app.drift.trade/ETH-PERP",
+ "viewport": [
+  390,
+  844
+ ],
+ "capturedWith": "refshot-pw (playwright port of refshot.py)",
+ "title": "(3) Drift",
+ "h1": null,
+ "h2": null,
+ "h3": null,
+ "body": {
+  "text": "Drift is being paused until further notice due to irregular ",
+  "font": "Inter, Roboto, sans-serif",
+  "size": "14px",
+  "weight": "400",
+  "tracking": "normal",
+  "leading": "21px",
+  "color": "rgb(0, 0, 0)",
+  "bg": "rgb(3, 3, 5)",
+  "radius": "0px",
+  "padding": "0px",
+  "border": "0px solid oklch(0.928 0.006 264.531)",
+  "transform": "none",
+  "features": "\"lnum\", \"tnum\""
+ },
+ "p": null,
+ "a": null,
+ "button": {
+  "text": "Connect",
+  "font": "Inter, Roboto, sans-serif",
+  "size": "13px",
+  "weight": "600",
+  "tracking": "normal",
+  "leading": "18px",
+  "color": "rgb(255, 255, 255)",
+  "bg": "rgb(108, 29, 115)",
+  "radius": "8px",
+  "padding": "8px 16px",
+  "border": "0px solid oklch(0.928 0.006 264.531)",
+  "transform": "none",
+  "features": "\"lnum\", \"tnum\""
+ },
+ "input": {
+  "text": "",
+  "font": "Inter, Roboto, sans-serif",
+  "size": "13px",
+  "weight": "600",
+  "tracking": "normal",
+  "leading": "18px",
+  "color": "rgb(201, 201, 216)",
+  "bg": "rgba(0, 0, 0, 0)",
+  "radius": "0px",
+  "padding": "8px 0px",
+  "border": "0px none oklch(0.928 0.006 264.531)",
+  "transform": "none",
+  "features": "\"lnum\", \"tnum\""
+ },
+ "loadedFonts": [
+  "Inter"
+ ],
+ "htmlBg": "rgba(0, 0, 0, 0)",
+ "bodyText": "Drift is being paused until further notice due to irregular activity in the protocol. Please follow https://x.com/DriftProtocol for further updates.\nConnect\nETH-PERP\n0.000001\nUSD\nPrice\nSize\nSpread: -\nCross\n1x\nLong\nShort\nAvailable:\n$0.00\nOrder Type\nMarket\nSize\n0%\n25%\n50%\n75%\n100%\n0%\nReduce Only\nTP/SL\nConnect Wallet\nSlippage (Dynamic)\nMargin Required\n$0.00\nLiquidation Price\nNone\nFees\n-\nAccount\nPosit",
+ "textLen": 621,
+ "height": 844
+}

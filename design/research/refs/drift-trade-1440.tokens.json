@@ -1,0 +1,66 @@
+{
+ "url": "https://app.drift.trade/ETH-PERP",
+ "viewport": [
+  1440,
+  900
+ ],
+ "capturedWith": "refshot-pw (playwright port of refshot.py)",
+ "title": "(3) Drift",
+ "h1": null,
+ "h2": null,
+ "h3": null,
+ "body": {
+  "text": "Drift is being paused until further notice due to irregular ",
+  "font": "Inter, Roboto, sans-serif",
+  "size": "14px",
+  "weight": "400",
+  "tracking": "normal",
+  "leading": "21px",
+  "color": "rgb(0, 0, 0)",
+  "bg": "rgb(3, 3, 5)",
+  "radius": "0px",
+  "padding": "0px",
+  "border": "0px solid oklch(0.928 0.006 264.531)",
+  "transform": "none",
+  "features": "\"lnum\", \"tnum\""
+ },
+ "p": null,
+ "a": null,
+ "button": {
+  "text": "Portfolio",
+  "font": "Inter, Roboto, sans-serif",
+  "size": "14px",
+  "weight": "600",
+  "tracking": "normal",
+  "leading": "18px",
+  "color": "rgb(111, 112, 143)",
+  "bg": "rgb(3, 3, 5)",
+  "radius": "0px",
+  "padding": "4px 12px",
+  "border": "0px solid oklch(0.928 0.006 264.531)",
+  "transform": "capitalize",
+  "features": "\"lnum\", \"tnum\""
+ },
+ "input": {
+  "text": "",
+  "font": "Inter, Roboto, sans-serif",
+  "size": "14px",
+  "weight": "600",
+  "tracking": "normal",
+  "leading": "18px",
+  "color": "rgb(201, 201, 216)",
+  "bg": "rgba(0, 0, 0, 0)",
+  "radius": "0px",
+  "padding": "12px 0px",
+  "border": "0px none oklch(0.928 0.006 264.531)",
+  "transform": "none",
+  "features": "\"lnum\", \"tnum\""
+ },
+ "loadedFonts": [
+  "Inter"
+ ],
+ "htmlBg": "rgba(0, 0, 0, 0)",
+ "bodyText": "Drift is being paused until further notice due to irregular activity in the protocol. Please follow https://x.com/DriftProtocol for further updates.\nPortfolio\nTrade\nEarn\nVaults\nLeaderboard\nMore\nConnect\nETH-PERP\nOracle\nFunding / Last 24h (APR)\n0.00% / 0.00%\nOpen Interest\n24h Volume\nMarket Details\nView\nOrderbook\nRecent Trades\n0.000001\nUSD\nPrice\nSize (USD)\nTotal (USD)\nSpread: -\nCross\n1x\nLong\nShort\nMa",
+ "textLen": 989,
+ "height": 900
+}

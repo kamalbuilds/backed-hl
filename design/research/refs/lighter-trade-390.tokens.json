@@ -1,0 +1,68 @@
+{
+ "url": "https://app.lighter.xyz/trade/ETH",
+ "viewport": [
+  390,
+  844
+ ],
+ "capturedWith": "refshot-pw (playwright port of refshot.py)",
+ "title": "2,496.90 • ETH • Lighter",
+ "h1": null,
+ "h2": null,
+ "h3": null,
+ "body": {
+  "text": "Deposits from Card, Bitcoin, Coinbase, Tron, Solana, USDT an",
+  "font": "\"Inter Variable\", Inter, system-ui, -apple-system, sans-serif",
+  "size": "12px",
+  "weight": "400",
+  "tracking": "normal",
+  "leading": "18px",
+  "color": "rgb(255, 255, 255)",
+  "bg": "rgba(0, 0, 0, 0)",
+  "radius": "0px",
+  "padding": "0px",
+  "border": "0px solid rgb(43, 43, 48)",
+  "transform": "none",
+  "features": "\"calt\", \"case\", \"cv02\", \"cv03\", \"cv04\", \"cv05\", \"cv11\""
+ },
+ "p": {
+  "text": "ETH",
+  "font": "\"Inter Variable\", Inter, system-ui, -apple-system, sans-serif",
+  "size": "14px",
+  "weight": "485",
+  "tracking": "-0.28px",
+  "leading": "14px",
+  "color": "oklch(0.964 0 0)",
+  "bg": "rgba(0, 0, 0, 0)",
+  "radius": "0px",
+  "padding": "0px",
+  "border": "0px solid rgb(43, 43, 48)",
+  "transform": "none",
+  "features": "\"calt\", \"case\", \"cv02\", \"cv03\", \"cv04\", \"cv05\", \"cv11\""
+ },
+ "a": null,
+ "button": {
+  "text": "ETH\n\n50x",
+  "font": "\"Inter Variable\", Inter, system-ui, -apple-system, sans-serif",
+  "size": "12px",
+  "weight": "400",
+  "tracking": "normal",
+  "leading": "18px",
+  "color": "oklch(0.964 0 0)",
+  "bg": "oklch(1 0 0 / 0.05)",
+  "radius": "3px",
+  "padding": "5.28px",
+  "border": "0px solid rgb(43, 43, 48)",
+  "transform": "none",
+  "features": "\"calt\", \"case\", \"cv02\", \"cv03\", \"cv04\", \"cv05\", \"cv11\""
+ },
+ "input": null,
+ "loadedFonts": [
+  "Inter Variable",
+  "Inter",
+  "Geist Mono Variable"
+ ],
+ "htmlBg": "rgb(6, 6, 12)",
+ "bodyText": "Deposits from Card, Bitcoin, Coinbase, Tron, Solana, USDT and more, are now available.\n\nETH\n\n50x\n2,496.88\n+0.55%\nPrice\nOrder Book\nTrades\nDepth\nFunding\nDetails\n5m\n15m\n1h\n4h\nMore\nChart Elements\nTradingView\nPositions\nAssets\nOpen Orders\nTWAP\nOrder History\nTrade History\nFunding History\nNOT CONNECTED\n\nConnect a wallet to see your open positions.\n\nConnect Wallet\nBuy / Long\nSell / Short",
+ "textLen": 381,
+ "height": 1146
+}

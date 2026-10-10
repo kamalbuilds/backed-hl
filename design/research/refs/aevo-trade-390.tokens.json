@@ -1,0 +1,53 @@
+{
+ "url": "https://app.aevo.xyz/perpetual/eth",
+ "viewport": [
+  390,
+  844
+ ],
+ "capturedWith": "refshot-pw (playwright port of refshot.py)",
+ "title": "$2,492.99 ETH-USD • Aevo",
+ "h1": null,
+ "h2": null,
+ "h3": null,
+ "body": {
+  "text": "Clear All\nConnect Wallet\nETH-USD\nPerpetual\nMark\n$2,492.99\n-0",
+  "font": "BaseFont, \"Open Sans\", sans-serif",
+  "size": "16px",
+  "weight": "400",
+  "tracking": "normal",
+  "leading": "24px",
+  "color": "rgb(255, 255, 255)",
+  "bg": "rgb(6, 6, 12)",
+  "radius": "0px",
+  "padding": "0px",
+  "border": "0px none rgb(255, 255, 255)",
+  "transform": "none",
+  "features": "normal"
+ },
+ "p": null,
+ "a": null,
+ "button": {
+  "text": "Clear All",
+  "font": "BananaGrotesk",
+  "size": "14px",
+  "weight": "400",
+  "tracking": "normal",
+  "leading": "16px",
+  "color": "rgb(165, 165, 168)",
+  "bg": "rgba(14, 14, 20, 0.92)",
+  "radius": "6px",
+  "padding": "16px",
+  "border": "1px solid rgb(21, 21, 27)",
+  "transform": "none",
+  "features": "normal"
+ },
+ "input": null,
+ "loadedFonts": [
+  "BananaGrotesk",
+  "BaseFont"
+ ],
+ "htmlBg": "rgba(0, 0, 0, 0)",
+ "bodyText": "Clear All\nConnect Wallet\nETH-USD\nPerpetual\nMark\n$2,492.99\n-0.15% (-$3.80)\nFunding in 12m:18s\nIndex\n$2,495.33\nFunding\n+0.0005%\n24h Vol\n$450,345.57\nOI\n$4,133,717.04\nChart\nOrderbook\nTrades\nDepth\nFunding\n1m\n5m\n15m\n1h\n4h\n1D\nPositions (0)\nOrders (0)\nTWAP (0)\nHistory\nYou have no open positions.\nBuy\nSell\nMarkets\nTrading\nAEVO\nPortfolio",
+ "textLen": 328,
+ "height": 844
+}
