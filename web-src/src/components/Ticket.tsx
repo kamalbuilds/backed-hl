@@ -53,9 +53,14 @@ export function Ticket({ s, vault, abi, onSent }: { s: Vault; vault: Address; ab
         { k: 'Loss line', v: `${room.toFixed(2)} USDC of room`, ok: room >= 0 },
         { k: 'Frozen', v: s.breached ? 'yes, flattened' : 'no', ok: !s.breached },
       ]
-      let v: { ok: boolean; text: string }
-      try { await pub.simulateContract({ account: s.trader as Address, address: vault, abi, functionName: 'trade', args: a }); v = { ok: true, text: 'The contract accepts this order (simulated as the trader).' } }
-      catch (e: any) { v = rpcLimited(e) ? { ok: false, text: 'The testnet RPC is rate limiting reads. The check reruns when you edit the order.' } : { ok: false, text: 'The contract refuses it: ' + String(e.shortMessage || e.message).split('\n').pop()!.replace(/^.*reverted with the following reason:\s*/, '') } }
+      let v: { ok: boolean; text: string } = { ok: false, text: '' }
+      for (let i = 0; i < 3; i++) { // only a real revert counts as a refusal; RPC hiccups retry, then say so
+        try { await pub.simulateContract({ account: s.trader as Address, address: vault, abi, functionName: 'trade', args: a }); v = { ok: true, text: 'The contract accepts this order (simulated as the trader).' }; break }
+        catch (e: any) {
+          if (rpcLimited(e)) { v = { ok: false, text: 'The testnet RPC is rate limiting reads. The check reruns when you edit the order.' }; await new Promise((r) => setTimeout(r, 2000 * (i + 1))); continue }
+          v = { ok: false, text: 'The contract refuses it: ' + String(e.shortMessage || e.message).split('\n').pop()!.replace(/^.*reverted with the following reason:\s*/, '') }; break
+        }
+      }
       clearTimeout(slow)
       if (v.ok) c.forEach((x) => { if (x.ok === null) { x.ok = true; x.v = 'within cap (contract simulation passed)' } })
       if (live) { setChecks(c); setVerdict(v) }
@@ -129,14 +134,14 @@ export function Ticket({ s, vault, abi, onSent }: { s: Vault; vault: Address; ab
           )) : checks ? <tr><td colSpan={3} className="text-dim">No answer from the contract.</td></tr> : <tr><td colSpan={3} className="text-dim">Asking the contract&hellip;</td></tr>}
         </tbody>
       </table>
-      {verdict && <p className={verdict.ok ? 'verdict' : 'verdict verdict-no'}>{verdict.text}</p>}
+      {verdict && <p data-k="check" className={verdict.ok ? 'verdict' : 'verdict verdict-no'}>{verdict.text}</p>}
       {f.asset === 4 && Number(f.sz) > 0 && capUsd != null && (Number(f.px) || ethPx) && <p className="verdict text-dim">Notional about {(Number(f.sz) * (Number(f.px) || ethPx!)).toFixed(2)} USD against {capUsd!.toFixed(2)} USDC capital. The signature path lets any relayer submit; here your wallet submits it.</p>}
 
       <div className="actions">
         <Button type="submit" disabled={busy || phase === 'checking'}>{busy ? 'Waiting for the wallet\u2026' : phase === 'checking' ? 'Checking\u2026' : phase === 'ok' ? 'Send order' : phase === 'no' ? 'Send anyway, it will revert' : 'Send unchecked'}</Button>
         <Button type="button" variant="outline" disabled={busy || phase === 'checking'} onClick={sign}>Sign, then submit (you pay gas)</Button>
       </div>
-      {out && <p className={out.ok ? 'verdict' : 'verdict verdict-no'}>{out.text} {out.tx && <Tx hash={out.tx} />}</p>}
+      {out && <p data-k="out" className={out.ok ? 'verdict' : 'verdict verdict-no'}>{out.text} {out.tx && <Tx hash={out.tx} />}</p>}
     </form>
   )
 }

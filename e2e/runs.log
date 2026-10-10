@@ -1,0 +1,55 @@
+PASS connect {"address":"0x263F74859F6c932Db0B4F11165580AE58984D8cc"}
+  tx 0x48461a5b7961c078cc6d8d4153312797b5a6bc509b9626aea0143c37dae5ebde
+PASS create vault {"text":"create confirmed 0x48461a…ebde","tx":"0x48461a5b7961c078cc6d8d4153312797b5a6bc509b9626aea0143c37dae5ebde"}
+PASS new vault loaded {"vault":"0xa33D732D142BE60946a5F0Ae1a36E88185A78A5B"}
+  big blocks off
+  tx 0x1a866d3a1748a673becd9533039d0755b70cb2bb31fbf3c3e7884a9f78bd2547
+PASS send 11 USDC to vault (CoreWriter spotSend) {"text":"sendRawAction confirmed 0x1a866d…2547","tx":"0x1a866d3a1748a673becd9533039d0755b70cb2bb31fbf3c3e7884a9f78bd2547"}
+FAIL fundPerp 10 USDC {"text":"Not sent: An unknown RPC error occurred.","tx":null}
+ABORT
+PASS connect {"address":"0x263F74859F6c932Db0B4F11165580AE58984D8cc"}
+PASS resumed vault {"vault":"0xa33D732D142BE60946a5F0Ae1a36E88185A78A5B"}
+PASS 2.5x pre-check accepted {"text":"The contract accepts this order (simulated as the trader)."}
+  tx 0x09d764ed60ba64ceb904d81a0ca61b8fe03aff530d66f92f8d33475b51fae961
+PASS allowed trade 2.5x ETH long {"text":"trade confirmed 0x09d764…e961","tx":"0x09d764ed60ba64ceb904d81a0ca61b8fe03aff530d66f92f8d33475b51fae961"}
+FAIL 20x refused by contract check {"text":"The testnet RPC is rate limiting reads. The check reruns when you edit the order."}
+ABORT
+PASS connect {"address":"0x263F74859F6c932Db0B4F11165580AE58984D8cc"}
+PASS resumed vault {"vault":"0xa33D732D142BE60946a5F0Ae1a36E88185A78A5B"}
+PASS 20x refused by contract check {"text":"The contract refuses it: leverage above backer limit"}
+PASS 20x send blocked before gas {"text":"Not sent: leverage above backer limit","tx":null}
+  tx 0x31166ddcf02968a7e1620989239ce512644809ef1daf91ca624c6400ec2fbc2e
+PASS move line above equity (breach) {"text":"setFloor confirmed 0x31166d…bc2e","tx":"0x31166ddcf02968a7e1620989239ce512644809ef1daf91ca624c6400ec2fbc2e"}
+  tx 0xde09fdff27bd02628d8a4b8fffc456a3726d299fcfdf3809876a34628e068004
+PASS flatten (UI, keeper may race) {"text":"flatten confirmed 0xde09fd…8004","tx":"0xde09fdff27bd02628d8a4b8fffc456a3726d299fcfdf3809876a34628e068004","msSinceBreachTx":11510}
+FAIL line back to -2 {"text":"Not sent: the testnet RPC is rate limiting after 3 tries. Nothing was broadcast; try again in a minute.","tx":null}
+ABORT
+PASS connect {"address":"0x263F74859F6c932Db0B4F11165580AE58984D8cc"}
+PASS resumed vault {"vault":"0xa33D732D142BE60946a5F0Ae1a36E88185A78A5B"}
+PASS 20x refused by contract check {"text":"The contract refuses it: frozen"}
+PASS 20x send blocked before gas {"text":"Not sent: frozen","tx":null}
+  tx 0x68f661ea91139e821662514401a3db31ab7eca6ecf93b6c977a34fa9266fb046
+PASS line back to -2 {"text":"setFloor confirmed 0x68f661…b046","tx":"0x68f661ea91139e821662514401a3db31ab7eca6ecf93b6c977a34fa9266fb046"}
+FAIL rearm {"text":"Not sent: the testnet RPC is rate limiting after 3 tries. Nothing was broadcast; try again in a minute.","tx":null}
+ABORT
+PASS connect {"address":"0x263F74859F6c932Db0B4F11165580AE58984D8cc"}
+PASS resumed vault {"vault":"0xa33D732D142BE60946a5F0Ae1a36E88185A78A5B"}
+PASS 20x refused by contract check {"text":"The contract refuses it: frozen"}
+PASS 20x send blocked before gas {"text":"Not sent: frozen","tx":null}
+  tx 0x5dc721196866762df65cbd57d81e0b2844cdfb2d4a01e97cedb38c3aaa127ab3
+PASS rearm {"text":"rearm confirmed 0x5dc721…7ab3","tx":"0x5dc721196866762df65cbd57d81e0b2844cdfb2d4a01e97cedb38c3aaa127ab3"}
+PASS signed pre-check {}
+  tx 0xeeefd331871dafb456f0cc80653a269a92bd1e93063a0c7f6ddaf0b9fbb5008d
+PASS signed order via tradeBySig {"text":"tradeBySig confirmed 0xeeefd3…008d","tx":"0xeeefd331871dafb456f0cc80653a269a92bd1e93063a0c7f6ddaf0b9fbb5008d"}
+  tx 0xf20bbd88d70b34dbf3f1cc89baf3248083f3b98e6c4b9f865e19fd4e58c21582
+PASS stop {"text":"stop confirmed 0xf20bbd…1582","tx":"0xf20bbd88d70b34dbf3f1cc89baf3248083f3b98e6c4b9f865e19fd4e58c21582"}
+  tx 0x25809e0b2b3c8b9adec7f4811395f6b0588a8d64b2da6edc2c36aa930d15880a
+FAIL flatten after stop {"text":"flatten reverted 0x25809e…880a","tx":"0x25809e0b2b3c8b9adec7f4811395f6b0588a8d64b2da6edc2c36aa930d15880a"}
+ABORT
+PASS connect {"address":"0x263F74859F6c932Db0B4F11165580AE58984D8cc"}
+PASS resumed vault {"vault":"0xa33D732D142BE60946a5F0Ae1a36E88185A78A5B"}
+PASS 20x refused by contract check {"text":"The contract refuses it: frozen"}
+PASS 20x send blocked before gas {"text":"Not sent: frozen","tx":null}
+  tx 0xd764ed6fb754d3eed9179cb5001bc1f827accb6074ae36a2c0fc7131fe549271
+PASS settle and withdraw {"text":"settle confirmed 0xd764ed…9271","tx":"0xd764ed6fb754d3eed9179cb5001bc1f827accb6074ae36a2c0fc7131fe549271"}
+PASS page errors {"errs":[]}

@@ -1,5 +1,5 @@
 // Chain + data layer. Reads HyperEVM testnet and the HyperCore info API directly; writes go through the user's wallet.
-import { createPublicClient, createWalletClient, custom, http, defineChain, type Address, type WalletClient } from 'viem'
+import { createPublicClient, createWalletClient, custom, http, defineChain, encodeAbiParameters, encodePacked, type Address, type WalletClient } from 'viem'
 
 export const chain = defineChain({
   id: 998, name: 'HyperEVM Testnet', nativeCurrency: { name: 'HYPE', symbol: 'HYPE', decimals: 18 },
@@ -9,7 +9,11 @@ export const chain = defineChain({
 export const EXPLORER = chain.blockExplorers.default.url
 // one JSON-RPC batch per tick: the public testnet RPC rate limits per request
 export const pub = createPublicClient({ chain, transport: http(undefined, { batch: { wait: 20 }, retryCount: 2, retryDelay: 800 }) })
-export const rpcLimited = (e: unknown) => /limit|429|rate|fetch|timed? ?out|HTTP request failed/i.test(String((e as { shortMessage?: string; message?: string })?.shortMessage || (e as Error)?.message || e))
+export const rpcLimited = (e: unknown) => {
+  const m = String((e as { shortMessage?: string; message?: string })?.shortMessage || (e as Error)?.message || e)
+  if (/revert/i.test(m)) return false // a contract refusal (e.g. "leverage above backer limit") is never an RPC problem
+  return /rate.?limit|limit exceeded|429|fetch|timed? ?out|HTTP request failed|unknown RPC error/i.test(m)
+}
 const INFO = 'https://api.hyperliquid-testnet.xyz/info'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -87,14 +91,41 @@ export type WriteResult = { ok: boolean; text: string; tx?: string }
 export async function write(address: Address, abi: any, functionName: string, args: unknown[], gas = 1_500_000n): Promise<WriteResult> {
   try {
     if (!wallet || !me) await connect()
-    await pub.simulateContract({ account: me!, address, abi, functionName, args })
-    const hash = await wallet!.writeContract({ account: me!, chain, address, abi, functionName, args, gas })
-    const r = await pub.waitForTransactionReceipt({ hash })
-    return { ok: r.status === 'success', text: `${functionName} ${r.status === 'success' ? 'confirmed' : 'reverted'}`, tx: hash }
+    let hash: `0x${string}` | undefined
+    for (let attempt = 0; ; attempt++) { // testnet RPC rate-limits bursts: retry the pre-broadcast steps, never a broadcast tx
+      try {
+        await pub.simulateContract({ account: me!, address, abi, functionName, args })
+        hash = await wallet!.writeContract({ account: me!, chain, address, abi, functionName, args, gas })
+        break
+      } catch (e) {
+        if (attempt < 5 && (rpcLimited(e) || /unknown RPC error/i.test(String((e as Error).message)))) { await new Promise((ok) => setTimeout(ok, 3000 * (attempt + 1))); continue }
+        throw e
+      }
+    }
+    // once broadcast, never report "not sent": poll the receipt through RPC rate limits for up to 3 minutes
+    for (let i = 0; i < 60; i++) {
+      const r = await pub.getTransactionReceipt({ hash }).catch(() => null)
+      if (r) return { ok: r.status === 'success', text: `${functionName} ${r.status === 'success' ? 'confirmed' : 'reverted'}`, tx: hash }
+      await new Promise((ok) => setTimeout(ok, 3000))
+    }
+    return { ok: false, text: `${functionName} sent, receipt not readable yet (testnet RPC busy). Check the tx`, tx: hash }
   } catch (e: any) {
-    return { ok: false, text: 'Not sent: ' + String(e.shortMessage || e.message).split('\n').pop() }
+    const m = String(e.shortMessage || e.message).split('\n').pop()
+    return { ok: false, text: rpcLimited(e) || /unknown RPC error/i.test(m!) ? 'Not sent: the testnet RPC is rate limiting after 6 tries. Nothing was broadcast; try again in a minute.' : 'Not sent: ' + m }
   }
 }
+// Send spot USDC from the connected wallet's HyperCore account to another address (e.g. a new vault) through the CoreWriter system contract.
+const CORE_WRITER = '0x3333333333333333333333333333333333333333' as const
+const CW_ABI = [{ type: 'function', name: 'sendRawAction', stateMutability: 'nonpayable', inputs: [{ name: 'data', type: 'bytes' }], outputs: [] }] as const
+export async function sendSpotUsdc(dest: Address, usd: number): Promise<WriteResult> {
+  const payload = encodeAbiParameters([{ type: 'address' }, { type: 'uint64' }, { type: 'uint64' }], [dest, 0n, BigInt(Math.round(usd * 1e8))])
+  const data = encodePacked(['uint8', 'uint24', 'bytes'], [1, 6, payload])
+  return write(CORE_WRITER, CW_ABI, 'sendRawAction', [data], 300_000n)
+}
+export async function spotUsdc(user: string): Promise<number | null> {
+  try { const r = await info({ type: 'spotClearinghouseState', user }); const b = (r.balances as { coin: string; total: string }[]).find((x) => x.coin === 'USDC'); return b ? Number(b.total) : 0 } catch { return null }
+}
+
 export async function signOrder(vault: Address, o: { asset: number; isBuy: boolean; limitPx8: bigint; sz8: bigint; reduceOnly: boolean }) {
   if (!wallet || !me) await connect()
   const order = { ...o, nonce: BigInt(Date.now()), deadline: BigInt(Math.floor(Date.now() / 1000) + 300) }
