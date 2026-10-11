@@ -30,19 +30,19 @@ export function Equity({ readAt, fills, eq, floor, loaded, failed, bounties }: {
           <g key={v} className="grid"><line x1={L} x2={W - 8} y1={y(v)} y2={y(v)} /><text x={L - 8} y={y(v) + 4} textAnchor="end">{v.toFixed(2)}</text></g>
         ))}
         <line className="zero" x1={L} x2={W - 8} y1={y(0)} y2={y(0)} />
-        <text className="lbl" x={L + 6} y={y(0) - 6}>capital</text>
+        <text className="lbl" x={L + 6} y={y(0) - 6}>starting capital (PnL 0)</text>
         <line className="floor" x1={L} x2={W - 8} y1={y(floor)} y2={y(floor)} />
         <text className="lbl lbl-alarm" x={L + 6} y={y(floor) - 6}>backer&rsquo;s line {sgn(floor)}</text>
         <path className="step" d={d} />
         <line className="zero" x1={x(t1)} x2={x(t1)} y1={T} y2={H - B} strokeDasharray="2 4" />
         <rect className="now" x={nx - 3} y={y(eq) - 3} width={6} height={6} />
-        <text className="lbl lbl-ink" x={nx} y={y(eq) - 10} textAnchor="middle">{readAt ? `read ${hhmm(readAt).replace(' IST', '')}` : 'last read'} {sgn(eq)}</text>
+        <text className="lbl lbl-ink" x={nx} y={y(eq) - 10} textAnchor={nx > W - 90 ? 'end' : 'middle'}>{readAt ? `read ${hhmm(readAt).replace(' IST', '')}` : 'last read'} {sgn(eq)}</text>
         <text className="lbl" x={L} y={H - 6}>{hhmm(t0)}</text>
         <text className="lbl" x={x(t1)} y={H - 6} textAnchor="end">{hhmm(t1)}</text>
       </svg>
       <p className="note">
         {fills.length} HyperCore fills, realized PnL after fees.{failed && ' The latest refresh failed; showing the last fills received.'}
-        {Math.abs(gap) > 0.05 && ` Live equity is ${Math.abs(gap).toFixed(2)} USDC under realized PnL: ${bounties} flatten bount${bounties === 1 ? 'y was' : 'ies were'} paid out of the vault, plus funding.`}
+        {Math.abs(gap) > 0.05 && ` Measured gap: live equity is ${Math.abs(gap).toFixed(2)} USDC ${gap < 0 ? 'under' : 'above'} realized PnL.`}{bounties > 0 && ` Separately, the vault made ${bounties} outgoing spot transfer${bounties === 1 ? '' : 's'} (bounties or payouts; not attributed here).`}
       </p>
     </div>
   )

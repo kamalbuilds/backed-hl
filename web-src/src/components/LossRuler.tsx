@@ -11,7 +11,7 @@ export function LossRuler({ eq, floor, flash }: { eq: number; floor: number; fla
   return (
     <figure
       className={`ruler${flash ? ' ruler-flash' : ''}${below ? ' ruler-below' : ''}`}
-      role="meter" aria-label="Equity against the backer's loss line, USDC"
+      role="meter" aria-label="PnL versus starting capital, against the backer's loss line, USDC"
       aria-valuemin={lo} aria-valuemax={hi} aria-valuenow={Number(eq.toFixed(2))}
     >
       <div className="ruler-track">
@@ -21,7 +21,7 @@ export function LossRuler({ eq, floor, flash }: { eq: number; floor: number; fla
         </div>
         <div className="ruler-zero" style={{ left: `${pct(0)}%` }} />
         <div className="ruler-eq-slide" style={{ transform: `translateX(${pct(eq)}%)` }}>
-          <div className="ruler-eq"><span className="ruler-eq-label">equity {sgn(eq)}</span></div>
+          <div className="ruler-eq"><span className="ruler-eq-label">PnL {sgn(eq)}</span></div>
         </div>
         <div className="ruler-flash-layer" />
       </div>

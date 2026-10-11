@@ -27,7 +27,7 @@ export function RulesSheet({ s, proof }: { s: Vault; proof: Record<string, strin
       <TableBody>
         {rows.map(([k, v, d, tx, kind]) => (
           <TableRow key={k}>
-            <TableCell><code className="param">{k}</code></TableCell>
+            <TableCell><span className="param-name">{k.replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase())}</span><code className="param param-id">{k}</code></TableCell>
             <TableCell className="num">{v}</TableCell>
             <TableCell className="text-dim whitespace-normal">{d}</TableCell>
             <TableCell className="text-right">{tx ? <Tx hash={tx} label={kind ?? 'rejected order'} /> : <a className="tx" href="https://github.com/kamalbuilds/backed-hl/blob/main/contracts/test/BackedVaultV3.t.sol" target="_blank" rel="noopener">forge test</a>}</TableCell>

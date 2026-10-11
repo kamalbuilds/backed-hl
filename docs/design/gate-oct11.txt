@@ -1,0 +1,10 @@
+ok   references: 3 captured
+ok   components logged
+ok   score 8.0 min 7.0
+ok   critic design-review
+FAIL r11-1440.png is older than a source file: critique is stale
+FAIL r11-390.png is older than a source file: critique is stale
+ok   design-review grades A/B
+ok   uicraft gate
+ok   cwf banned grep
+---- 2 failure(s)

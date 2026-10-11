@@ -29,7 +29,7 @@ const tab = (n) => page.getByRole('tab', { name: n }).click();
 async function check(preset) { // click a preset and wait for a real contract verdict; re-trigger through RPC rate limits
   let t = '';
   for (let i = 0; i < 6; i++) {
-    await page.getByRole('button', { name: '$1 limit' }).click().catch(() => {}); await page.waitForTimeout(300);
+    await page.getByRole('button', { name: 'Below oracle ($1)' }).click().catch(() => {}); await page.waitForTimeout(300);
     await page.getByRole('button', { name: preset }).click(); await page.waitForTimeout(1500);
     await page.waitForFunction(() => /accepts|refuses|rate limiting|did not answer/.test(document.querySelector('.ticket [data-k=check]')?.textContent || ''), null, { timeout: 40000 }).catch(() => {});
     t = (await page.locator('.ticket [data-k=check]').textContent().catch(() => '')) || '';
@@ -59,11 +59,11 @@ await page.waitForTimeout(8000); await shot('02-funded');
 // 3 allowed trade
 await tab('Trader'); await page.waitForTimeout(6000);
 if (!process.env.TRADED) {
-const pre = await check('2.5x long'); step('2.5x pre-check accepted', /accepts/.test(pre), { text: pre.trim() });
+const pre = await check('Within cap (2.5x)'); step('2.5x pre-check accepted', /accepts/.test(pre), { text: pre.trim() });
 r = await click('.ticket', 'Send order'); step('allowed trade 2.5x ETH long', /confirmed/.test(r.text), r);
 await page.waitForTimeout(6000); await shot('03-trade'); }
 // 4 rejected 20x (contract simulation refuses; button reads Send anyway)
-await tab('Trader'); await page.waitForTimeout(5000); const v20 = await check('20x long'); step('20x refused by contract check', /refuses/.test(v20), { text: v20.trim() });
+await tab('Trader'); await page.waitForTimeout(5000); const v20 = await check('Over cap (20x)'); step('20x refused by contract check', /refuses/.test(v20), { text: v20.trim() });
 r = await click('.ticket', 'Send anyway, it will revert'); step('20x send blocked before gas', /Not sent/.test(r.text), r);
 await shot('04-reject20x');
 // 5 breach + flatten
@@ -78,7 +78,7 @@ await tab('Backer'); await page.waitForTimeout(5000);
 if (!process.env.STOPPED) {
 if (!process.env.LINED) { await page.fill('#line', '2'); r = await click('.backer', 'Move line'); step('line back to -2', /confirmed/.test(r.text), r); }
 await page.waitForTimeout(4000); r = await click('.backer', 'Rearm'); step('rearm', /confirmed/.test(r.text), r);
-await tab('Trader'); await page.waitForTimeout(4000); step('signed pre-check', /accepts/.test(await check('2.5x long')));
+await tab('Trader'); await page.waitForTimeout(4000); step('signed pre-check', /accepts/.test(await check('Within cap (2.5x)')));
 r = await click('.ticket', 'Sign, then submit (you pay gas)'); step('signed order via tradeBySig', /confirmed/.test(r.text), r);
 await page.waitForTimeout(6000); await shot('06-signed');
 // 7 stop, flatten, settle (withdraw), sweep

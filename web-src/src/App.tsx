@@ -8,6 +8,8 @@ import { LossRuler } from '@/components/LossRuler'
 import { RulesSheet } from '@/components/RulesSheet'
 import { Incidents } from '@/components/Incidents'
 import { Equity } from '@/components/Equity'
+import { Judges } from '@/components/Judges'
+import { Business } from '@/components/Business'
 import { KeyTable } from '@/components/KeyTable'
 import { Ticket } from '@/components/Ticket'
 import { Backer } from '@/components/Backer'
@@ -94,6 +96,7 @@ export default function App() {
         <div className="mast-in">
           <span className="word">BACKED</span>
           <span className="text-dim mast-meta">Vault <Tx hash={vault} kind="address" /> · HyperEVM testnet</span>
+          <a className="mast-verify" href="#judges">Verify on chain</a>
           <Button variant="outline" size="sm" onClick={() => connect().then(setMe).catch((e) => alert(e.message))}>{me ? short(me) : 'Connect wallet'}</Button>
         </div>
       </header>
@@ -105,7 +108,7 @@ export default function App() {
             <p className="lede">Every order goes through the vault contract, which checks the backer&rsquo;s rules on chain.<span className="lede-short"> Below the loss line, anyone can close it.</span><span className="lede-more"> Cross the loss line and anyone can close the account. There is no operator key.</span></p>
 
             <div className="status" aria-live="polite">
-              {!s ? <p className="state-line">Reading the vault from HyperEVM&hellip;</p> : replay === 'crossing' ? (
+              {!s ? (rpcDown ? <p className="state-line">Could not read this vault from HyperEVM (testnet RPC). <button type="button" className="linkish" onClick={() => location.reload()}>Retry</button></p> : <p className="state-line">Reading the vault from HyperEVM&hellip;</p>) : replay === 'crossing' ? (
                 <p className="state-line alarm">Replay: line crossed, flatten() on its way&hellip; <span className="state-sub">A replay of a recorded run, not the live vault.</span></p>
               ) : replay === 'flat' && med ? (
                 <p className="state-line alarm">Replay: flat in {(med.ms / 1000).toFixed(2)} s. <span className="state-sub">Not the live vault. Median of {med.runs} live runs, breach to HyperCore fill. <Tx hash={med.tx} label="Fill tx" /></span></p>
@@ -113,7 +116,7 @@ export default function App() {
                 <p className={st!.alarm ? 'state-line alarm' : 'state-line'}>
                   {asOf || rpcDown ? `Last confirmed: ${st!.word.toLowerCase()}` : st!.word}{eq >= floor ? `, ${(eq - floor).toFixed(2)} USDC of room.` : `, ${(floor - eq).toFixed(2)} USDC past the line.`}{' '}
                   <span className="state-sub">
-                    {`Equity ${eq.toFixed(2)} against the backer's line at ${floor.toFixed(2)}`}
+                    {`PnL versus starting capital ${eq >= 0 ? '+' : ''}${eq.toFixed(2)} USDC, against the backer's line at ${floor.toFixed(2)}`}
                     {asOf ? `, read at ${hhmm(asOf)} (page snapshot).` : readAt ? `, read from the contract at ${hhmm(readAt)}.` : '.'}
                     {rpcDown && ' RPC not answering, retrying.'}
                   </span>
@@ -123,31 +126,40 @@ export default function App() {
             {s && <LossRuler eq={shownEq} floor={floor} flash={replay !== 'idle'} />}
             <p className="hint">
               <Button type="button" variant="outline" size="sm" onClick={doReplay} disabled={replay !== 'idle'}>Replay a breach</Button>
-              <span className="text-dim"> (key R).</span>
+              <span className="text-dim"> (key R).</span> <a className="jump" href="#ticket">Try an order</a></p>
+            <p className="proof-strip">Recorded proof: 5 funded breaches on testnet, median 2.05 s to flat; a full wallet run on 11 Oct. <a href="#judges">Verify this run</a></p><p hidden>
               {med && isRef && <span className="measured"> Measured on this vault: flat in {(med.ms / 1000).toFixed(2)} s, median of {med.runs} live runs. <Tx hash={med.tx} label="fill tx" /></span>}
             </p>
+            <nav className="spine" aria-label="Sections"><a href="#judges">Verify on chain</a><a href="#rules">Rules</a><a href="#incidents">Incidents</a><a href="#business">Business model</a></nav>
           </section>
 
-          <aside className="desk" aria-label="Order ticket and backer controls">
+          <aside className="desk" id="ticket" aria-label="Order ticket and backer controls">
             <Tabs value={tab} onValueChange={setTab}>
               <TabsList className="tabs">
                 <TabsTrigger value="trader">Trader</TabsTrigger>
                 <TabsTrigger value="backer">Backer</TabsTrigger>
               </TabsList>
-              <TabsContent value="trader">{s ? <Ticket s={s} vault={vault} abi={data.abi.vault} onSent={onSent} /> : <p className="text-dim">Waiting for the vault&hellip;</p>}</TabsContent>
+              <TabsContent value="trader">{s ? <Ticket s={s} vault={vault} abi={data.abi.vault} onSent={onSent} readNote={asOf ? `Rules and equity as of the page snapshot at ${hhmm(asOf)}; the verdict below is a fresh simulation.` : rpcDown && readAt ? `Rules last read at ${hhmm(readAt)}; the RPC is not answering, so the verdict may be stale.` : undefined} /> : <p className="text-dim">Waiting for the vault&hellip;</p>}</TabsContent>
               <TabsContent value="backer"><Backer vault={vault} factory={data.config.factory} abi={data.abi} onVault={(v) => { setVault(v); setS(null); setFills([]); setFillsErr(false); setFillsLoaded(false) }} onSent={onSent} /></TabsContent>
             </Tabs>
+            <nav className="spine spine-m" aria-label="Sections"><a href="#rules">Rules</a><a href="#incidents">Incidents</a><a href="#judges">Verify on chain</a></nav>
           </aside>
         </div>
 
         <Separator className="rule" />
-        <section className="sec" aria-labelledby="rules-h">
+        <section className="sec" aria-labelledby="j-h" id="judges">
+          <div className="sec-head"><h2 id="j-h">For judges</h2><p className="text-dim">Check it on chain in about a minute. Every link opens the testnet explorer.</p></div>
+          <Judges factory={data.config.factory} />
+        </section>
+
+        <Separator className="rule" />
+        <section className="sec" aria-labelledby="rules-h" id="rules">
           <div className="sec-head"><h2 id="rules-h">Rules</h2><p className="text-dim">Set by the backer when the vault is created. Values come from the contract{readAt ? `, last read at ${hhmm(readAt)}` : asOf ? `, snapshot from ${hhmm(asOf)}` : ''}.</p></div>
           {s ? <RulesSheet s={s} proof={proof} /> : <p className="text-dim">Reading rules&hellip;</p>}
         </section>
 
         <Separator className="rule" />
-        <section className="sec" aria-labelledby="inc-h">
+        <section className="sec" aria-labelledby="inc-h" id="incidents">
           <div className="sec-head"><h2 id="inc-h">Incidents</h2><p className="text-dim">Every breach and refused order from the live testnet runs on the reference vault <Tx hash={ev.vault} kind="address" />, with its transaction.{!isRef && ' The vault loaded above is a different one, so none of this is its history.'}</p></div>
           <Incidents ev={ev} />
         </section>
@@ -156,6 +168,12 @@ export default function App() {
         <section className="sec" aria-labelledby="eq-h">
           <div className="sec-head"><h2 id="eq-h">Equity</h2><p className="text-dim">Realized PnL from this vault&rsquo;s HyperCore fills, against the line.</p></div>
           {s && <Equity readAt={readAt ?? asOf} fills={fills} eq={eq} floor={floor} loaded={fillsLoaded} failed={fillsErr} bounties={bounties} />}
+        </section>
+
+        <Separator className="rule" />
+        <section className="sec" aria-labelledby="b-h" id="business">
+          <div className="sec-head"><h2 id="b-h">Business model</h2><p className="text-dim">Who pays, and the market it replaces. Figures are sourced; the fee is a plan.</p></div>
+          <Business />
         </section>
 
         <Separator className="rule" />

@@ -1,0 +1,25 @@
+// node e2e/record-demo.mjs [url] -> ../../docs/pitch/demo.webm (+ mp4 via ffmpeg). Follows docs/pitch/DEMO-SCRIPT.md. Read-only: no transactions.
+import { chromium } from 'playwright';
+import fs from 'node:fs';
+const url = process.argv[2] || 'https://backed-2v9.pages.dev/';
+const out = '../../docs/pitch'; const tmp = 'e2e/video-tmp'; fs.rmSync(tmp, { recursive: true, force: true });
+const b = await chromium.launch();
+const ctx = await b.newContext({ viewport: { width: 1440, height: 900 }, recordVideo: { dir: tmp, size: { width: 1440, height: 900 } } });
+const p = await ctx.newPage(); const t0 = Date.now(); const at = (s) => console.log(((Date.now() - t0) / 1000).toFixed(1) + 's', s);
+const until = async (sec) => { const w = sec * 1000 - (Date.now() - t0); if (w > 0) await p.waitForTimeout(w); };
+const scrollTo = async (sel) => { await p.evaluate((s) => { const e = document.querySelector(s); if (e) window.scrollTo({ top: e.getBoundingClientRect().top + scrollY - 70, behavior: 'smooth' }); }, sel); };
+const verdict = () => p.waitForFunction(() => /accepts|refuses|rate limiting|did not answer/.test(document.querySelector('.ticket [data-k=check]')?.textContent || ''), null, { timeout: 25000 }).catch(() => {});
+await p.goto(url, { waitUntil: 'load' }); at('loaded');
+await until(20); at('status');
+await until(35); await p.getByRole('button', { name: 'Within cap (2.5x)' }).click(); await verdict(); at('2.5x ' + await p.locator('.ticket [data-k=check]').textContent().catch(() => ''));
+await until(55); await p.getByRole('button', { name: 'Over cap (20x)' }).click(); await verdict(); at('20x ' + await p.locator('.ticket [data-k=check]').textContent().catch(() => ''));
+await until(75); await p.getByRole('button', { name: 'Blocked market (SOL)' }).click(); await verdict(); at('SOL');
+await until(85); await p.evaluate(() => scrollTo({ top: 0, behavior: 'smooth' })); await p.getByRole('button', { name: 'Replay a breach' }).click(); at('replay');
+await until(105); await scrollTo('#rules-h'); at('rules');
+await until(120); await scrollTo('#inc-h'); at('incidents');
+await until(135); await scrollTo('#judges'); at('judges');
+await until(155); await scrollTo('#b-h'); await p.locator('details.econ summary').click().catch(() => {}); at('business');
+await until(170); await scrollTo('#key-h'); at('key');
+await until(180);
+const v = p.video(); await ctx.close(); await b.close();
+fs.copyFileSync(await v.path(), `${out}/demo.webm`); at('saved demo.webm');

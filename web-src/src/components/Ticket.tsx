@@ -10,13 +10,14 @@ import { Tx } from './Tx'
 type Form = { asset: number; buy: boolean; sz: string; px: string; ro: boolean }
 type Check = { k: string; v: string; ok: boolean | null }
 
-export function Ticket({ s, vault, abi, onSent }: { s: Vault; vault: Address; abi: any; onSent: (r: WriteResult) => void }) {
+export function Ticket({ s, vault, abi, onSent, readNote }: { s: Vault; vault: Address; abi: any; onSent: (r: WriteResult) => void; readNote?: string }) {
   const ethPos = s.pos.find((p) => p.m === 4)
   const ethPx = ethPos && ethPos.px > 0 ? pxOf(ethPos) : null
   const capUsd = s.cap > 0 ? s.cap / 1e6 : null
   const canPreset = ethPx != null && capUsd != null
-  const [f, setF] = useState<Form>({ asset: 4, buy: true, sz: canPreset ? (2.5 * capUsd! / ethPx!).toFixed(4) : '', px: '', ro: false })
+  const [f, setF] = useState<Form>({ asset: 4, buy: true, sz: '', px: '', ro: false })
   const [checks, setChecks] = useState<Check[] | null>(null)
+  const [retry, setRetry] = useState(0)
   const [verdict, setVerdict] = useState<{ ok: boolean; text: string } | null>(null)
   const [out, setOut] = useState<WriteResult | null>(null)
   const [busy, setBusy] = useState(false)
@@ -36,9 +37,10 @@ export function Ticket({ s, vault, abi, onSent }: { s: Vault; vault: Address; ab
 
   useEffect(() => {
     let live = true
+    if (!(Number(f.sz) > 0)) { setChecks([]); setVerdict({ ok: false, text: 'Choose an example or enter a size to check the rules.' }); return }
     setChecks(null); setVerdict(null)
     const t = setTimeout(async () => {
-      const slow = setTimeout(() => { if (live) { setChecks([]); setVerdict({ ok: false, text: 'The testnet RPC did not answer within 8 s. Edit the order to check again.' }) } }, 8000)
+      const slow = setTimeout(() => { if (live) { setChecks([]); setVerdict({ ok: false, text: 'The testnet RPC did not answer within 8 s. Your order is kept; press Retry check.' }) } }, 8000)
       let a: Awaited<ReturnType<typeof args>>
       try { a = await args() } catch { clearTimeout(slow); if (live) { setChecks([]); setVerdict({ ok: false, text: `No oracle price for ${MK[f.asset]} right now (it may not be listed on this vault), so the order did not reach the contract check. Enter a limit price to check it.` }) } return }
       const [asset, buy, , sz8, ro] = a
@@ -57,7 +59,7 @@ export function Ticket({ s, vault, abi, onSent }: { s: Vault; vault: Address; ab
       for (let i = 0; i < 3; i++) { // only a real revert counts as a refusal; RPC hiccups retry, then say so
         try { await pub.simulateContract({ account: s.trader as Address, address: vault, abi, functionName: 'trade', args: a }); v = { ok: true, text: 'The contract accepts this order (simulated as the trader).' }; break }
         catch (e: any) {
-          if (rpcLimited(e)) { v = { ok: false, text: 'The testnet RPC is rate limiting reads. The check reruns when you edit the order.' }; await new Promise((r) => setTimeout(r, 2000 * (i + 1))); continue }
+          if (rpcLimited(e)) { v = { ok: false, text: 'The testnet RPC is rate limiting reads. Your order is kept; press Retry check.' }; await new Promise((r) => setTimeout(r, 2000 * (i + 1))); continue }
           v = { ok: false, text: 'The contract refuses it: ' + String(e.shortMessage || e.message).split('\n').pop()!.replace(/^.*reverted with the following reason:\s*/, '') }; break
         }
       }
@@ -67,10 +69,11 @@ export function Ticket({ s, vault, abi, onSent }: { s: Vault; vault: Address; ab
     }, 250)
     return () => { live = false; clearTimeout(t) }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [f, s, vault])
+  }, [f, s, vault, retry])
 
+  const empty = !(Number(f.sz) > 0)
   const unavailable = verdict != null && /rate limiting|did not answer|No oracle price/.test(verdict.text)
-  const phase: 'checking' | 'ok' | 'no' | 'unknown' = !verdict ? 'checking' : verdict.ok ? 'ok' : unavailable ? 'unknown' : 'no'
+  const phase: 'checking' | 'ok' | 'no' | 'unknown' = empty ? 'idle' as 'unknown' : !verdict ? 'checking' : verdict.ok ? 'ok' : unavailable ? 'unknown' : 'no'
   const preset = (k: string) => {
     if (!canPreset) return
     const capUsd = s.cap / 1e6, ethPx = pxOf(ethPos!)
@@ -97,10 +100,10 @@ export function Ticket({ s, vault, abi, onSent }: { s: Vault; vault: Address; ab
     <form className="ticket" onSubmit={(e) => { e.preventDefault(); send() }}>
       <div className="presets" aria-label="Try an order">
         <span className="text-dim">{canPreset ? 'Try' : 'Presets need the live ETH price and vault capital, which have not loaded.'}</span>
-        <button type="button" disabled={!canPreset} onClick={() => preset('ok')}>2.5x long</button>
-        <button type="button" disabled={!canPreset} onClick={() => preset('lev')}>20x long</button>
-        <button type="button" disabled={!canPreset} onClick={() => preset('fake')}>$1 limit</button>
-        <button type="button" disabled={!canPreset} onClick={() => preset('sol')}>SOL</button>
+        <button type="button" disabled={!canPreset} onClick={() => preset('ok')}>Within cap (2.5x)</button>
+        <button type="button" disabled={!canPreset} onClick={() => preset('lev')}>Over cap (20x)</button>
+        <button type="button" disabled={!canPreset} onClick={() => preset('fake')}>Below oracle ($1)</button>
+        <button type="button" disabled={!canPreset} onClick={() => preset('sol')}>Blocked market (SOL)</button>
       </div>
       <div className="fields">
         <div className="field">
@@ -131,15 +134,16 @@ export function Ticket({ s, vault, abi, onSent }: { s: Vault; vault: Address; ab
         <tbody>
           {checks && checks.length ? checks.map((c) => (
             <tr key={c.k}><th scope="row">{c.k}</th><td>{c.v}</td><td className={c.ok === null ? 'wait' : c.ok ? 'pass' : 'fail'}>{c.ok === null ? 'wait' : c.ok ? 'pass' : 'fail'}</td></tr>
-          )) : checks ? <tr><td colSpan={3} className="text-dim">No answer from the contract.</td></tr> : <tr><td colSpan={3} className="text-dim">Asking the contract&hellip;</td></tr>}
+          )) : empty ? <tr><td colSpan={3} className="text-dim">Market, leverage, loss line and frozen state are checked by the contract once you choose an example or enter a size.</td></tr> : checks ? <tr><td colSpan={3} className="text-dim">No answer from the contract.</td></tr> : <tr><td colSpan={3} className="text-dim">Asking the contract&hellip;</td></tr>}
         </tbody>
       </table>
-      {verdict && <p data-k="check" className={verdict.ok ? 'verdict' : 'verdict verdict-no'}>{verdict.text}</p>}
+      {readNote && <p className="verdict text-dim">{readNote}</p>}
+      {verdict && !empty && <p data-k="check" className={empty ? 'verdict text-dim' : verdict.ok ? 'verdict' : 'verdict verdict-no'}>{verdict.text} {unavailable && <button type="button" className="linkish" onClick={() => setRetry((n) => n + 1)}>Retry check</button>}</p>}
       {f.asset === 4 && Number(f.sz) > 0 && capUsd != null && (Number(f.px) || ethPx) && <p className="verdict text-dim">Notional about {(Number(f.sz) * (Number(f.px) || ethPx!)).toFixed(2)} USD against {capUsd!.toFixed(2)} USDC capital. The signature path lets any relayer submit; here your wallet submits it.</p>}
 
       <div className="actions">
-        <Button type="submit" disabled={busy || phase === 'checking'}>{busy ? 'Waiting for the wallet\u2026' : phase === 'checking' ? 'Checking\u2026' : phase === 'ok' ? 'Send order' : phase === 'no' ? 'Send anyway, it will revert' : 'Send unchecked'}</Button>
-        <Button type="button" variant="outline" disabled={busy || phase === 'checking'} onClick={sign}>Sign, then submit (you pay gas)</Button>
+        <Button type="submit" variant={phase === 'ok' || phase === 'checking' || empty ? 'default' : 'ghost'} className={!empty && (phase === 'no' || phase === 'unknown') ? 'test-action' : undefined} disabled={busy || phase === 'checking' || empty}>{busy ? 'Waiting for the wallet\u2026' : phase === 'checking' ? 'Checking\u2026' : phase === 'ok' ? 'Send order' : phase === 'no' ? 'Test: send it and watch it revert' : empty ? 'Send order' : 'Test: send without a check'}</Button>
+        <Button type="button" variant={phase === 'ok' || phase === 'checking' ? 'outline' : 'ghost'} className={phase === 'no' || phase === 'unknown' ? 'test-action' : undefined} disabled={busy || phase === 'checking' || empty} onClick={sign}>{phase === 'no' || phase === 'unknown' ? 'Test: sign it anyway' : 'Sign, then submit (you pay gas)'}</Button>
       </div>
       {out && <p data-k="out" className={out.ok ? 'verdict' : 'verdict verdict-no'}>{out.text} {out.tx && <Tx hash={out.tx} />}</p>}
     </form>
