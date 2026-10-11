@@ -5,9 +5,11 @@ ok   no Markdown rendering
 ok   links styled
 ok   CSS variables defined (56 decls)
 ok   button styles present
-ok   status chips/badges styled (29)
+ok   status chips/badges styled (30)
 ok   surfaces/cards present
 ok   summary metrics present
 ok   radius mixed (5 zero, 16 non-zero)
+ok   explorer/contract link present (2)
+ok   confirm/sign CTA has summary/simulation language nearby
 ---
 slop-check: PASS

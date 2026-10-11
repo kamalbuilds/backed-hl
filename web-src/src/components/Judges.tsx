@@ -30,8 +30,8 @@ export function Judges({ factory }: { factory: string }) {
         <li><span className="step-n">1</span><span className="run-what"><strong>Vault created</strong><span>by the factory, from a browser wallet</span></span><span className="run-tx"><Tx hash={E2E.create} /></span><span className="chip chip-success"><span className="dot" />Mined</span></li>
         <li><span className="step-n">2</span><span className="run-what"><strong>Allowed order placed</strong><span>sent by the vault contract to HyperCore</span></span><span className="run-tx"><Tx hash={E2E.trade} /></span><span className="chip chip-success"><span className="dot" />Mined</span></li>
         <li><span className="step-n">3</span><span className="run-what"><strong>20x order refused</strong><span>&ldquo;leverage above backer limit&rdquo;, never sent</span></span><span className="run-tx text-dim">no tx by design</span><span className="chip chip-danger"><span className="dot" />Refused</span></li>
-        <li><span className="step-n">4</span><span className="run-what"><strong>Line crossed, flattened</strong><span>backer moved the line, then flatten() closed it</span></span><span className="run-tx"><Tx hash={E2E.breach} /> <Tx hash={E2E.flatten} /></span><span className="chip chip-info"><span className="dot" />Flat</span></li>
-        <li><span className="step-n">5</span><span className="run-what"><strong>Keeper flattened after Stop</strong><span>public keeper, 4.8 s after it saw the stop</span></span><span className="run-tx"><Tx hash={E2E.keeper} /></span><span className="chip chip-info"><span className="dot" />Flat</span></li>
+        <li><span className="step-n">4</span><span className="run-what"><strong>Line crossed, flattened</strong><span>backer moved the line, then flatten() closed it</span></span><span className="run-tx"><Tx hash={E2E.breach} /> <Tx hash={E2E.flatten} /></span><span className="chip chip-success"><span className="dot" />Flat</span></li>
+        <li><span className="step-n">5</span><span className="run-what"><strong>Keeper flattened after Stop</strong><span>public keeper, 4.8 s after it saw the stop</span></span><span className="run-tx"><Tx hash={E2E.keeper} /></span><span className="chip chip-success"><span className="dot" />Flat</span></li>
         <li><span className="step-n">6</span><span className="run-what"><strong>Gasless signed order</strong><span>trader signed, a relayer sent tradeBySig</span></span><span className="run-tx"><Tx hash={E2E.signed} /></span><span className="chip chip-success"><span className="dot" />Mined</span></li>
         <li><span className="step-n">7</span><span className="run-what"><strong>Paid out to the backer</strong><span>principal paid back</span></span><span className="run-tx"><Tx hash={E2E.settle} /></span><span className="chip chip-success"><span className="dot" />Mined</span></li>
       </ol>
@@ -54,7 +54,7 @@ export function Checkpoints({ onAll, revertTx }: { onAll: () => void; revertTx?:
       <ul>
         <li><span className="cp-k">Allowed order</span><Tx hash={E2E.trade} /><span className="chip chip-success"><span className="dot" />Mined</span></li>
         <li><span className="cp-k">Over-cap order reverted</span>{revertTx ? <Tx hash={revertTx} /> : <span className="text-dim mono">see Incidents</span>}<span className="chip chip-danger"><span className="dot" />Reverted</span></li>
-        <li><span className="cp-k">Flatten below line</span><Tx hash={E2E.flatten} /><span className="chip chip-info"><span className="dot" />Flat</span></li>
+        <li><span className="cp-k">Flatten below line</span><Tx hash={E2E.flatten} /><span className="chip chip-success"><span className="dot" />Flat</span></li>
       </ul>
       <a className="cp-all" href="#judges" onClick={onAll}>All 7 steps and the real vs simulated table</a>
     </section>

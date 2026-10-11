@@ -9,8 +9,8 @@
   --accent-1: #5e6ad2; --accent-hover: #828fff; --on-primary: #ffffff;
   --success: #27a644; --warn: #f2994a; --danger: #eb5757;
   /* v3 status system: one primary (lavender, actions) + one secondary accent (teal, data and enforced outcomes) */
-  --accent-2: #2ec4b0; --accent-2-ink: #5fd8c6;
-  --st-success-ink: #5ad17a; --st-warn-ink: #f7b77c; --st-danger-ink: #ff8f8f; --st-info-ink: #5fd8c6; --st-neutral-ink: #d0d6e0;
+  --accent-2: #7c86e8; --accent-2-ink: #a4acf0;
+  --st-success-ink: #5ad17a; --st-warn-ink: #f7b77c; --st-danger-ink: #ff8f8f; --st-info-ink: #c3c8f5; --st-warnc: #f2c94c; --st-neutral-ink: #d0d6e0;
   --radius-s: 6px; --radius-m: 8px; --radius-l: 12px; --radius-pill: 999px;
   --shadow-card: 0 1px 0 rgba(255,255,255,.03) inset, 0 8px 24px rgba(0,0,0,.35);
   /* legacy names used by components, mapped onto v2 */
@@ -777,3 +777,21 @@ button[data-slot="button"]:disabled { opacity: 1; background: var(--surface-3); 
 .about .seg [role="tab"][data-state="active"] { background: var(--surface-4); color: var(--ink); }
 .pre-main { background: var(--surface-4) !important; border-color: rgba(94,106,210,.5) !important; }
 @media (max-width: 720px) { .replay-btn { min-height: 44px; } .about .seg [role="tab"] { min-height: 44px; } }
+
+/* brief v4: semantic green/yellow/red + one brand accent (lavender) */
+.chip-info { color: var(--st-info-ink); background: rgba(94,106,210,.16); border-color: rgba(94,106,210,.42); }
+.chip-warn { color: #f6d26b; background: rgba(242,201,76,.12); border-color: rgba(242,201,76,.36); }
+.chart .area { fill: rgba(94,106,210,.12); }
+.chart .gapline, .chart .gapmark line { stroke: #f2c94c; } .chart .gaptext { fill: #f6d26b; }
+.warnc { color: #f6d26b; } .pos { color: var(--st-success-ink); } .neg { color: var(--st-danger-ink); }
+.metric-pct { font-family: var(--font-mono); font-weight: 500; }
+.confirm { margin-top: 12px; border: 1px solid var(--hairline-strong); border-radius: var(--radius-m); background: var(--surface-2); padding: 14px; display: grid; gap: 10px; }
+.confirm-head { display: flex; justify-content: space-between; align-items: center; font-weight: 500; font-size: 14px; }
+.confirm-plain { margin: 0; font-size: 15px; color: var(--ink); line-height: 1.5; }
+.confirm-plain b { font-weight: 500; }
+.confirm-grid { margin: 0; display: grid; gap: 6px; }
+.confirm-grid > div { display: flex; justify-content: space-between; gap: 12px; font-size: 13.5px; }
+.confirm-grid dt { color: var(--ink-subtle); } .confirm-grid dd { margin: 0; }
+.confirm-foot { margin: 0; font-size: 13px; color: var(--ink-subtle); }
+.txstate { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 14px; margin: 10px 0 0; }
+.metric-label { white-space: nowrap; }

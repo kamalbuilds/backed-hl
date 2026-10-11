@@ -1,0 +1,11 @@
+ok   webfont loaded
+ok   primary font: PublicSans
+ok   tables: 0, none bare
+ok   no Markdown rendering
+ok   links styled
+ok   CSS variables defined (1 decls)
+ok   button styles present
+ok   status chips/badges styled (2)
+FAIL no surfaces (card/panel class + shadow/surface token): flat document
+ok   summary metrics present
+ok   radius mixed (2 zero, 3 non-zero)

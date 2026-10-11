@@ -21,6 +21,7 @@ export function Ticket({ s, vault, abi, onSent, readNote }: { s: Vault; vault: A
   const [verdict, setVerdict] = useState<{ ok: boolean; text: string } | null>(null)
   const [out, setOut] = useState<WriteResult | null>(null)
   const [busy, setBusy] = useState(false)
+  const [levAfter, setLevAfter] = useState<number | null>(null)
 
   const args = async (): Promise<[number, boolean, bigint, bigint, boolean]> => {
     const d = SZD[f.asset] ?? 2
@@ -47,6 +48,7 @@ export function Ticket({ s, vault, abi, onSent, readNote }: { s: Vault; vault: A
       const allowed = s.markets.includes(asset)
       let lev: number | null = null
       if (allowed) { try { lev = Number(await pub.readContract({ address: vault, abi, functionName: 'notionalAfter', args: [asset, buy, sz8] })) / s.cap } catch { lev = null } }
+      setLevAfter(lev)
       const levOk = lev == null ? (allowed ? null : false) : lev <= s.maxLev || ro
       const room = (s.eq - s.floor) / 1e6
       const c: Check[] = [
@@ -150,7 +152,23 @@ export function Ticket({ s, vault, abi, onSent, readNote }: { s: Vault; vault: A
       </div>
       {readNote && <p className="verdict text-dim">{readNote}</p>}
       {verdict && !empty && <p data-k="check" className={empty ? 'verdict text-dim' : verdict.ok ? 'verdict' : 'verdict verdict-no'}>{verdict.text} {unavailable && <button type="button" className="linkish" onClick={() => setRetry((n) => n + 1)}>Retry check</button>}</p>}
-      {f.asset === 4 && Number(f.sz) > 0 && capUsd != null && (Number(f.px) || ethPx) && <p className="verdict text-dim">Notional about {(Number(f.sz) * (Number(f.px) || ethPx!)).toFixed(2)} USD against {capUsd!.toFixed(2)} USDC capital. The signature path lets any relayer submit; here your wallet submits it.</p>}
+      {!empty && (() => {
+        const q = s.pos.find((p) => p.m === f.asset), px = Number(f.px) || (q && q.px > 0 ? pxOf(q) : null)
+        if (!px) return null
+        const sz = Number(f.sz), notional = sz * px, move = notional * 0.01, room = (s.eq - s.floor) / 1e6, after = room - move
+        return (
+          <div className="confirm" data-k="summary">
+            <div className="confirm-head"><span>Order summary</span><span className={`chip chip-${phase === 'ok' ? 'success' : phase === 'no' ? 'danger' : 'warn'}`}><span className="dot" />{phase === 'ok' ? 'Simulation passed' : phase === 'no' ? 'Contract will refuse' : 'Simulating'}</span></div>
+            <p className="confirm-plain">{f.buy ? 'Buy' : 'Sell'} <b className="mono">{sz} {MK[f.asset]}</b> (about <b className="mono">${notional.toFixed(2)}</b>) {f.px ? <>at up to <b className="mono">${Number(f.px).toLocaleString('en-US')}</b></> : 'at the oracle price, within 2%'}{f.ro ? ', reduce only' : ''}.</p>
+            <dl className="confirm-grid">
+              <div><dt>Exposure after fill</dt><dd className={`mono ${levAfter != null && levAfter > s.maxLev ? 'neg' : ''}`}>{levAfter != null ? `${levAfter.toFixed(2)}x of ${s.maxLev}x` : '\u2013'}</dd></div>
+              <div><dt>If {MK[f.asset]} moves 1% against you</dt><dd className="mono neg">{'\u2212'}${move.toFixed(2)}</dd></div>
+              <div><dt>Room to the loss line after that</dt><dd className={`mono ${after < 0 ? 'neg' : after < room * 0.5 ? 'warnc' : 'pos'}`}>{after.toFixed(2)} USDC</dd></div>
+            </dl>
+            <p className="confirm-foot">Nothing is sent until you confirm in your wallet. Below the line, anyone can close the position.</p>
+          </div>
+        )
+      })()}
 
       <div className="actions">
         <Button type="submit" variant={phase === 'ok' || phase === 'checking' || empty ? 'default' : 'ghost'} className={!empty && (phase === 'no' || phase === 'unknown') ? 'test-action' : undefined} disabled={busy || phase === 'checking' || empty}>{busy ? 'Waiting for the wallet\u2026' : phase === 'checking' ? 'Checking\u2026' : phase === 'ok' ? 'Send order' : phase === 'no' ? 'Test: send it and watch it revert' : empty ? 'Send order' : 'Test: send without a check'}</Button>
@@ -158,7 +176,8 @@ export function Ticket({ s, vault, abi, onSent, readNote }: { s: Vault; vault: A
       <div className="alt-path"><span className="text-dim">Or sign it and let any relayer submit:</span>
         <Button type="button" variant="ghost" size="sm" className={phase === 'no' || phase === 'unknown' ? 'test-action' : undefined} disabled={busy || phase === 'checking' || empty} onClick={sign}>{phase === 'no' || phase === 'unknown' ? 'Test: sign it anyway' : 'Sign, then submit (you pay gas)'}</Button>
       </div>
-      {out && <p data-k="out" className={out.ok ? 'verdict' : 'verdict verdict-no'}>{out.text} {out.tx && <Tx hash={out.tx} />}</p>}
+      {busy && <p className="txstate" data-k="pending"><span className="chip chip-warn"><span className="dot" />Pending</span>Confirm in your wallet, then wait for the block.</p>}
+      {out && !busy && <p data-k="out" className="txstate"><span className={`chip chip-${out.ok ? 'success' : 'danger'}`}><span className="dot" />{out.ok ? 'Confirmed' : 'Failed'}</span><span>{out.text} {out.tx && <Tx hash={out.tx} />}</span></p>}
     </form>
   )
 }
