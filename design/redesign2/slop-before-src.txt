@@ -1,0 +1,13 @@
+FAIL no webfont loaded (no Google Fonts / @font-face / next/font / fontsource)
+ok   primary font: PublicSans
+ok   tables: 31, none bare
+ok   no Markdown rendering
+ok   links styled
+ok   CSS variables defined (52 decls)
+ok   button styles present
+FAIL status shown as plain text (25 status words, no chip/badge class)
+FAIL no surfaces (card/panel class + shadow/surface token): flat document
+ok   summary metrics present
+ok   radius mixed (3 zero, 10 non-zero)
+---
+slop-check: 3 issue(s)

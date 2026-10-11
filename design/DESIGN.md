@@ -1,35 +1,41 @@
-# BACKED design system (binding)
+# BACKED design contract (v2, Oct 11 2026): product console on linear.app
 
-Hallmark · macrostructure: 02 Long Document, leaning F3 tabular spec sheet, with an F4 incident rail · theme: custom "night ledger" · studied: yes · DNA-source: image+tokens (ref-hl-hlp, ref-stripe-controls, ref-gh-status; see docs/design/REFERENCES.md)
+System: `~/.config/design-md/designs/linear.app.md` (claimed in hyperliquid/DESIGN-PICKS.md; PLEDGE must pick another).
 
-## Art direction
-A vault is a controls sheet, not a trading terminal. The page reads top to bottom like a spec that is alive: what the vault is doing in one sentence, the backer's rules as a parameter table with live values, then the incident log that proves the rules fire.
+## Contract (binding, written before code)
+1. **Direction:** a dark risk console for one vault. It reads like Linear's product chrome: near-black canvas, a four-step surface ladder, hairline borders, one lavender accent. Not a document: every block is a card with a surface, and numbers are the headline.
+2. **Fonts:** Geist (UI and display, 400/500/600) and Geist Mono (addresses, hashes, amounts), loaded from Google Fonts: `https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap`. Linear's own faces are proprietary; Geist is the closest open sans with a matching mono. Tabular numerals everywhere.
+3. **Palette:** CSS variables in the token block below. One accent (lavender `#5e6ad2`, used on the primary action, focus and the loss-line marker); semantic success / warn / danger only on chips and the ruler.
+4. **Spacing:** 4px base, scale 4 / 8 / 12 / 16 / 24 / 32 / 48. Type scale 12 / 13 / 14 / 16 / 20 / 28 / 40.
+5. **Layout:** sticky top bar (wordmark, vault pill with truncated mono address, network chip, Connect); a row of 5 metric cards; a 12-column grid with the risk column (loss line, equity chart, incidents) in 8 columns and the order desk card in 4 (sticky); then Rules, Verify on chain, Business and Key cards. Mobile: one column, metrics in a 2-column grid, desk right after the loss line.
 
-## Type (two faces, neither Inter/Roboto/Arial/system)
-- Display: **Familjen Grotesk** 600. Tight, slightly quirky grotesque, used for h1/h2 and the status sentence only. Tracking -0.03em on 40px, -0.02em on 24px.
-- Body and figures: **Public Sans** 400/500. Neutral, very legible at 13-15px, real tabular figures (`font-variant-numeric: tabular-nums`) in every table and number.
-- Scale (px): 13 / 15 / 18 / 24 / 40. Leading 1.5 body, 1.15 display. No mono anywhere. No letter-spaced caps labels.
+## Components
+- **Metric card:** 12px uppercase-free label in ink-subtle, 28px value in Geist Mono 500, a delta or sub-line in 13px.
+- **Status chip:** pill, 12px/500, a 6px dot plus text, tinted background at 12% of the semantic color. Armed (success), Breached / Frozen (danger), Settled (neutral), Refused (danger), Accepted (success), Simulated (warn), Real (success).
+- **Card:** surface-1, 1px hairline, radius 12px, shadow `0 1px 0 rgba(255,255,255,.03) inset, 0 8px 24px rgba(0,0,0,.35)`. Card header: 14px/600 title + 13px subtle sub-line + optional chip on the right.
+- **Buttons:** primary (lavender fill, white text, radius 8, 40px), secondary (surface-3 fill, hairline), ghost (text only, hover surface-2). Exactly one primary per view: "Send order" on Trader, "Fund" on Backer, "Connect wallet" in the top bar before connect.
+- **Tables:** 13px rows, 12px 16px cell padding, hairline separators, row hover surface-2, right-aligned tabular numbers, chips for status, truncated mono hashes linking to the explorer.
+- **Address:** Geist Mono 13px, `0x6619…F049`, copy-free explorer link with a subtle underline on hover only.
 
-## Colour (70/20/10)
-- 70 paper `#14120F` (warm near-black, not blue-black), raised `#1B1814`
-- 20 ink `#ECE5D8` (bone), dim `#A39A8B`, line `#2C2821`
-- 10 accent vermilion `#FF5B35`, **one job: the loss line and everything that happens when it is crossed** (the line, breach state, FLATTENED, incident titles). Primary actions are bone-filled buttons, not accent.
-- Sign: negatives get a leading minus and dim ink; only breach uses vermilion. Positive gets "+" and ink.
-
-## Space and shape
-8px scale: 4, 8, 12, 16, 24, 32, 48, 64. Radius **4px** on every element. Hairline 1px `--line` rules separate sections (no cards inside cards, no shadows, no blur, no gradients).
-
-## Layout
-- Masthead: one line. Wordmark, vault address, network, Connect.
-- Fold: left 7/12 = h1 vault, status sentence, the loss-line ruler (signature). Right 5/12 = order ticket with live rule checks (Tabs: Trader | Backer).
-- Then sections down the page: Rules (parameter sheet), Incidents (rail), Equity (stepped line), Who holds the key (two-column table), footer single line.
-- 390px: single column, ticket after the ruler.
-
-## Signature component: the loss-line ruler
-A horizontal ruler in USDC from below the line to above zero, with tick labels. The backer's line is a 2px vermilion rule labelled with its value; equity is a bone marker with its value. On breach (or the replay, key R) the ruler flashes once and the status sentence becomes "Flattened in 2.05 s" with the tx.
-
-## Motion
-One page-load: status sentence and ruler fade up 8px, 240ms ease-out, once. Breach flash 420ms once. Nothing else animates. `prefers-reduced-motion`: none.
+## Token block
+```css
+:root {
+  --canvas: #08090a; --surface-1: #0f1011; --surface-2: #141516; --surface-3: #18191a; --surface-4: #1f2023;
+  --hairline: #23252a; --hairline-strong: #34343a;
+  --ink: #f7f8f8; --ink-muted: #d0d6e0; --ink-subtle: #8a8f98; --ink-tertiary: #62666d;
+  --primary: #5e6ad2; --primary-hover: #828fff; --on-primary: #ffffff;
+  --success: #27a644; --warn: #f2994a; --danger: #eb5757;
+  --radius-sm: 6px; --radius: 8px; --radius-lg: 12px; --radius-pill: 999px;
+  --shadow-card: 0 1px 0 rgba(255,255,255,.03) inset, 0 8px 24px rgba(0,0,0,.35);
+  --font-sans: "Geist", ui-sans-serif, sans-serif; --font-mono: "Geist Mono", ui-monospace, monospace;
+}
+```
 
 ## Refusals
-Terminal grid, order book, candles, mono figures, teal, neon, gradients, glass, pills, sparklines, big-metric stat rows, emoji, em dashes in copy, skeleton-first loading, `transition-all`.
+No document sections with long paragraphs (max two sentences of prose per card); no square-only corners; no gradients; no glow; no second accent; no emoji; no em dashes in copy.
+
+## v3 final pass (Oct 11, 10:40 PM IST): status color system, chart, type floor
+- **Two accents, two jobs.** Primary lavender `#5e6ad2` = actions and focus only (Connect, Send order, first-step marker). Secondary teal `--accent-2 #2ec4b0` = data and enforced outcomes (realized-PnL line and area, room bracket, Flat chips, network and recorded-proof chips, proof links).
+- **Status chips (text + dot, never color alone):** success green (Armed, Mined, Pass), danger red (Below line, Frozen, Refused, Reverted, Fail), warn amber (Snapshot, RPC retrying, Fee planned, Replay, measured gap), info teal (Testnet, Recorded, Flat), neutral grey (Settled, Not checked, Checking, Loaded). Chip text uses the `--st-*-ink` tints, all at least 4.5:1 on surface-1.
+- **Chart:** labelled USDC axis with nice ticks and gridlines, dashed time gridlines with date+time ticks, axis lines, teal stepped line with 8% area, fill dots, annotations (low point, worst fill, measured gap, last read), the backer's line dashed red, and a hover/keyboard tooltip (time, coin/direction, size at price, fill PnL, realized total).
+- **Type floor:** no text under 12px; secondary text 13px in ink-subtle `#aab0b9` (about 9:1 on surface-1); tertiary `#8d929a` (about 6:1). Body 14 to 16px.

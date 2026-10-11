@@ -84,6 +84,14 @@ export function Ticket({ s, vault, abi, onSent, readNote }: { s: Vault; vault: A
       sol: { asset: 5, buy: true, sz: '0.10', px: '150', ro: false },
     }
     setF(P[k]); setOut(null)
+    if (k === 'ok') {
+      // size the allowed example to the headroom left under the cap, counting the vault's open exposure
+      pub.readContract({ address: vault, abi, functionName: 'notionalAfter', args: [4, true, 0n] }).then((n) => {
+        const cur = Number(n) / 1e6, room = s.maxLev * capUsd - cur
+        const usd = Math.min(2.5 * capUsd, 0.8 * room)
+        if (usd > 0) setF({ ...P.ok, sz: (usd / ethPx).toFixed(4) })
+      }).catch(() => {})
+    }
   }
   const send = async () => { setBusy(true); const r = await write(vault, abi, 'trade', await args()); setOut(r); onSent(r); setBusy(false) }
   const sign = async () => {
@@ -99,11 +107,13 @@ export function Ticket({ s, vault, abi, onSent, readNote }: { s: Vault; vault: A
   return (
     <form className="ticket" onSubmit={(e) => { e.preventDefault(); send() }}>
       <div className="presets" aria-label="Try an order">
-        <span className="text-dim">{canPreset ? 'Try' : 'Presets need the live ETH price and vault capital, which have not loaded.'}</span>
-        <button type="button" disabled={!canPreset} onClick={() => preset('ok')}>Within cap (2.5x)</button>
-        <button type="button" disabled={!canPreset} onClick={() => preset('lev')}>Over cap (20x)</button>
-        <button type="button" disabled={!canPreset} onClick={() => preset('fake')}>Below oracle ($1)</button>
-        <button type="button" disabled={!canPreset} onClick={() => preset('sol')}>Blocked market (SOL)</button>
+        {!canPreset && <span className="text-dim">Presets need the live ETH price and vault capital, which have not loaded.</span>}
+        <button type="button" className="pre-main" aria-label="Within cap (2.5x)" disabled={!canPreset} onClick={() => preset('ok')}><span className="pre-txt">Check an ETH long under the cap<span className="pre-sub">Sized to the room left under {s.maxLev}x, counting open positions. No wallet needed.</span></span><span className="pre-go" aria-hidden="true">&rarr;</span></button>
+        <div className="pre-row"><span className="pre-lbl">Or test a refusal</span>
+          <button type="button" disabled={!canPreset} onClick={() => preset('lev')}>Over cap (20x)</button>
+          <button type="button" disabled={!canPreset} onClick={() => preset('fake')}>Below oracle ($1)</button>
+          <button type="button" disabled={!canPreset} onClick={() => preset('sol')}>Blocked market (SOL)</button>
+        </div>
       </div>
       <div className="fields">
         <div className="field">
@@ -130,20 +140,23 @@ export function Ticket({ s, vault, abi, onSent, readNote }: { s: Vault; vault: A
       </div>
       <label className="check"><input type="checkbox" checked={f.ro} onChange={(e) => setF({ ...f, ro: e.target.checked })} /> Reduce only</label>
 
-      <table className="checks" aria-live="polite">
-        <tbody>
-          {checks && checks.length ? checks.map((c) => (
-            <tr key={c.k}><th scope="row">{c.k}</th><td>{c.v}</td><td className={c.ok === null ? 'wait' : c.ok ? 'pass' : 'fail'}>{c.ok === null ? 'wait' : c.ok ? 'pass' : 'fail'}</td></tr>
-          )) : empty ? <tr><td colSpan={3} className="text-dim">Market, leverage, loss line and frozen state are checked by the contract once you choose an example or enter a size.</td></tr> : checks ? <tr><td colSpan={3} className="text-dim">No answer from the contract.</td></tr> : <tr><td colSpan={3} className="text-dim">Asking the contract&hellip;</td></tr>}
-        </tbody>
-      </table>
+      <div className="gate" aria-live="polite">
+        <div className="gate-head"><span>Contract checks</span><span className="gate-sub">{empty ? 'run when you set a size' : checks === null ? 'asking the contract\u2026' : 'simulated as the trader'}</span></div>
+        {empty ? <p className="gate-idle">Choose an example or enter a size.</p> : <ul>
+          {(checks && checks.length ? checks : (['Market', 'Leverage', 'Loss line', 'Frozen'] as const).map((k) => ({ k, v: checks ? 'no answer' : 'checking', ok: null as boolean | null }))).map((c) => (
+            <li key={c.k}><span className="gate-k">{c.k}</span><span className="gate-v">{c.v}</span><span className={`chip chip-${c.ok === null ? 'neutral' : c.ok ? 'success' : 'danger'}`}><span className="dot" />{c.ok === null ? 'Checking' : c.ok ? 'Pass' : 'Fail'}</span></li>
+          ))}
+        </ul>}
+      </div>
       {readNote && <p className="verdict text-dim">{readNote}</p>}
       {verdict && !empty && <p data-k="check" className={empty ? 'verdict text-dim' : verdict.ok ? 'verdict' : 'verdict verdict-no'}>{verdict.text} {unavailable && <button type="button" className="linkish" onClick={() => setRetry((n) => n + 1)}>Retry check</button>}</p>}
       {f.asset === 4 && Number(f.sz) > 0 && capUsd != null && (Number(f.px) || ethPx) && <p className="verdict text-dim">Notional about {(Number(f.sz) * (Number(f.px) || ethPx!)).toFixed(2)} USD against {capUsd!.toFixed(2)} USDC capital. The signature path lets any relayer submit; here your wallet submits it.</p>}
 
       <div className="actions">
         <Button type="submit" variant={phase === 'ok' || phase === 'checking' || empty ? 'default' : 'ghost'} className={!empty && (phase === 'no' || phase === 'unknown') ? 'test-action' : undefined} disabled={busy || phase === 'checking' || empty}>{busy ? 'Waiting for the wallet\u2026' : phase === 'checking' ? 'Checking\u2026' : phase === 'ok' ? 'Send order' : phase === 'no' ? 'Test: send it and watch it revert' : empty ? 'Send order' : 'Test: send without a check'}</Button>
-        <Button type="button" variant={phase === 'ok' || phase === 'checking' ? 'outline' : 'ghost'} className={phase === 'no' || phase === 'unknown' ? 'test-action' : undefined} disabled={busy || phase === 'checking' || empty} onClick={sign}>{phase === 'no' || phase === 'unknown' ? 'Test: sign it anyway' : 'Sign, then submit (you pay gas)'}</Button>
+      </div>
+      <div className="alt-path"><span className="text-dim">Or sign it and let any relayer submit:</span>
+        <Button type="button" variant="ghost" size="sm" className={phase === 'no' || phase === 'unknown' ? 'test-action' : undefined} disabled={busy || phase === 'checking' || empty} onClick={sign}>{phase === 'no' || phase === 'unknown' ? 'Test: sign it anyway' : 'Sign, then submit (you pay gas)'}</Button>
       </div>
       {out && <p data-k="out" className={out.ok ? 'verdict' : 'verdict verdict-no'}>{out.text} {out.tx && <Tx hash={out.tx} />}</p>}
     </form>

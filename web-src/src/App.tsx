@@ -1,14 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { Address } from 'viem'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
-import { connect, hhmm, loadData, loadFills, medianRun, pub, readVault, short, vaultState, type Data, type Fill, type Vault, type WriteResult } from '@/lib/backed'
+import { connect, hhmm, sgn, loadData, loadFills, medianRun, pub, readVault, short, vaultState, type Data, type Fill, type Vault, type WriteResult } from '@/lib/backed'
 import { LossRuler } from '@/components/LossRuler'
 import { RulesSheet } from '@/components/RulesSheet'
 import { Incidents } from '@/components/Incidents'
 import { Equity } from '@/components/Equity'
-import { Judges } from '@/components/Judges'
+import { Judges, Checkpoints, PoolsNote } from '@/components/Judges'
 import { Business } from '@/components/Business'
 import { KeyTable } from '@/components/KeyTable'
 import { Ticket } from '@/components/Ticket'
@@ -29,6 +28,9 @@ export default function App() {
   const [fillsLoaded, setFillsLoaded] = useState(false)
   const [me, setMe] = useState<string | null>(null)
   const [replay, setReplay] = useState<'idle' | 'crossing' | 'flat'>('idle')
+  const [evTab, setEvTab] = useState('verify')
+  const [acct, setAcct] = useState(false)
+  const [aboutTab, setAboutTab] = useState('key')
   const [tab, setTab] = useState(() => (new URLSearchParams(location.search).get('tab') === 'backer' ? 'backer' : 'trader'))
   useEffect(() => {
     if (!vault) return
@@ -90,111 +92,131 @@ export default function App() {
   const st = s ? vaultState(s) : null
   const shownEq = replay === 'crossing' ? floor - 0.05 : eq
 
+  const shownRoom = shownEq - floor
+  const chip = !st ? null : s!.settled ? 'neutral' : st.alarm ? 'danger' : 'success'
+  const chipWord = (!st ? 'Reading' : s!.settled ? 'Settled' : s!.breached ? 'Frozen' : s!.reason ? 'Below line' : 'Armed') + (st && (rpcDown || asOf) ? ' at' : '')
+  const loadVault = (v: Address) => { setVault(v); setS(null); setFills([]); setFillsErr(false); setFillsLoaded(false) }
+
   return (
     <>
-      <header className="mast">
-        <div className="mast-in">
-          <span className="word">BACKED</span>
-          <span className="text-dim mast-meta">Vault <Tx hash={vault} kind="address" /> · HyperEVM testnet</span>
-          <a className="mast-verify" href="#judges">Verify on chain</a>
-          <Button variant="outline" size="sm" onClick={() => connect().then(setMe).catch((e) => alert(e.message))}>{me ? short(me) : 'Connect wallet'}</Button>
+      <header className="topbar">
+        <div className="topbar-in">
+          <span className="word"><span className="word-mark" aria-hidden="true"><i /></span>BACKED</span>
+          <span className="pill mono" title={vault}>{short(vault)}</span>
+          <span className="chip chip-info"><span className="dot" />HyperEVM testnet</span>
+          <nav className="topnav" aria-label="Sections"><a href="#judges" onClick={() => setEvTab('verify')}>Verify on chain</a><a href="#judges" onClick={() => setEvTab('rules')}>Rules</a><a href="#business" onClick={() => setAboutTab('business')}>Business</a></nav>
+          <Button size="sm" variant={me ? 'secondary' : 'default'} className="topbar-cta" onClick={() => connect().then(setMe).catch((e) => alert(e.message))}>{me ? short(me) : 'Connect wallet'}</Button>
         </div>
       </header>
 
-      <main className="page">
-        <div className="fold">
-          <section className="lead" aria-labelledby="h1">
-            <h1 id="h1">A trader uses your USDC. The contract holds the line.</h1>
-            <p className="lede">Every order goes through the vault contract, which checks the backer&rsquo;s rules on chain.<span className="lede-short"> Below the loss line, anyone can close it.</span><span className="lede-more"> Cross the loss line and anyone can close the account. There is no operator key.</span></p>
-
-            <div className="status" aria-live="polite">
-              {!s ? (rpcDown ? <p className="state-line">Could not read this vault from HyperEVM (testnet RPC). <button type="button" className="linkish" onClick={() => location.reload()}>Retry</button></p> : <p className="state-line">Reading the vault from HyperEVM&hellip;</p>) : replay === 'crossing' ? (
-                <p className="state-line alarm">Replay: line crossed, flatten() on its way&hellip; <span className="state-sub">A replay of a recorded run, not the live vault.</span></p>
-              ) : replay === 'flat' && med ? (
-                <p className="state-line alarm">Replay: flat in {(med.ms / 1000).toFixed(2)} s. <span className="state-sub">Not the live vault. Median of {med.runs} live runs, breach to HyperCore fill. <Tx hash={med.tx} label="Fill tx" /></span></p>
-              ) : (
-                <p className={st!.alarm ? 'state-line alarm' : 'state-line'}>
-                  {asOf || rpcDown ? `Last confirmed: ${st!.word.toLowerCase()}` : st!.word}{eq >= floor ? `, ${(eq - floor).toFixed(2)} USDC of room.` : `, ${(floor - eq).toFixed(2)} USDC past the line.`}{' '}
-                  <span className="state-sub">
-                    {`PnL versus starting capital ${eq >= 0 ? '+' : ''}${eq.toFixed(2)} USDC, against the backer's line at ${floor.toFixed(2)}`}
-                    {asOf ? `, read at ${hhmm(asOf)} (page snapshot).` : readAt ? `, read from the contract at ${hhmm(readAt)}.` : '.'}
-                    {rpcDown && ' RPC not answering, retrying.'}
-                  </span>
-                </p>
-              )}
+      <main className="console">
+        <section className="hero" aria-labelledby="h1">
+          <div>
+            <div className="hero-top">
+              <h1 id="h1">Back a trader. The contract enforces your rules.</h1>
+              <span className="chip chip-info net-m"><span className="dot" />Testnet</span>
+              {chip && <span className={`chip chip-${chip === 'success' && (rpcDown || asOf) ? 'warn' : chip}`}><span className="dot" />{chipWord}{rpcDown ? `${readAt ? ` ${hhmm(readAt)}` : asOf ? ` ${hhmm(asOf)}` : ''} · RPC retrying` : asOf ? ` ${hhmm(asOf)} · snapshot` : readAt ? ` · live ${hhmm(readAt)}` : ''}</span>}
             </div>
-            {s && <LossRuler eq={shownEq} floor={floor} flash={replay !== 'idle'} />}
-            <p className="hint">
-              <Button type="button" variant="outline" size="sm" onClick={doReplay} disabled={replay !== 'idle'}>Replay a breach</Button>
-              <span className="text-dim"> (key R).</span> <a className="jump" href="#ticket">Try an order</a></p>
-            <p className="proof-strip">Recorded proof: 5 funded breaches on testnet, median 2.05 s to flat; a full wallet run on 11 Oct. <a href="#judges">Verify this run</a></p><p hidden>
-              {med && isRef && <span className="measured"> Measured on this vault: flat in {(med.ms / 1000).toFixed(2)} s, median of {med.runs} live runs. <Tx hash={med.tx} label="fill tx" /></span>}
-            </p>
-            <nav className="spine" aria-label="Sections"><a href="#judges">Verify on chain</a><a href="#rules">Rules</a><a href="#incidents">Incidents</a><a href="#business">Business model</a></nav>
-          </section>
+            <p className="hero-sub-m">The payout is code and no key exists: the contract checks every order and pays the trader&rsquo;s share.</p>
+            <p className="hero-sub">No gateway, no API wallet, a payout nobody can deny. A trader trades your USDC, every order goes through this contract, the profit split is fixed in its code, and below the loss line anyone can close the book.</p>
+          </div>
+        </section>
 
-          <aside className="desk" id="ticket" aria-label="Order ticket and backer controls">
-            <Tabs value={tab} onValueChange={setTab}>
-              <TabsList className="tabs">
-                <TabsTrigger value="trader">Trader</TabsTrigger>
-                <TabsTrigger value="backer">Backer</TabsTrigger>
-              </TabsList>
-              <TabsContent value="trader">{s ? <Ticket s={s} vault={vault} abi={data.abi.vault} onSent={onSent} readNote={asOf ? `Rules and equity as of the page snapshot at ${hhmm(asOf)}; the verdict below is a fresh simulation.` : rpcDown && readAt ? `Rules last read at ${hhmm(readAt)}; the RPC is not answering, so the verdict may be stale.` : undefined} /> : <p className="text-dim">Waiting for the vault&hellip;</p>}</TabsContent>
-              <TabsContent value="backer"><Backer vault={vault} factory={data.config.factory} abi={data.abi} onVault={(v) => { setVault(v); setS(null); setFills([]); setFillsErr(false); setFillsLoaded(false) }} onSent={onSent} /></TabsContent>
-            </Tabs>
-            <nav className="spine spine-m" aria-label="Sections"><a href="#rules">Rules</a><a href="#incidents">Incidents</a><a href="#judges">Verify on chain</a></nav>
+
+        <div className="layout">
+          <div className="col-main">
+        <section className="card m-first instrument" aria-labelledby="line-h">
+              <div className="card-head"><div><h2 id="line-h">Loss line</h2><p className="card-sub">PnL against the backer&rsquo;s line, read from the contract.</p></div>{replay !== 'idle' ? <span className="chip chip-warn"><span className="dot" />Replay</span> : <span className="head-acts"><a className="proof-jump" href="#judges" onClick={() => setEvTab('verify')}>Verify recorded run</a><Button type="button" variant="ghost" size="sm" className="replay-btn" onClick={doReplay}>Replay a breach</Button></span>}</div>
+              {s && <div className="line-hero"><span className={`line-big mono ${shownRoom < 0 ? 'neg' : ''}${asOf || rpcDown ? ' is-stale' : ''}`}>{Math.abs(shownRoom).toFixed(2)}</span>{(asOf || rpcDown) && (readAt || asOf) ? <span className="chip chip-warn big-stale"><span className="dot" />{asOf ? 'Snapshot' : 'Stale'} {hhmm((readAt ?? asOf)!)}</span> : null}<span className="line-cap">USDC {shownRoom >= 0 ? 'of room above the line' : 'past the line, anyone can flatten'}{replay !== 'idle' && ' (replay)'}<br /><span className="line-cap-sub">PnL {sgn(shownEq)} · line {floor.toFixed(2)} · then <code>flatten()</code> by anyone{(asOf || rpcDown) && (readAt || asOf) ? <span className="stale"> · last confirmed {hhmm((readAt ?? asOf)!)}</span> : null}</span></span></div>}
+              {(asOf || rpcDown) && (readAt || asOf) ? <p className="stale-m">Last confirmed {hhmm((readAt ?? asOf)!)}</p> : null}
+              <p className="cap-m">Below the red line, anyone can close the positions.</p>
+              {s && <LossRuler eq={shownEq} floor={floor} flash={replay !== 'idle'} />}
+              <button type="button" className="acct-toggle" aria-expanded={acct} onClick={() => setAcct(!acct)}>{acct ? 'Hide account details' : 'Account details'}</button>
+              <div className={`metrics${acct ? ' open' : ''}`} aria-label="Vault summary">
+          <div className="metric"><span className="metric-label">Account value</span><span className="metric-value mono">{s ? ((s.cap + s.eq) / 1e6).toFixed(2) : '\u2013'}</span><span className="metric-sub">USDC · capital {s ? (s.cap / 1e6).toFixed(2) : '\u2013'}</span></div>
+          <div className="metric"><span className="metric-label">PnL vs capital</span><span className={`metric-value mono ${eq < 0 ? 'neg' : 'pos'}`}>{s ? sgn(eq) : '\u2013'}</span><span className="metric-sub">USDC{readAt ? ` · read ${hhmm(readAt)}` : asOf ? ` · snapshot ${hhmm(asOf)}` : ''}</span></div>
+          <div className="metric"><span className="metric-label">Positions</span><span className="metric-value mono">{s ? s.pos.filter((p) => p.szi).length : '\u2013'}</span><span className="metric-sub">{s ? (s.pos.some((p) => p.szi) ? s.pos.filter((p) => p.szi).map((p) => ({ 4: 'ETH', 3: 'BTC', 5: 'SOL' } as Record<number, string>)[p.m] ?? p.m).join(' · ') : 'flat on HyperCore') : ''}</span></div>
+          <div className="metric"><span className="metric-label">Leverage cap</span><span className="metric-value mono">{s ? `${s.maxLev}x` : '\u2013'}</span><span className="metric-sub">{s ? s.markets.map((m) => ({ 4: 'ETH', 3: 'BTC', 5: 'SOL' } as Record<number, string>)[m] ?? m).join(' · ') : ''} at oracle price</span></div>
+          <a className="metric metric-link" href="#judges" onClick={() => setEvTab('incidents')} aria-label="Breach to flat, see the recorded runs"><span className="metric-label">Breach to flat <span className="metric-go">proof</span></span><span className="metric-value mono">{med ? `${(med.ms / 1000).toFixed(2)}s` : '\u2013'}</span><span className="metric-sub">testnet, median of {med?.runs ?? 5} runs</span></a>
+              </div>
+              <div className="status" aria-live="polite">
+                {!s ? (rpcDown ? <p className="state-line">Could not read this vault (testnet RPC). <Button type="button" variant="ghost" size="sm" onClick={() => location.reload()}>Retry</Button></p> : <p className="state-line">Reading the vault from HyperEVM&hellip;</p>) : replay === 'crossing' ? (
+                  <p className="state-line alarm">Replay: line crossed, flatten() on its way&hellip; <span className="state-sub">A recorded run, not the live vault.</span></p>
+                ) : replay === 'flat' && med ? (
+                  <p className="state-line alarm">Replay: flat in {(med.ms / 1000).toFixed(2)} s. <span className="state-sub">Median of {med.runs} live runs. <Tx hash={med.tx} label="Fill tx" /></span></p>
+                ) : st!.alarm ? (
+                  <p className={st!.alarm ? 'state-line alarm' : 'state-line'}>{asOf || rpcDown ? `Last confirmed: ${st!.word.toLowerCase()}` : st!.word}.</p>
+                ) : null}
+              </div>
+            </section>
+
+
+            <Checkpoints onAll={() => setEvTab('verify')} revertTx={find(/stacked/i) ?? undefined} />
+            <section className="card" aria-labelledby="eq-h">
+              <div className="card-head"><div><h2 id="eq-h">Realized PnL</h2><p className="card-sub">{fills.length ? `${fills.length} HyperCore fills on this vault, ${new Date(fills[0].time).toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })} to ${new Date(fills[fills.length - 1].time).toLocaleString('en-GB', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })} IST, after fees.` : 'Realized PnL from this vault\u2019s HyperCore fills.'}</p></div>{fillsErr && <span className="chip chip-warn"><span className="dot" />Fills refresh failed, showing cached</span>}</div>
+              {s && <Equity readAt={readAt ?? asOf} fills={fills} eq={eq} floor={floor} loaded={fillsLoaded} failed={fillsErr} bounties={bounties} />}
+            </section>
+          </div>
+
+          <aside className="col-side" id="ticket" aria-label="Order desk">
+            <section className="card desk">
+              <Tabs value={tab} onValueChange={setTab}>
+                <TabsList className="tabs">
+                  <TabsTrigger value="trader">Trader</TabsTrigger>
+                  <TabsTrigger value="backer">Backer</TabsTrigger>
+                </TabsList>
+                <TabsContent value="trader">{s ? <Ticket s={s} vault={vault} abi={data.abi.vault} onSent={onSent} readNote={asOf ? `Rules as of the snapshot at ${hhmm(asOf)}; the verdict is a fresh simulation.` : rpcDown && readAt ? `Rules last read at ${hhmm(readAt)}; RPC not answering.` : undefined} /> : <p className="text-dim">Waiting for the vault&hellip;</p>}</TabsContent>
+                <TabsContent value="backer"><Backer vault={vault} factory={data.config.factory} abi={data.abi} onVault={loadVault} onSent={onSent} /></TabsContent>
+              </Tabs>
+            </section>
+            <section className="card guarantees" aria-labelledby="g-h">
+              <div className="card-head"><div><h2 id="g-h">What no one can do</h2><p className="card-sub">Enforced by the vault contract, not an operator.</p></div><span className="chip chip-info"><span className="dot" />No operator key</span></div>
+              <ul>
+                <li><span className="g-k">Skip the rules</span><span>Only the vault contract can place an order, and it checks market, leverage and the loss line first.</span></li>
+                <li><span className="g-k">Keep a losing trade open</span><span>Below the line, anyone can call <code>flatten()</code> and is paid a bounty for it.</span></li>
+                <li><span className="g-k">Withhold the payout</span><span>The profit split is fixed at creation and paid by <code>settle()</code>.</span></li>
+              </ul>
+              <a className="cp-all" href="#business" onClick={() => setAboutTab('key')}>Full comparison with an operator-run pool</a>
+            </section>
           </aside>
         </div>
 
-        <Separator className="rule" />
-        <section className="sec" aria-labelledby="j-h" id="judges">
-          <div className="sec-head"><h2 id="j-h">For judges</h2><p className="text-dim">Check it on chain in about a minute. Every link opens the testnet explorer.</p></div>
-          <Judges factory={data.config.factory} />
+        <section className="card evidence" aria-labelledby="ev-h" id="judges">
+          <div className="card-head"><div><h2 id="ev-h">Recorded contract walkthrough</h2><p className="card-sub">A separate reference vault, run end to end on testnet on 11 Oct. Every hash opens the explorer.</p></div><span className="chip chip-info"><span className="dot" />Recorded 11 Oct 2026</span></div>
+          <Tabs value={evTab} onValueChange={setEvTab}>
+            <TabsList className="seg">
+              <TabsTrigger value="verify">Verify on chain</TabsTrigger>
+              <TabsTrigger value="incidents">Incidents</TabsTrigger>
+              <TabsTrigger value="rules">Rules</TabsTrigger>
+            </TabsList>
+            <TabsContent value="verify" id="verify"><Judges factory={data.config.factory} /></TabsContent>
+            <TabsContent value="incidents" id="incidents"><p className="card-sub tab-sub">Breaches and refused orders on the reference vault <Tx hash={ev.vault} kind="address" />.{!isRef && ' Not the vault loaded above.'}</p><Incidents ev={ev} /></TabsContent>
+            <TabsContent value="rules" id="rules"><p className="card-sub tab-sub">Set at creation, enforced on every order{readAt ? `; read ${hhmm(readAt)}` : ''}.</p>{s ? <RulesSheet s={s} proof={proof} /> : <p className="text-dim">Reading rules&hellip;</p>}</TabsContent>
+          </Tabs>
         </section>
-
-        <Separator className="rule" />
-        <section className="sec" aria-labelledby="rules-h" id="rules">
-          <div className="sec-head"><h2 id="rules-h">Rules</h2><p className="text-dim">Set by the backer when the vault is created. Values come from the contract{readAt ? `, last read at ${hhmm(readAt)}` : asOf ? `, snapshot from ${hhmm(asOf)}` : ''}.</p></div>
-          {s ? <RulesSheet s={s} proof={proof} /> : <p className="text-dim">Reading rules&hellip;</p>}
-        </section>
-
-        <Separator className="rule" />
-        <section className="sec" aria-labelledby="inc-h" id="incidents">
-          <div className="sec-head"><h2 id="inc-h">Incidents</h2><p className="text-dim">Every breach and refused order from the live testnet runs on the reference vault <Tx hash={ev.vault} kind="address" />, with its transaction.{!isRef && ' The vault loaded above is a different one, so none of this is its history.'}</p></div>
-          <Incidents ev={ev} />
-        </section>
-
-        <Separator className="rule" />
-        <section className="sec" aria-labelledby="eq-h">
-          <div className="sec-head"><h2 id="eq-h">Equity</h2><p className="text-dim">Realized PnL from this vault&rsquo;s HyperCore fills, against the line.</p></div>
-          {s && <Equity readAt={readAt ?? asOf} fills={fills} eq={eq} floor={floor} loaded={fillsLoaded} failed={fillsErr} bounties={bounties} />}
-        </section>
-
-        <Separator className="rule" />
-        <section className="sec" aria-labelledby="b-h" id="business">
-          <div className="sec-head"><h2 id="b-h">Business model</h2><p className="text-dim">Who pays, and the market it replaces. Figures are sourced; the fee is a plan.</p></div>
-          <Business />
-        </section>
-
-        <Separator className="rule" />
-        <section className="sec" aria-labelledby="key-h">
-          <div className="sec-head"><h2 id="key-h">Who holds the key</h2><p className="text-dim">Compared with a pool where an operator signs the orders.</p></div>
-          <KeyTable />
-        </section>
-
-        <Separator className="rule" />
-        <section className="sec" aria-labelledby="v-h">
-          <div className="sec-head"><h2 id="v-h">Vaults from the factory</h2><p className="text-dim">Factory <Tx hash={data.config.factory} kind="address" />. Load any vault to read its rules.</p></div>
-          {vaults && vaults.length ? (
-            <ul className="vaults">
-              {vaults.map((v) => (
-                <li key={v}><Tx hash={v} kind="address" label={v} />{v.toLowerCase() === vault.toLowerCase() ? <span className="text-dim"> loaded</span> : <button type="button" className="linkish" onClick={() => { setVault(v); setS(null); setFills([]); setFillsErr(false); setFillsLoaded(false) }}>Load</button>}</li>
-              ))}
-            </ul>
-          ) : <p className="text-dim">{factoryErr ? 'The factory did not answer (testnet RPC). Reload to retry.' : vaults ? 'This factory has not created any vaults yet.' : 'Reading the factory\u2026'}</p>}
+        <section className="card card-quiet about" aria-labelledby="about-h" id="business">
+          <div className="card-head"><div><h2 id="about-h">About BACKED</h2><p className="card-sub">How it compares, who pays, and every vault the factory made.</p></div><span className="chip chip-warn"><span className="dot" />Fee planned</span></div>
+          <Tabs value={aboutTab} onValueChange={setAboutTab}>
+            <TabsList className="seg">
+              <TabsTrigger value="key">Who holds the key</TabsTrigger>
+              <TabsTrigger value="business">Business model</TabsTrigger>
+              <TabsTrigger value="vaults">Vaults</TabsTrigger>
+            </TabsList>
+            <TabsContent value="key" id="key-h"><KeyTable /><PoolsNote /></TabsContent>
+            <TabsContent value="business"><Business /></TabsContent>
+            <TabsContent value="vaults"><p className="card-sub tab-sub">Factory <Tx hash={data.config.factory} kind="address" />.</p>
+              {vaults && vaults.length ? (
+                <ul className="vaults">
+                  {vaults.map((v) => (
+                    <li key={v}><span className="mono">{short(v)}</span>{v.toLowerCase() === vault.toLowerCase() ? <span className="chip chip-success"><span className="dot" />Loaded</span> : <Button type="button" variant="ghost" size="sm" onClick={() => loadVault(v)}>Load</Button>}</li>
+                  ))}
+                </ul>
+              ) : <p className="text-dim">{factoryErr ? 'The factory did not answer (testnet RPC). Reload to retry.' : vaults ? 'No vaults yet.' : 'Reading the factory\u2026'}</p>}
+            </TabsContent>
+          </Tabs>
         </section>
       </main>
-      <footer className="foot"><p>BACKED · Colosseum World&rsquo;s Fair, Hyperliquid track · contracts on HyperEVM testnet (chain 998) · figures come from the contract and the HyperCore API with their read time shown; the only animation not driven by chain data is the breach replay, which uses the measured median timing.</p></footer>
+      <footer className="foot">BACKED · Colosseum World&rsquo;s Fair, Hyperliquid track · HyperEVM testnet (chain 998) · the breach replay is the only animation not driven by chain data.</footer>
     </>
   )
 }

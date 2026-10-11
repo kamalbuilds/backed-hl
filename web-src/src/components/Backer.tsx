@@ -38,8 +38,8 @@ export function Backer({ vault, factory, abi, onVault, onSent }: { vault: Addres
           <Button type="button" variant="outline" className="self-end" onClick={() => run(sendSpotUsdc(vault, Number(amt.send)))}>Send USDC</Button>
           <div className="field"><Label htmlFor="fund">2. Fund margin <span className="text-dim">USDC</span></Label><Input id="fund" inputMode="decimal" value={amt.fund} onChange={(e) => setAmt({ ...amt, fund: e.target.value })} /></div>
           <Button type="button" variant="outline" className="self-end" onClick={() => run(write(vault, abi.vault, 'fundPerp', [BigInt(Math.round(Number(amt.fund) * 1e6))]))}>Fund</Button>
-          <div className="field"><Label htmlFor="line">Loss line <span className="text-dim">USDC below capital</span></Label><Input id="line" inputMode="decimal" value={amt.line} onChange={(e) => setAmt({ ...amt, line: e.target.value })} /></div>
-          <Button type="button" variant="outline" className="self-end" onClick={() => run(write(vault, abi.vault, 'setFloor', [BigInt(-Math.round(Number(amt.line) * 1e6))]))}>Move line</Button>
+          <div className="field"><Label htmlFor="line">New loss line <span className="text-dim">USDC below capital</span></Label><Input id="line" inputMode="decimal" value={amt.line} onChange={(e) => setAmt({ ...amt, line: e.target.value })} /></div>
+          <Button type="button" variant="outline" className="self-end" onClick={() => run(write(vault, abi.vault, 'setFloor', [BigInt(-Math.round(Number(amt.line) * 1e6))]))}>Loosen line</Button>
         </div>
         <div className="actions">
           <Button type="button" variant="outline" onClick={() => confirm('Close every position in this vault now? This only works below the line.') && flattenNow()}>Flatten (anyone)</Button>
