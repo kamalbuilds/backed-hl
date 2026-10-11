@@ -113,6 +113,82 @@ contract BackedVaultV3Test {
     function test_settleLossAllToBacker() public { v.stop(); mar.set(10_000_000); uint256 n0 = cw.n(); require(_call(anyone, abi.encodeCall(v.settle, ())));
         require(cw.n() - n0 == 2); (address to,, uint64 w) = abi.decode(cw.bodyAt(n0 + 1), (address, uint64, uint64)); require(to == address(this) && w == 10_000_000 * 100); }
     function test_settleNeedsEndedAndFlat() public { require(!_call(anyone, abi.encodeCall(v.settle, ()))); v.stop(); pos.set(BTC, 1); require(!_call(anyone, abi.encodeCall(v.settle, ()))); }
+    // rules lock once trading has started
+    function _reverts(address who, bytes memory d, string memory why) internal {
+        vm.prank(who); (bool ok, bytes memory ret) = address(v).call(d);
+        require(!ok, "should revert"); require(keccak256(ret) == keccak256(abi.encodeWithSignature("Error(string)", why)), "wrong revert reason");
+    }
+    function _open() internal { require(_t(ETH, true, 2550e8, 0.004e8, false), "first order"); }
+    function test_positiveFloorRejectedBeforeAndAfterTrading() public {
+        _reverts(address(this), abi.encodeCall(v.setFloor, (int64(1))), "floor above principal");
+        _open();
+        _reverts(address(this), abi.encodeCall(v.setFloor, (int64(1))), "floor above principal");
+        _reverts(address(this), abi.encodeCall(v.setFloor, (int64(5_000_000))), "floor above principal");
+    }
+    function test_rulesFreelyEditableBeforeFirstTrade() public {
+        require(!v.traded());
+        require(_call(address(this), abi.encodeCall(v.setFloor, (int64(-500_000)))) && v.floorPnl() == -500_000, "tighten floor pre-trade");
+        require(_call(address(this), abi.encodeCall(v.setFloor, (int64(0)))) && v.floorPnl() == 0, "zero floor pre-trade");
+        require(_call(address(this), abi.encodeCall(v.setDailyLoss, (uint64(100_000)))) && v.dailyLossUsd6() == 100_000, "tighten daily pre-trade");
+        require(_call(address(this), abi.encodeCall(v.fundPerp, (uint64(1_000_000)))) && v.capital() == 15_000_000, "top up pre-trade");
+    }
+    function test_firstOrderLocksRules() public { require(!v.traded()); _open(); require(v.traded()); }
+    function test_signedFirstOrderAlsoLocks() public {
+        BackedVaultV3.Order memory o = BackedVaultV3.Order(ETH, true, 2550e8, 0.004e8, false, 9, block.timestamp + 60);
+        (uint8 a, bytes32 r, bytes32 s) = _sig(o, TK); require(_call(relayer, abi.encodeCall(v.tradeBySig, (o, a, r, s)))); require(v.traded());
+        _reverts(address(this), abi.encodeCall(v.setFloor, (int64(-1_000_000))), "floor tightened");
+    }
+    function test_floorOnlyMovesLowerAfterTrading() public {
+        _open();
+        _reverts(address(this), abi.encodeCall(v.setFloor, (int64(-1_000_000))), "floor tightened");
+        _reverts(address(this), abi.encodeCall(v.setFloor, (int64(0))), "floor tightened");
+        require(v.floorPnl() == -2_000_000, "unchanged");
+        require(_call(address(this), abi.encodeCall(v.setFloor, (int64(-2_000_000)))), "same value ok");
+        require(_call(address(this), abi.encodeCall(v.setFloor, (int64(-3_000_000)))) && v.floorPnl() == -3_000_000, "looser ok");
+        _reverts(address(this), abi.encodeCall(v.setFloor, (int64(-2_500_000))), "floor tightened");
+    }
+    function test_tightenedFloorCannotForceBreach() public { // the attack: raise the floor above current equity, then flatten
+        pos.set(ETH, 100); _open(); mar.set(13_500_000); // -0.5 vs capital
+        _reverts(address(this), abi.encodeCall(v.setFloor, (int64(-100_000))), "floor tightened");
+        require(uint8(v.breachReason()) == 0 && !_call(anyone, abi.encodeCall(v.flatten, ())), "no breach to flatten");
+    }
+    function test_dailyLossOnlyGrowsAfterTrading() public {
+        _open();
+        _reverts(address(this), abi.encodeCall(v.setDailyLoss, (uint64(500_000))), "daily tightened");
+        require(v.dailyLossUsd6() == 1_000_000, "unchanged");
+        require(_call(address(this), abi.encodeCall(v.setDailyLoss, (uint64(1_000_000)))), "same ok");
+        require(_call(address(this), abi.encodeCall(v.setDailyLoss, (uint64(2_000_000)))) && v.dailyLossUsd6() == 2_000_000, "grow ok");
+        _reverts(address(this), abi.encodeCall(v.setDailyLoss, (uint64(1_999_999))), "daily tightened");
+        require(_call(address(this), abi.encodeCall(v.setDailyLoss, (uint64(0)))) && v.dailyLossUsd6() == 0, "off is loosest");
+    }
+    function test_dailyLossCannotBeSwitchedOnAfterTrading() public {
+        v.setDailyLoss(0); _open();
+        _reverts(address(this), abi.encodeCall(v.setDailyLoss, (uint64(1))), "daily tightened");
+        require(_call(address(this), abi.encodeCall(v.setDailyLoss, (uint64(0)))), "off stays off");
+    }
+    function test_capitalFixedAfterTrading() public {
+        _open();
+        _reverts(address(this), abi.encodeCall(v.fundPerp, (uint64(1_000_000))), "rules locked");
+        require(v.capital() == 14_000_000, "capital unchanged");
+    }
+    function test_stopAfterTradingStillSettlesTraderShare() public {
+        pos.set(ETH, 100); _open(); v.stop();
+        require(!_t(ETH, true, 2550e8, 0.001e8, false), "stop halts orders");
+        pos.set(ETH, 0); mar.set(19_000_000); uint256 n0 = cw.n();       // flat with 5 USDC realized profit
+        require(_call(anyone, abi.encodeCall(v.settle, ())), "settle after stop");
+        (address to,, uint64 w) = abi.decode(cw.bodyAt(n0 + 1), (address, uint64, uint64)); require(to == trader && w == 1_000_000 * 100, "trader keeps 20% of 5");
+        (to,, w) = abi.decode(cw.bodyAt(n0 + 2), (address, uint64, uint64)); require(to == address(this) && w == 18_000_000 * 100, "backer rest");
+    }
+    function test_stopCannotChangeTheSplitOrRules() public {
+        _open(); v.stop();
+        require(v.traderShareBps() == 2000 && v.floorPnl() == -2_000_000 && v.dailyLossUsd6() == 1_000_000 && v.capital() == 14_000_000);
+        _reverts(address(this), abi.encodeCall(v.setFloor, (int64(-1))), "floor tightened");
+        _reverts(address(this), abi.encodeCall(v.fundPerp, (uint64(1))), "rules locked");
+    }
+    function test_stopStillAllowsBackerExitFlatThenSettle() public {
+        v.stop(); require(_call(address(this), abi.encodeCall(v.stop, ()))); // idempotent, backer keeps an exit at any time
+        mar.set(14_000_000); require(_call(anyone, abi.encodeCall(v.settle, ()))); require(v.settled());
+    }
     // gasless signed orders
     function _sig(BackedVaultV3.Order memory o, uint256 k) internal returns (uint8 a, bytes32 r, bytes32 s) { (a, r, s) = vm.sign(k, v.hashOrder(o)); }
     function test_relayerSubmitsSignedOrder() public {

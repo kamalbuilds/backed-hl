@@ -8,6 +8,9 @@ pragma solidity 0.8.26;
 //  - flatten(): permissionless, retryable until flat; first caller that triggers a breach earns a bounty
 //  - tradeBySig(): trader signs EIP-712, any relayer submits (gasless for the trader, still keyless)
 //  - settle(): once flat and ended, pays trader its share of profit and the backer the rest
+//  - rules lock on the first accepted order: the floor only moves lower, the daily loss limit only grows
+//    (0 = off is the loosest), capital is fixed, a floor above principal never exists. stop() only halts and
+//    ends the run; it cannot touch the profit split, which settle() computes from flat equity.
 interface ICoreWriter { function sendRawAction(bytes calldata data) external; }
 
 contract BackedVaultV3 {
@@ -39,6 +42,7 @@ contract BackedVaultV3 {
     uint64 public dailyLossUsd6;    // 0 = off
     uint32 public snapDay;
     int64 public dayStartEquity;
+    bool public traded;             // set by the first accepted order; locks the rules against tightening
     bool public breached;           // frozen: no new trades, flatten allowed until flat
     bool public settled;
     bool public bountyPaid;
@@ -106,12 +110,20 @@ contract BackedVaultV3 {
 
     // ---------- backer ----------
     function fundPerp(uint64 usd6) external onlyBacker { // USDC must already sit on this contract's HyperCore spot
+        require(!traded, "rules locked"); // capital is the principal the floor and the profit split are measured from
         capital += usd6;
         _cw(7, abi.encode(usd6, true));
     }
-    function setFloor(int64 usd6) external onlyBacker { require(usd6 <= 0 || !settled, "floor"); floorPnl = usd6; } // positive allowed: lock-in gains / testing
-    function setDailyLoss(uint64 usd6) external onlyBacker { dailyLossUsd6 = usd6; }
-    function stop() external onlyBacker { breached = true; }           // backer ends the backing; anyone may then flatten
+    function setFloor(int64 usd6) external onlyBacker {
+        require(usd6 <= 0, "floor above principal");
+        require(!traded || usd6 <= floorPnl, "floor tightened");
+        floorPnl = usd6;
+    }
+    function setDailyLoss(uint64 usd6) external onlyBacker { // 0 = off, the loosest value
+        require(!traded || usd6 == 0 || (dailyLossUsd6 > 0 && usd6 >= dailyLossUsd6), "daily tightened");
+        dailyLossUsd6 = usd6;
+    }
+    function stop() external onlyBacker { breached = true; }           // backer exit: halts new orders, anyone flattens, settle() pays the split
     function rearm() external onlyBacker {                              // reuse after a flatten, only when flat and unsettled
         require(breached && !settled && isFlat(), "rearm");
         require(breachReason() == Reason.None, "still in breach");
@@ -149,6 +161,7 @@ contract BackedVaultV3 {
             require(breachReason() == Reason.None, "in breach");
             require(notionalAfter(o.asset, o.isBuy, o.sz8) <= maxLev * capital, "leverage above backer limit");
         }
+        traded = true;
         _cw(1, abi.encode(o.asset, o.isBuy, o.limitPx8, o.sz8, o.reduceOnly, uint8(3), uint128(0)));
         emit Traded(by, o.asset, o.isBuy, o.limitPx8, o.sz8, o.reduceOnly);
     }
