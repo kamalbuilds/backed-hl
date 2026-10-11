@@ -1,0 +1,18 @@
+{"t":1791607202508,"net":"testnet","step":"factory deploy","factory":"0x1bc11362defc312593930ce937285b149B341a30","tx":"0xb7eab1ff95b4af595f7d4f6173cd78e263f49b2f21ece5773fb687a394371c1e","status":"success","gasUsed":"5110945"}
+{"t":1791607262749,"net":"testnet","step":"create vault ETH+BTC 3x floor-2 daily-1 share20% bounty0.1","tx":"0x76eba56a065a52df23220f0d7025c80f653169b74ed834395415a12e75a988a2","status":"success","block":"66502169","blockTsMs":1791607260000}
+{"t":1791607262917,"net":"testnet","step":"vault","vault":"0xAb923434279bd82f66942Ae28d07d238b5B9A955"}
+{"t":1791607335793,"net":"testnet","step":"sim 20x ETH long","oracle":2494.7,"capital":14,"sz":0.1122,"sim":"in breach"}
+{"t":1791607338967,"net":"testnet","step":"REJECT on-chain 20x ETH long","tx":"0x91a7d382d462360db3d3bf6b08e77ad799aded392be495a5662cbfeca542374b","status":"reverted","block":"66502248","blockTsMs":1791607338000}
+{"t":1791607339281,"net":"testnet","step":"sim fake $1 limit 5x ETH","oracle":2494.7,"capital":14,"sz":0.0281,"sim":"in breach"}
+{"t":1791607378685,"net":"testnet","step":"setFloor below equity (unfunded vault: isolate leverage rule)","tx":"0x13799a686332bca7af731272f238fde8f6e7734077c8cdef018ca41e24eef753","status":"success","block":"66502288","blockTsMs":1791607378000}
+{"t":1791607379167,"net":"testnet","step":"sim 20x ETH long","oracle":2494.7,"capital":14,"sz":0.1122,"sim":"leverage above backer limit"}
+{"t":1791607382127,"net":"testnet","step":"REJECT on-chain 20x ETH long","tx":"0xc379251525009fc3d7638b784e2754fb03fc5ee3681c93cfeebd257c0c5c8adb","status":"reverted","block":"66502292","blockTsMs":1791607381000}
+{"t":1791607382292,"net":"testnet","step":"sim fake $1 limit 5x ETH","oracle":2494.7,"capital":14,"sz":0.0281,"sim":"leverage above backer limit"}
+{"t":1791607385210,"net":"testnet","step":"REJECT on-chain fake $1 limit 5x ETH","tx":"0x1849ed34d656a5a4c872bc53c260995e26c3c171b0b4574537667e900bf07043","status":"reverted","block":"66502295","blockTsMs":1791607384000}
+{"t":1791607385375,"net":"testnet","step":"sim disallowed market SOL(5)","oracle":2494.7,"capital":14,"sz":0.1,"sim":"market not allowed"}
+{"t":1791607388071,"net":"testnet","step":"REJECT on-chain disallowed market SOL(5)","tx":"0xcaf75fa6a00606dc1d6c56f44ee7a44f22f208305d1245baab29d4171d02c8d9","status":"reverted","block":"66502298","blockTsMs":1791607387000}
+{"t":1791607388232,"net":"testnet","step":"sim within cap 2.5x ETH","oracle":2494.7,"capital":14,"sz":0.014,"sim":"ok"}
+{"t":1791608547387,"net":"testnet","step":"gas: 0.15 HYPE demo-operator -> backed-operator-2","tx":"0x0a792c1a6765ee403bfbd70115f75ea9fa3bb9cc1e486218f11d16418b748c59","status":"success"}
+{"t":1791608661474,"net":"testnet","step":"create live vault ETH+BTC 3x floor-2 share20% bounty0.1","tx":"0x0273a18353987a716108172081570f07d35f7eb11bb1b20a0c4f99000199f179","status":"success","block":"66503572","blockTsMs":1791608640000}
+{"t":1791608661807,"net":"testnet","step":"live vault","vault":"0x661971C1183088D6290395F4dE15Be9858DeF049","backer":"0x263F74859F6c932Db0B4F11165580AE58984D8cc"}
+{"t":1791608664293,"net":"testnet","step":"fund vault spot","amount":"20","body":"{\"status\":\"ok\",\"response\":{\"type\":\"default\"}}"}

@@ -1,0 +1,98 @@
+{"t":1791608155023,"net":"fork-sim","step":"sim oracle ETH 2494.70","tx":"0x80237c9c4d82ea9c2e022838ef827200d9a8bb57fc65403e4a8fa0b0c46057d9","status":"success","block":"3","blockTsMs":1791608154000}
+{"t":1791608156074,"net":"fork-sim","step":"sim oracle BTC 100000","tx":"0xf375f25f34232760eeab24e30ab9e99db43821365b9215182412508e8fd08224","status":"success","block":"4","blockTsMs":1791608155000}
+{"t":1791608157103,"net":"fork-sim","step":"sim szDec ETH","tx":"0xcfab69f8584cd2ac52a55cd850a41e8cd8aaa86bdb5a114e0b27ee290d34507a","status":"success","block":"5","blockTsMs":1791608156000}
+{"t":1791608158140,"net":"fork-sim","step":"sim szDec BTC","tx":"0xfa806971ef06dd7f46508622fb9209e631313dcd78e2d70c17e2e7cb02509061","status":"success","block":"6","blockTsMs":1791608157000}
+{"t":1791608160298,"net":"fork-sim","step":"create vault","tx":"0xc601b8a7d11c691e423d23a0b9578db82e4e50e15145960e32b1ed4feb6c7615","status":"success","block":"8","blockTsMs":1791608159000}
+{"t":1791608160309,"net":"fork-sim","step":"sim deploy","factory":"0xdc64a140aa3e981100a9beca4e685f962f0cf6c9","vault":"0x856e4424f806D16E8CBC702B3c0F2ede5468eae5"}
+{"t":1791608161331,"net":"fork-sim","step":"fundPerp 14 (sim cash)","tx":"0x3a186c2ce012ab020b1bebbc06378653d6fefff9dffd2b81eaa6b6e5b61ca7e2","status":"success","block":"9","blockTsMs":1791608160000}
+{"t":1791608161357,"net":"fork-sim","step":"state funded","szi":0,"equityPnl":0,"floor":-2000000,"breached":false,"reason":0}
+{"t":1791608161920,"net":"fork-sim","step":"trade ETH buy 0.014 @2545","tx":"0x40cec16d08ab4c2b31ec59dffe7382f24753f3576bb16263104987ebc5a6ef4a","status":"success","block":"10","blockTsMs":1791608161000}
+{"t":1791608161927,"net":"fork-sim","step":"state after 2.5x open","szi":140,"equityPnl":0,"floor":-2000000,"breached":false,"reason":0}
+{"t":1791608161933,"net":"fork-sim","step":"SCENARIO stacked","sim":"leverage above backer limit"}
+{"t":1791608162950,"net":"fork-sim","step":"REJECT stacked +0.003 ETH (2.5x + 0.54x > 3x)","tx":"0xb0489b9ab3f8268f37b0d0b1228632bba7401d93dce59125b372f675c2e24b01","status":"reverted","block":"11","blockTsMs":1791608162000}
+{"t":1791608163983,"net":"fork-sim","step":"trade ETH sell 0.014 @2445 RO","tx":"0x47bc4cf6ba7e7cdd03beb42154fbc3d672e8c36e330807a8e200cc5ef9728cc0","status":"success","block":"12","blockTsMs":1791608163000}
+{"t":1791608163993,"net":"fork-sim","step":"state closed","szi":0,"equityPnl":0,"floor":-2000000,"breached":false,"reason":0}
+{"t":1791608165020,"net":"fork-sim","step":"floor -1 USDC","tx":"0x188bbae5f6c9aa2084a14f63c5bf4df4ea45f3219cec50906d6a0aaab83258e3","status":"success","block":"13","blockTsMs":1791608164000}
+{"t":1791608166051,"net":"fork-sim","step":"trade ETH buy 0.014 @2545","tx":"0xf4907e25c668d36f5184fdbe2304b2b1dfe293b3e3882f4877fb812ccabcc1ba","status":"success","block":"14","blockTsMs":1791608165000}
+{"t":1791608167131,"net":"fork-sim","step":"sim oracle ETH -> 2345.02 (down 6%)","tx":"0x5ff361f85a060749d034743fea31815b2a7ed8afe900898dc639b1244608e2f2","status":"success","block":"15","blockTsMs":1791608166000}
+{"t":1791608168153,"net":"fork-sim","step":"trade ETH sell 0.014 @2245 RO","tx":"0xf7edf0ef8616c4b1f78fbe3a0176152d3aa086e39dc3fb31f87188de1eec5562","status":"success","block":"16","blockTsMs":1791608167000}
+{"t":1791608168163,"net":"fork-sim","step":"state loss realized, flat","szi":0,"equityPnl":-2095520,"floor":-1000000,"breached":false,"reason":1}
+{"t":1791608168167,"net":"fork-sim","step":"SCENARIO realized-loss reopen","sim":"in breach"}
+{"t":1791608168190,"net":"fork-sim","step":"keeper flatten","vault":"0x856e4424f806D16E8CBC702B3c0F2ede5468eae5","reason":1,"attempt":1,"tx":"0xf66a932b786903084b37485bd5db830cb3bc9f9d2e411894c124465253c53c14","status":"reverted","block":"16","sinceSeenMs":521}
+{"t":1791608169185,"net":"fork-sim","step":"REJECT reopen after realized loss (in breach)","tx":"0x3f31105df7a5d5068af9dcf45a5540835d22dd237c5897729b10a58c6566a441","status":"reverted","block":"17","blockTsMs":1791608168000}
+{"t":1791608169197,"net":"fork-sim","step":"RESULT keeper","vault":"0x856e4424f806D16E8CBC702B3c0F2ede5468eae5","breachSeenMs":1791608167669,"flatSeenMs":1791608169197,"breachToFlatObservedMs":1528,"attempts":1,"txs":["0xf66a932b786903084b37485bd5db830cb3bc9f9d2e411894c124465253c53c14"]}
+{"t":1791608170203,"net":"fork-sim","step":"sim oracle ETH -> 2494.7 (restore)","tx":"0x91d5a30f2be6b91ad4c430e551abc36e1e82ec8df1261c43ffe14a53ff82e559","status":"success","block":"18","blockTsMs":1791608169000}
+{"t":1791608171358,"net":"fork-sim","step":"floor -5","tx":"0x18942c8596c8068b825fd7093f357c43d775d3a23c84ca6b6d695ad6ea5c5806","status":"success","block":"19","blockTsMs":1791608170000}
+{"t":1791608172418,"net":"fork-sim","step":"daily loss off (isolate floor runs)","tx":"0xcea42d1e72c3680916d6e31bbfbe19871959ac1e3762f281dec348c95c75fe7b","status":"success","block":"20","blockTsMs":1791608171000}
+{"t":1791608172452,"net":"fork-sim","step":"state reset","szi":0,"equityPnl":-2095520,"floor":-5000000,"breached":false,"reason":0}
+{"t":1791608172964,"net":"fork-sim","step":"sim oracle ETH -> 2494.7 (restore)","tx":"0x56c98ed98f729ccf3d078e4d121b973217d2ad1d443009de5dadb9c98cc18a02","status":"success","block":"21","blockTsMs":1791608172000}
+{"t":1791608173990,"net":"fork-sim","step":"floor = equity - 1","tx":"0x3b899da0eca0053c98fc969aee5f7d047b31fd71a2e874fcd498650e116e8a31","status":"success","block":"22","blockTsMs":1791608173000}
+{"t":1791608175019,"net":"fork-sim","step":"trade ETH buy 0.014 @2545","tx":"0x4092da5fcdbc7ca38e3e04e3d6d7b727edc772fe6c013f039cadb874c63fbc4d","status":"success","block":"23","blockTsMs":1791608174000}
+{"t":1791608175021,"net":"fork-sim","step":"retry-flatten opened","szi":140}
+{"t":1791608176061,"net":"fork-sim","step":"sim: drop next close order (missed band)","tx":"0x677a691fbf90f08d14b2a5b5a9c992b8b634a299d17766f719d6a02fd20a127e","status":"success","block":"24","blockTsMs":1791608175000}
+{"t":1791608177087,"net":"fork-sim","step":"sim oracle ETH -> 2394.91 (down 4% -> crosses floor)","tx":"0x26780256e885d78bf10141946bd60317a5efeafaf8a137d8c8360f4185746fba","status":"success","block":"25","blockTsMs":1791608176000}
+{"t":1791608177990,"net":"fork-sim","step":"keeper flatten","vault":"0x856e4424f806D16E8CBC702B3c0F2ede5468eae5","reason":1,"attempt":1,"tx":"0xf64950478deeb0678f52633048dbb43b8dfc5817c5be8762cac33be7f00fe7a2","status":"success","block":"26","sinceSeenMs":514}
+{"t":1791608182029,"net":"fork-sim","step":"RESULT retry-flatten","breachBlockTsMs":1791608176000,"flatObservedMs":1791608182022,"breachToFlatMs":6022,"missInjected":true}
+{"t":1791608182093,"net":"fork-sim","step":"keeper flatten","vault":"0x856e4424f806D16E8CBC702B3c0F2ede5468eae5","reason":1,"attempt":2,"tx":"0x82b80dbb7b83daa133a4bb95da3e781822bb0c623795a3cf2b9d738f545beaa7","status":"success","block":"30","sinceSeenMs":4617}
+{"t":1791608183090,"net":"fork-sim","step":"sim oracle ETH -> 2494.7 (restore)","tx":"0x2fdb2e62a6f4cf2e2e7840b0c1ad2b333f28e1ba818739fbdbf21b2b6e5d76c7","status":"success","block":"31","blockTsMs":1791608182000}
+{"t":1791608183105,"net":"fork-sim","step":"RESULT keeper","vault":"0x856e4424f806D16E8CBC702B3c0F2ede5468eae5","breachSeenMs":1791608177476,"flatSeenMs":1791608183105,"breachToFlatObservedMs":5629,"attempts":2,"txs":["0xf64950478deeb0678f52633048dbb43b8dfc5817c5be8762cac33be7f00fe7a2","0x82b80dbb7b83daa133a4bb95da3e781822bb0c623795a3cf2b9d738f545beaa7"]}
+{"t":1791608185134,"net":"fork-sim","step":"sim oracle ETH -> 2494.7 (restore)","tx":"0x4df6a2d053cd6c1d45f62ca5cf4cc747c360750e108f2c14cf7c8068beef088d","status":"success","block":"33","blockTsMs":1791608184000}
+{"t":1791608186172,"net":"fork-sim","step":"floor = equity - 1","tx":"0x3f6929a064513b7d44acb456526d3011f7401415b90bd3e0416a56a2015ceb63","status":"success","block":"34","blockTsMs":1791608185000}
+{"t":1791608187220,"net":"fork-sim","step":"rearm","tx":"0xe101c6ba863b3f7d6bb5ec48bf157e490424deb46d9723b9cf33ea377585ef58","status":"success","block":"35","blockTsMs":1791608186000}
+{"t":1791608188240,"net":"fork-sim","step":"trade ETH buy 0.014 @2545","tx":"0x19cf5214aee2a919018a7c273e28c92b70e0bc17b6b2a4effbae0cdd52accdcd","status":"success","block":"36","blockTsMs":1791608187000}
+{"t":1791608188243,"net":"fork-sim","step":"latency run 0 opened","szi":140}
+{"t":1791608189261,"net":"fork-sim","step":"sim oracle ETH -> 2394.91 (down 4% -> crosses floor)","tx":"0x3b5721d28a5501c8220181962858452faf7e3571119d18ecc1fd346ee7e07651","status":"success","block":"37","blockTsMs":1791608188000}
+{"t":1791608190051,"net":"fork-sim","step":"RESULT latency run 0","breachBlockTsMs":1791608188000,"flatObservedMs":1791608190049,"breachToFlatMs":2049,"missInjected":false}
+{"t":1791608190262,"net":"fork-sim","step":"keeper flatten","vault":"0x856e4424f806D16E8CBC702B3c0F2ede5468eae5","reason":1,"attempt":1,"tx":"0xd9d1743f881fc4b3b629861070f2c3fd6f41d7f90a80811406887fcf617af83d","status":"success","block":"38","sinceSeenMs":1029}
+{"t":1791608191105,"net":"fork-sim","step":"sim oracle ETH -> 2494.7 (restore)","tx":"0xf8006f80f5164eb487e11b181007663c9c60973f2b817b2b23af577173440c4a","status":"success","block":"39","blockTsMs":1791608190000}
+{"t":1791608191280,"net":"fork-sim","step":"RESULT keeper","vault":"0x856e4424f806D16E8CBC702B3c0F2ede5468eae5","breachSeenMs":1791608189233,"flatSeenMs":1791608191280,"breachToFlatObservedMs":2047,"attempts":1,"txs":["0xd9d1743f881fc4b3b629861070f2c3fd6f41d7f90a80811406887fcf617af83d"]}
+{"t":1791608193133,"net":"fork-sim","step":"sim oracle ETH -> 2494.7 (restore)","tx":"0xc7d246880f00141fd3050623281c8c68031864a5f691167bed02f34acac1a2ae","status":"success","block":"41","blockTsMs":1791608192000}
+{"t":1791608194166,"net":"fork-sim","step":"floor = equity - 1","tx":"0xf3762bf3caa314cdd85bd55b5c503b5922fe2eff0786e53c957e5dd0b391c0f0","status":"success","block":"42","blockTsMs":1791608193000}
+{"t":1791608195196,"net":"fork-sim","step":"rearm","tx":"0x26ead2fb8d323e02d3de7f0341745c046eb620e43d0a46835e25e43631d4d8ff","status":"success","block":"43","blockTsMs":1791608194000}
+{"t":1791608196233,"net":"fork-sim","step":"trade ETH buy 0.014 @2545","tx":"0x7e71a199b6e9542fa7ccfe8ccb161b6c89c61f761563f557007934c8cfb83a3f","status":"success","block":"44","blockTsMs":1791608195000}
+{"t":1791608196236,"net":"fork-sim","step":"latency run 1 opened","szi":140}
+{"t":1791608197261,"net":"fork-sim","step":"sim oracle ETH -> 2394.91 (down 4% -> crosses floor)","tx":"0xdee0f1f68914ab68e1aac64555d2264dfe7f2790d182f86721e03508939a7599","status":"success","block":"45","blockTsMs":1791608196000}
+{"t":1791608198080,"net":"fork-sim","step":"RESULT latency run 1","breachBlockTsMs":1791608196000,"flatObservedMs":1791608198072,"breachToFlatMs":2072,"missInjected":false}
+{"t":1791608198401,"net":"fork-sim","step":"keeper flatten","vault":"0x856e4424f806D16E8CBC702B3c0F2ede5468eae5","reason":1,"attempt":1,"tx":"0x58a98bc98b0cfae78afe157646f1e06bd6e31514e206fee5a0c5b00f8331be98","status":"success","block":"46","sinceSeenMs":1043}
+{"t":1791608199136,"net":"fork-sim","step":"sim oracle ETH -> 2494.7 (restore)","tx":"0xd2583201f9cbd87976a96ee37d92957ea64bd2175e968704ce58c52102e94033","status":"success","block":"47","blockTsMs":1791608198000}
+{"t":1791608199412,"net":"fork-sim","step":"RESULT keeper","vault":"0x856e4424f806D16E8CBC702B3c0F2ede5468eae5","breachSeenMs":1791608197358,"flatSeenMs":1791608199412,"breachToFlatObservedMs":2054,"attempts":1,"txs":["0x58a98bc98b0cfae78afe157646f1e06bd6e31514e206fee5a0c5b00f8331be98"]}
+{"t":1791608201252,"net":"fork-sim","step":"sim oracle ETH -> 2494.7 (restore)","tx":"0xf5b88840041f2ad30c44a15b18a04a9071d01dcac150aa503817c764f3534170","status":"success","block":"49","blockTsMs":1791608200000}
+{"t":1791608202305,"net":"fork-sim","step":"floor = equity - 1","tx":"0x0c2dc1abf136251c2aaed785897cc9ee95b16af5f6909216f9be89adb58917b0","status":"success","block":"50","blockTsMs":1791608201000}
+{"t":1791608202952,"net":"fork-sim","step":"rearm","tx":"0x4282a2910e2179dbc021f39b988523df3e4457456e106cf8e894e1215c84b782","status":"success","block":"51","blockTsMs":1791608202000}
+{"t":1791608203990,"net":"fork-sim","step":"trade ETH buy 0.014 @2545","tx":"0x193e0064ebd948fd57a91630c03b4796594c901ecd1d734608f8753f6db1b1d5","status":"success","block":"52","blockTsMs":1791608203000}
+{"t":1791608203992,"net":"fork-sim","step":"latency run 2 opened","szi":140}
+{"t":1791608205028,"net":"fork-sim","step":"sim oracle ETH -> 2394.91 (down 4% -> crosses floor)","tx":"0x490f447801a14125ff7e1b9c03b590941b54c34cacb602648987ef1bf1b85f8b","status":"success","block":"53","blockTsMs":1791608204000}
+{"t":1791608206087,"net":"fork-sim","step":"RESULT latency run 2","breachBlockTsMs":1791608204000,"flatObservedMs":1791608206085,"breachToFlatMs":2085,"missInjected":false}
+{"t":1791608206228,"net":"fork-sim","step":"keeper flatten","vault":"0x856e4424f806D16E8CBC702B3c0F2ede5468eae5","reason":1,"attempt":1,"tx":"0xee70969a5573625c4f602e0f3a3ccf391e24d606d21e2e84aadcf6966a9e58c2","status":"success","block":"54","sinceSeenMs":531}
+{"t":1791608207120,"net":"fork-sim","step":"sim oracle ETH -> 2494.7 (restore)","tx":"0xd74108342e82088fcf7cbe6a048c1d1d2b3ce91a9d1489e587b3fb5bb55a4381","status":"success","block":"55","blockTsMs":1791608206000}
+{"t":1791608207236,"net":"fork-sim","step":"RESULT keeper","vault":"0x856e4424f806D16E8CBC702B3c0F2ede5468eae5","breachSeenMs":1791608205697,"flatSeenMs":1791608207236,"breachToFlatObservedMs":1539,"attempts":1,"txs":["0xee70969a5573625c4f602e0f3a3ccf391e24d606d21e2e84aadcf6966a9e58c2"]}
+{"t":1791608209231,"net":"fork-sim","step":"sim oracle ETH -> 2494.7 (restore)","tx":"0xa890723efa9bf7f86a41d2f5579abe801d55f7d52056e2115d7a2066d71f3d9a","status":"success","block":"57","blockTsMs":1791608208000}
+{"t":1791608210288,"net":"fork-sim","step":"floor = equity - 1","tx":"0xe9dfcd37ae19d3e03ab34f9c66292cf4ef59a0f8e0cd2a6a15a1f4e867733652","status":"success","block":"58","blockTsMs":1791608209000}
+{"t":1791608211346,"net":"fork-sim","step":"rearm","tx":"0x0b69bea387918f21d56bb6660b2d193bc6407dbd088294db68970d857c75ef41","status":"success","block":"59","blockTsMs":1791608210000}
+{"t":1791608212371,"net":"fork-sim","step":"trade ETH buy 0.014 @2545","tx":"0x25af2ad94e65ef6fa9dd0175606f85f59ccce75c4ff305adba28fbe84930efda","status":"success","block":"60","blockTsMs":1791608211000}
+{"t":1791608212374,"net":"fork-sim","step":"latency run 3 opened","szi":140}
+{"t":1791608213406,"net":"fork-sim","step":"sim oracle ETH -> 2394.91 (down 4% -> crosses floor)","tx":"0x125387453dc0b7cce69c847631100aadeca0abc758da43e6afa9739cfe84e91a","status":"success","block":"61","blockTsMs":1791608212000}
+{"t":1791608213937,"net":"fork-sim","step":"RESULT latency run 3","breachBlockTsMs":1791608212000,"flatObservedMs":1791608213936,"breachToFlatMs":1936,"missInjected":false}
+{"t":1791608214413,"net":"fork-sim","step":"keeper flatten","vault":"0x856e4424f806D16E8CBC702B3c0F2ede5468eae5","reason":1,"attempt":1,"tx":"0x38e0f4d0248782ef3b9dcd926f156f4a57826221bfe7db25fcb51c02af71a6ef","status":"success","block":"62","sinceSeenMs":1017}
+{"t":1791608214979,"net":"fork-sim","step":"sim oracle ETH -> 2494.7 (restore)","tx":"0x9fb935f9fc74ee5a0981ef218557f2a1158e41b9a11b4e5f56408985a3ccd033","status":"success","block":"63","blockTsMs":1791608214000}
+{"t":1791608215422,"net":"fork-sim","step":"RESULT keeper","vault":"0x856e4424f806D16E8CBC702B3c0F2ede5468eae5","breachSeenMs":1791608213396,"flatSeenMs":1791608215422,"breachToFlatObservedMs":2026,"attempts":1,"txs":["0x38e0f4d0248782ef3b9dcd926f156f4a57826221bfe7db25fcb51c02af71a6ef"]}
+{"t":1791608217005,"net":"fork-sim","step":"sim oracle ETH -> 2494.7 (restore)","tx":"0x211aeddeaa648fadb9960839653ca277bf3ee69289c19862cfb6f29ee28a34ac","status":"success","block":"65","blockTsMs":1791608216000}
+{"t":1791608218032,"net":"fork-sim","step":"floor = equity - 1","tx":"0x909f053e9d78cf53ee888d26b73d864ae2838e1fea37b440407ace90efa6d6d4","status":"success","block":"66","blockTsMs":1791608217000}
+{"t":1791608219080,"net":"fork-sim","step":"rearm","tx":"0xae44b193bf40cbeb9ec44d48f71d507926d04a974bc0581706cd32e72477b66d","status":"success","block":"67","blockTsMs":1791608218000}
+{"t":1791608220123,"net":"fork-sim","step":"trade ETH buy 0.014 @2545","tx":"0xf3f1e3e91529b50aee048cfe345572a1c6bfde00cc52aec8dfba72b2cd6e2e56","status":"success","block":"68","blockTsMs":1791608219000}
+{"t":1791608220126,"net":"fork-sim","step":"latency run 4 opened","szi":140}
+{"t":1791608221184,"net":"fork-sim","step":"sim oracle ETH -> 2394.91 (down 4% -> crosses floor)","tx":"0xb4f925ff01ebe8c6ad3c59a15328f032fb2ab091ea0df835403bd7ff6c167513","status":"success","block":"69","blockTsMs":1791608220000}
+{"t":1791608221998,"net":"fork-sim","step":"RESULT latency run 4","breachBlockTsMs":1791608220000,"flatObservedMs":1791608221994,"breachToFlatMs":1994,"missInjected":false}
+{"t":1791608222270,"net":"fork-sim","step":"keeper flatten","vault":"0x856e4424f806D16E8CBC702B3c0F2ede5468eae5","reason":1,"attempt":1,"tx":"0x984b0400d2114bc98038f5f484aeae382a70c43cbb7a1fe8330b1823cc62c7da","status":"success","block":"70","sinceSeenMs":610}
+{"t":1791608223052,"net":"fork-sim","step":"sim oracle ETH -> 2494.7 (restore)","tx":"0x9c273b7ccdcd23108165232ee36001078cfcfb94eb7d3c87035cb8a4ea2a1cc7","status":"success","block":"71","blockTsMs":1791608222000}
+{"t":1791608223291,"net":"fork-sim","step":"RESULT keeper","vault":"0x856e4424f806D16E8CBC702B3c0F2ede5468eae5","breachSeenMs":1791608221660,"flatSeenMs":1791608223291,"breachToFlatObservedMs":1631,"attempts":1,"txs":["0x984b0400d2114bc98038f5f484aeae382a70c43cbb7a1fe8330b1823cc62c7da"]}
+{"t":1791608226326,"net":"fork-sim","step":"floor = equity - 3","tx":"0xa2f20a0be0c9e49e24432b7e274424584f8a811d55a2885c3d74fad0f3177f1a","status":"success","block":"73","blockTsMs":1791608224000}
+{"t":1791608241867,"net":"fork-sim","step":"rearm","tx":"0xf772d89389d46a20429786077e907e04a63c640fdab44a1d7bfa07c17a91ebfb","status":"success","block":"86","blockTsMs":1791608241000}
+{"t":1791608242834,"net":"fork-sim","step":"trade ETH buy 0.014 @2545","tx":"0x2365a567da4446bf8cd073aa3c13b28f525c499eb24b8ccaa3069da7d0f063f6","status":"success","block":"87","blockTsMs":1791608242000}
+{"t":1791608243427,"net":"fork-sim","step":"sim oracle ETH -> 2694.28 (up 8%)","tx":"0xb5650d72654393cf19371de7a3b4d7ba36ff86055753f63aedfcbd4ec4b0d609","status":"success","block":"88","blockTsMs":1791608243000}
+{"t":1791608244391,"net":"fork-sim","step":"state in profit","szi":140,"equityPnl":-8283760,"floor":-14077880,"breached":false,"reason":0}
+{"t":1791608245920,"net":"fork-sim","step":"backer stop","tx":"0xb828f66215dd00b1e51c5343a0ca24bef611810640c14295ba9012002d2371ad","status":"success","block":"90","blockTsMs":1791608245000}
+{"t":1791608247692,"net":"fork-sim","step":"keeper flatten","vault":"0x856e4424f806D16E8CBC702B3c0F2ede5468eae5","reason":0,"attempt":1,"tx":"0x67680858a056b346e05a6893cca74fef0ba78c4cdb6db31022ad3897a57afe76","status":"success","block":"92","sinceSeenMs":1296}
+{"t":1791608248617,"net":"fork-sim","step":"state stopped+flat","szi":0,"equityPnl":-8283760,"floor":-14077880,"breached":true,"reason":0}
+{"t":1791608251469,"net":"fork-sim","step":"settle (20% profit share to trader)","tx":"0xccdec91fd9ef3b600fa4594a76cfb2e422eb6157b59060b6dc5ddb90081dd53a","status":"success","block":"94","blockTsMs":1791608249000}
+{"t":1791608251671,"net":"fork-sim","step":"SCENARIO settle","logs":3}

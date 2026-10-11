@@ -23,6 +23,7 @@ Critic: independent Codex CLI run per round (gstack design-review outside voice,
 | r18 | 7.8 | 6.9 | B / A | see review/critic-r18.md |
 | r19 | 7.9 | 7.3 | B / A | see review/critic-r19.md |
 | r20 | 7.8 | 7.0 | B / A | see review/critic-r20.md |
+| r21 | 7.9 | 7.3 | B / A | see review/critic-r21.md |
 r1-r2 were builder self-review rounds (placeholder escape, ruler clipping, duplicate incidents, mobile overflow 144px fixed) before the outside voice started.
 
 r12-r20 (Oct 11): For judges + Business model sections and e2e fixes added after r11; the critic plateaued at 7.7-7.9 avg, never 8.0. Deployed on Oct 11 with the gate failing on score only (see gate-oct11.txt); the r11 FINAL line below refers to the pre-judges build.

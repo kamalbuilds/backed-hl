@@ -1,0 +1,9 @@
+{
+ "started": "2026-10-11T04:41:18.457Z",
+ "checkpoint": "0x3f4139571f122421e76e9aaf0d531ba1000c848aaf9eda84736638f687a4e4e5",
+ "setDaily": "0x7bcbe9caf593dab291856665d4a48b9ea36494157f0ef15d8ed12672ce8acbdc",
+ "breachSeen": "2026-10-11T04:43:10.831Z",
+ "reason": 2,
+ "flatSeen": "2026-10-11T04:43:13.011Z",
+ "breached": true
+}

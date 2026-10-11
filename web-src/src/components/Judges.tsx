@@ -18,6 +18,8 @@ export function Judges({ factory }: { factory: string }) {
     ['Rule checks, leverage cap, frozen state, settle split', 'Real: HyperEVM testnet contracts, 27 forge tests'],
     ['Orders, fills, flatten closes', 'Real: HyperCore testnet fills you can query by vault address'],
     ['Public keeper and breach-to-flat timing', 'Real: measured on testnet, five funded runs plus this click-through'],
+    ['Daily loss limit, flatten bounty, sweep', 'Real: daily breach on the reference vault on 11 Oct, flat in about 2 s by the keeper; 0.1 USDC bounty paid to the flattener; leftover USDC swept to the backer'],
+    ['Retry after a missed price band; profit split when there is a profit', 'Simulated HyperCore on a local chain plus forge tests (a testnet settle so far only ran at a loss)'],
     ['Breach replay on the ruler', 'Simulated: animation only, timed with the measured median'],
     ['Mainnet, real money', 'Not deployed. Testnet USDC only'],
   ]

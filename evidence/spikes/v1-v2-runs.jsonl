@@ -1,0 +1,133 @@
+{"t":1791603183703,"step":"deploy","address":"0x6169a53bcbbc7ecafbbd3eea3b979232479a9a84","tx":"0x62a6673bc48d86b1371c495b1f0b8673a8a2b1ba36a5d579b82d8b859d5927c9","status":"success"}
+{"t":1791603185261,"step":"spotSend to contract","amount":"12","body":"{\"status\":\"ok\",\"response\":{\"type\":\"default\"}}"}
+{"t":1791603191993,"step":"fundPerp","tx":"0xbd4ca3354e8b7bbb83cc6564e418c7005832eddb39f291273224ace461c320f1","status":"success","block":"66498032","blockTsMs":1791603191000}
+{"t":1791603198690,"step":"state","szi":0,"entryNtl":0,"oraclePx":249110,"lossUsd6":0,"capital":11000000,"maxLoss":1000000000,"breached":false,"accountValue":"11.0"}
+{"t":1791603205716,"step":"reject-sim","label":"20x ETH long sz 0.0883 (~224.37 USD on 11 capital)","sim":"The contract function \"trade\" reverted with the following reason:\nleverage above backer limit"}
+{"t":1791603208881,"step":"REJECT 20x ETH long sz 0.0883 (~224.37 USD on 11 capital)","tx":"0x14fff96958561d7f7a3063a6b019de3abe10b13688befed87ada8cbf8a731666","status":"reverted","block":"66498049","blockTsMs":1791603208000}
+{"t":1791603212241,"step":"post-reject","szi":0}
+{"t":1791603212402,"step":"reject-sim","label":"disallowed market BTC (asset 3)","sim":"The contract function \"trade\" reverted with the following reason:\nmarket not allowed"}
+{"t":1791603215007,"step":"REJECT disallowed market BTC (asset 3)","tx":"0xd266f9ab58dbbd8678d661d50f4f326a7937344b7950bda75b26a962ca14da8f","status":"reverted","block":"66498055","blockTsMs":1791603214000}
+{"t":1791603218181,"step":"post-reject","szi":0}
+{"t":1791603222437,"step":"maxLoss high","tx":"0x6b70963de56434d0cfc06aac13d77b0a70e20a51016aedf374114d6208205b53","status":"success","block":"66498062","blockTsMs":1791603221000}
+{"t":1791603224725,"step":"open long 0.0049 ETH IOC @2541","tx":"0x9693ac584c80da7aaa8485dad986744defad9282fad9ed0cf80ee2dcdad082c1","status":"success","block":"66498065","blockTsMs":1791603224000}
+{"t":1791603225046,"step":"opened","szi":49}
+{"t":1791603227885,"step":"maxLoss -> 0.000001 USDC (breach line)","tx":"0xe8d2604ce5797e2472a67f6d9265730b07bf075dd228057485f9bc11c746ba59","status":"success","block":"66498068","blockTsMs":1791603227000}
+{"t":1791603322839,"step":"state","szi":49,"entryNtl":12149060,"oraclePx":249071,"lossUsd6":0,"capital":11000000,"maxLoss":1,"breached":false,"accountValue":"10.992083"}
+{"t":1791603327002,"step":"maxLoss high","tx":"0x5f96458ea2a9a16b12abf71c2f376c6632a99a459aa0f339729e592210497292","status":"success","block":"66498169","blockTsMs":1791603326000}
+{"t":1791603586437,"step":"state","szi":98,"entryNtl":24295200,"oraclePx":249046,"lossUsd6":0,"capital":11000000,"maxLoss":1000000000,"breached":false,"accountValue":"10.983168"}
+{"t":1791603613861,"step":"maxLoss -> 0.000001 USDC (breach line)","tx":"0xc5f8049257231307501e904a7ee9a6da7789bf14063cba542f43578754978cf0","status":"success","block":"66498461","blockTsMs":1791603613000}
+{"t":1791603614203,"step":"watching","oracle":249050}
+{"t":1791603698986,"step":"watching","oracle":249069}
+{"t":1791603785794,"step":"watching","oracle":249040}
+{"t":1791603871856,"step":"watching","oracle":249040}
+{"t":1791603957686,"step":"watching","oracle":249090}
+{"t":1791604043874,"step":"watching","oracle":249210}
+{"t":1791604129521,"step":"watching","oracle":249172}
+{"t":1791604223185,"step":"watching","oracle":249103}
+{"t":1791604311140,"step":"watching","oracle":249044}
+{"t":1791604397414,"step":"watching","oracle":249003}
+{"t":1791604462624,"step":"maxLoss -> 0.000001 USDC (breach line)","tx":"0x911942bd0a1d496a45f3fda874dde37900f72a14c5abb4fa2cc0b7425652f2fe","status":"success","block":"66499324","blockTsMs":1791604462000}
+{"t":1791604462954,"step":"watching","oracle":249020}
+{"t":1791604547959,"step":"watching","oracle":249070}
+{"t":1791604635162,"step":"watching","oracle":249139}
+{"t":1791604813995,"step":"watching","oracle":249182}
+{"t":1791604909974,"step":"watching","oracle":249310}
+{"t":1791604996801,"step":"watching","oracle":249456}
+{"t":1791605082729,"step":"watching","oracle":249460}
+{"t":1791605169629,"step":"watching","oracle":249461}
+{"t":1791605255198,"step":"watching","oracle":249461}
+{"t":1791605339696,"step":"watching","oracle":249480}
+{"t":1791605424246,"step":"watching","oracle":249411}
+{"t":1791605511603,"step":"watching","oracle":249338}
+{"t":1791605601841,"step":"watching","oracle":249439}
+{"t":1791605687184,"step":"watching","oracle":249470}
+{"t":1791605773552,"step":"watching","oracle":249430}
+{"t":1791605859144,"step":"watching","oracle":249440}
+{"t":1791605950154,"step":"watching","oracle":249465}
+{"t":1791606044390,"step":"watching","oracle":249419}
+{"t":1791606130757,"step":"watching","oracle":249394}
+{"t":1791606168383,"step":"state","szi":98,"entryNtl":24295200,"oraclePx":249361,"lossUsd6":0,"capital":11000000,"maxLoss":1,"breached":false,"accountValue":"11.022451"}
+{"status":"ok","response":{"type":"order","data":{"statuses":[{"filled":{"totalSz":"0.75","avgPx":"22.512","oid":62314321317}}]}}}
+{"t":1791606216087,"step":"watching","oracle":249360}
+--- v2
+{"t":1791606223319,"step":"deploy","address":"0xb758576f55d3b8a8afed4c85b1279d50a50c0e5e","tx":"0x0246a98592eedab79a74154e180c6ace3692b182ddc0daec224c678273326123","status":"success"}
+{"t":1791606224552,"step":"spotSend to contract","amount":"15","body":"{\"status\":\"ok\",\"response\":{\"type\":\"default\"}}"}
+{"t":1791606227840,"step":"floor far below (no breach)","tx":"0xda37ac5777b0d515895128005d23eb0473d5ce9656d8877c4270690d5e7be1ca","status":"success","block":"66501118","blockTsMs":1791606227000}
+{"t":1791606230740,"step":"fundPerp","tx":"0x9ed6761279b7c24ce553788fb56d91e95dd27721648db81d50b0c9745c3e270a","status":"success","block":"66501121","blockTsMs":1791606230000}
+{"t":1791606237654,"step":"state","szi":0,"entryNtl":0,"oraclePx":249344,"pnlUsd6":0,"capital":14000000,"floor":-1000000000,"breached":false,"accountValue":"14.0"}
+{"t":1791606238633,"step":"reject-sim","label":"20x ETH long sz 0.1123 (~285.58 USD on 14 capital)","sim":"The contract function \"trade\" reverted with the following reason:\nleverage above backer limit"}
+{"t":1791606242498,"step":"REJECT 20x ETH long sz 0.1123 (~285.58 USD on 14 capital)","tx":"0x2f9e7412c59abe9c612fd31f825fc834b172ef0486560403c5da2dbf97b13f3d","status":"reverted","block":"66501133","blockTsMs":1791606241000}
+{"t":1791606245669,"step":"post-reject","szi":0}
+{"t":1791606245832,"step":"reject-sim","label":"disallowed market BTC (asset 3)","sim":"The contract function \"trade\" reverted with the following reason:\nmarket not allowed"}
+{"t":1791606247751,"step":"REJECT disallowed market BTC (asset 3)","tx":"0x97fdcf8bc6a8e5ea1e93e308166fa54650e4937963b76602237c995a6995819e","status":"reverted","block":"66501139","blockTsMs":1791606247000}
+{"t":1791606250923,"step":"post-reject","szi":0}
+{"t":1791606255024,"step":"floor far below (no breach)","tx":"0xf3132bf0c090894b0b3a0509c2206791eb0061dc687f9db5d47644eab66a73ff","status":"success","block":"66501146","blockTsMs":1791606254000}
+{"t":1791606257695,"step":"open long 0.0049 ETH IOC @2543","tx":"0x266684fdfdb72aa4834b4e23f2be9438d1d512ea68da3e65b365abe281fcca32","status":"success","block":"66501149","blockTsMs":1791606257000}
+{"t":1791606258030,"step":"opened","szi":49}
+{"t":1791606261071,"step":"floor -> pnl+0.05 USDC (breach line crossed)","tx":"0xaab7d8a0f0c11d11f910de3b8cbd54e3d290b30f9c2e2d2a8a01816fc363d636","status":"success","block":"66501152","blockTsMs":1791606260000}
+{"t":1791606261394,"step":"breach","run":0,"mode":"keeper","tBreach":1791606261394,"lossUsd6":59927}
+{"t":1791606263802,"step":"flatten (permissionless)","tx":"0xbcb247be82e9e4ace18f0adc62767e048825a08cba22b81561e85aee6855008e","status":"success","block":"66501155","blockTsMs":1791606263000}
+{"t":1791606264320,"step":"RESULT","run":0,"mode":"keeper","tBreach":1791606261394,"flattenTx":"0xbcb247be82e9e4ace18f0adc62767e048825a08cba22b81561e85aee6855008e","flattenBlockTsMs":1791606263000,"fillTimeMs":1791606263423,"tFlatObserved":1791606263965,"breachToFillMs":2029,"breachBlockToFillMs":3423,"breachToObservedFlatMs":2571,"flattenBlockToFillMs":423}
+{"t":1791606268550,"step":"reset","tx":"0x14210739516e4bdded7665573c13b4db1d14d11459f90ee98ce8cd72439cca40","status":"success","block":"66501160","blockTsMs":1791606268000}
+{"t":1791606272231,"step":"floor far below (no breach)","tx":"0xe8516b440d4707965b314bfe13edbc6513efe91eec9eac351c7bcb95fdf3ac97","status":"success","block":"66501163","blockTsMs":1791606271000}
+{"t":1791606274860,"step":"open long 0.0049 ETH IOC @2543","tx":"0xc993595463c2c7a876058c10b6f3ae42f2bb8eb25bc231f9b8295766d0a8021d","status":"success","block":"66501166","blockTsMs":1791606274000}
+{"t":1791606275186,"step":"opened","szi":49}
+{"t":1791606277907,"step":"floor -> pnl+0.05 USDC (breach line crossed)","tx":"0x30657771435372836739773455fa8989f046f3b36dcf0bdda379f4c88adf45e4","status":"success","block":"66501169","blockTsMs":1791606277000}
+{"t":1791606278231,"step":"breach","run":1,"mode":"keeper","tBreach":1791606278231,"lossUsd6":60858}
+{"t":1791606281048,"step":"flatten (permissionless)","tx":"0x9007a5029873af6efe70efe4162feb64706dff869557f74803d989667ee2b25b","status":"success","block":"66501172","blockTsMs":1791606280000}
+{"t":1791606281402,"step":"RESULT","run":1,"mode":"keeper","tBreach":1791606278231,"flattenTx":"0x9007a5029873af6efe70efe4162feb64706dff869557f74803d989667ee2b25b","flattenBlockTsMs":1791606280000,"fillTimeMs":1791606280364,"tFlatObserved":1791606281215,"breachToFillMs":2133,"breachBlockToFillMs":3364,"breachToObservedFlatMs":2984,"flattenBlockToFillMs":364}
+{"t":1791606286746,"step":"reset","tx":"0xdf74f77dce8b5b903994c20ad2b74dffa0e8e8ad9882e49b577b05a2f82ec9cc","status":"success","block":"66501178","blockTsMs":1791606286000}
+{"t":1791606289581,"step":"floor far below (no breach)","tx":"0x369eb749147b2bfaa588b5d1182d708ead37351bed3637121d0977adc4f58945","status":"success","block":"66501181","blockTsMs":1791606289000}
+{"t":1791606292655,"step":"open long 0.0049 ETH IOC @2543","tx":"0x5e9754852e33fe8c1eee97e2d03252e01c285ccc0000c024ff6fd2841a027f22","status":"success","block":"66501184","blockTsMs":1791606292000}
+{"t":1791606292978,"step":"opened","szi":49}
+{"t":1791606295909,"step":"floor -> pnl+0.05 USDC (breach line crossed)","tx":"0xbb86a29c2a56338c7196852c7144cd3c3303f4629da23011f89667e11daf1b94","status":"success","block":"66501187","blockTsMs":1791606295000}
+{"t":1791606296412,"step":"breach","run":2,"mode":"keeper","tBreach":1791606296412,"lossUsd6":60172}
+{"t":1791606299947,"step":"flatten (permissionless)","tx":"0x5b7e8dc7635c06ff08c36469122de24c731de19a6cce5a99e2276f548f44dc24","status":"success","block":"66501191","blockTsMs":1791606299000}
+{"t":1791606300663,"step":"RESULT","run":2,"mode":"keeper","tBreach":1791606296412,"flattenTx":"0x5b7e8dc7635c06ff08c36469122de24c731de19a6cce5a99e2276f548f44dc24","flattenBlockTsMs":1791606299000,"fillTimeMs":1791606299472,"tFlatObserved":1791606300264,"breachToFillMs":3060,"breachBlockToFillMs":4472,"breachToObservedFlatMs":3852,"flattenBlockToFillMs":472}
+{"t":1791606305682,"step":"reset","tx":"0x131e492cf3d514cb6653f82857e4af6329949095060d1c7d559e934815b7c70f","status":"success","block":"66501198","blockTsMs":1791606305000}
+{"t":1791606307574,"step":"floor far below (no breach)","tx":"0xba2b1635992e8e01cd017d87f55ba6319234a2248016aafa3ec0062e484ed684","status":"success","block":"66501200","blockTsMs":1791606307000}
+{"t":1791606310721,"step":"open long 0.0049 ETH IOC @2543","tx":"0x4c05aaf508402724277c265063a4701e56ceade877e35d0656f0911b5f33341a","status":"success","block":"66501203","blockTsMs":1791606310000}
+{"t":1791606311232,"step":"opened","szi":49}
+{"t":1791606314020,"step":"floor -> pnl+0.05 USDC (breach line crossed)","tx":"0xfad74fe95f33d89c43b45510b3777a0a85d9fc305c398e39f87a4d841f007abc","status":"success","block":"66501206","blockTsMs":1791606313000}
+{"t":1791606314349,"step":"breach","run":3,"mode":"keeper","tBreach":1791606314349,"lossUsd6":62083}
+{"t":1791606316945,"step":"flatten (permissionless)","tx":"0x778906ae780f05e0682e9bf6d45266b27f9901ff5712ab8d94096a8954fcd8b4","status":"success","block":"66501209","blockTsMs":1791606316000}
+{"t":1791606317444,"step":"RESULT","run":3,"mode":"keeper","tBreach":1791606314349,"flattenTx":"0x778906ae780f05e0682e9bf6d45266b27f9901ff5712ab8d94096a8954fcd8b4","flattenBlockTsMs":1791606316000,"fillTimeMs":1791606316483,"tFlatObserved":1791606317104,"breachToFillMs":2134,"breachBlockToFillMs":3483,"breachToObservedFlatMs":2755,"flattenBlockToFillMs":483}
+{"t":1791606322786,"step":"reset","tx":"0xfc6573ad7d5a664ce2e043035338da8e7ed4b68713db1f6b900441b0143f95d5","status":"success","block":"66501215","blockTsMs":1791606322000}
+{"t":1791606326517,"step":"floor far below (no breach)","tx":"0xa2f57eed84227d775f3b80dbd28d2fd49a4d90da72c672b7618cd4184c8d8679","status":"success","block":"66501218","blockTsMs":1791606325000}
+{"t":1791606330123,"step":"open long 0.0049 ETH IOC @2543","tx":"0xa6dafb691e259b96063fb42d1fff5444811f73f61c84ac08c50a848431b6092b","status":"success","block":"66501222","blockTsMs":1791606329000}
+{"t":1791606330611,"step":"opened","szi":49}
+{"t":1791606333884,"step":"floor -> pnl+0.05 USDC (breach line crossed)","tx":"0xfaa6320cc6af5a963366d2c7290a74486ea6e255389d2f44c123a359014b2f60","status":"success","block":"66501226","blockTsMs":1791606333000}
+{"t":1791606334219,"step":"breach","run":4,"mode":"keeper","tBreach":1791606334219,"lossUsd6":59290}
+{"t":1791606336629,"step":"flatten (permissionless)","tx":"0xb9fec6b974b9a0486b7a4b21b3a022c30ceaeb1fbc3247b01a1256e1b1f58aa8","status":"success","block":"66501229","blockTsMs":1791606336000}
+{"t":1791606337293,"step":"RESULT","run":4,"mode":"keeper","tBreach":1791606334219,"flattenTx":"0xb9fec6b974b9a0486b7a4b21b3a022c30ceaeb1fbc3247b01a1256e1b1f58aa8","flattenBlockTsMs":1791606336000,"fillTimeMs":1791606336441,"tFlatObserved":1791606336942,"breachToFillMs":2222,"breachBlockToFillMs":3441,"breachToObservedFlatMs":2723,"flattenBlockToFillMs":441}
+{"t":1791606342964,"step":"reset","tx":"0x0b645644931c89f15e543f38ef280ab9390440559ab8971949c56dd34b34e73f","status":"success","block":"66501235","blockTsMs":1791606342000}
+{"t":1791606346090,"step":"floor far below (no breach)","tx":"0xede8f25dafe9059d580ed51ba5885346dac699ed7da21219c960a9d7aa701434","status":"success","block":"66501238","blockTsMs":1791606345000}
+{"t":1791606349163,"step":"open long 0.0049 ETH IOC @2543","tx":"0xd34e7fa2d1bd43fe17b3e84f2ec38f6c687dbc3cddfafefd30d3b603df60b549","status":"success","block":"66501241","blockTsMs":1791606348000}
+{"t":1791606349488,"step":"opened","szi":49}
+{"t":1791606352576,"step":"floor -> pnl+0.05 USDC (breach line crossed)","tx":"0xeec17e367d6937a9506c42015cc6ec13b14cb4423460cb8c8ddfa7b81ffe6884","status":"success","block":"66501245","blockTsMs":1791606352000}
+{"t":1791606352941,"step":"breach","run":0,"mode":"control","tBreach":1791606352941,"lossUsd6":59780}
+{"t":1791606413353,"step":"RESULT","run":0,"mode":"control","tBreach":1791606352941,"stillOpenAfterMs":60000,"sziAfter":49}
+{"t":1791606415632,"step":"control cleanup flatten","tx":"0x339cc0e2ad41b15ca826cac4d8b4078883c4c3441bd38e1695ec98aa74edb3a1","status":"success","block":"66501309","blockTsMs":1791606415000}
+{"t":1791606422001,"step":"reset","tx":"0xf77e86486ea28ee3ac94564aa52e5885fe1b7e8cfd99da5ce6289b28119645e8","status":"success","block":"66501314","blockTsMs":1791606420000}
+{"t":1791606424945,"step":"floor far below (no breach)","tx":"0xefedfec6c8265e04aa3eaf80e9256a2195fc02f566307caf3a481dcbe45eaf6a","status":"success","block":"66501319","blockTsMs":1791606424000}
+{"t":1791606427971,"step":"open long 0.0049 ETH IOC @2544","tx":"0x24bf1d18de353bc6d02371962d40566a646d7c05ebf56fb029883e1e71b763d0","status":"success","block":"66501322","blockTsMs":1791606427000}
+{"t":1791606428297,"step":"opened","szi":49}
+{"t":1791606430227,"step":"state","szi":49,"entryNtl":12158370,"oraclePx":249386,"pnlUsd6":61544,"capital":14000000,"floor":-1000000000,"breached":false,"accountValue":"13.921538"}
+{"t":1791606430819,"step":"floor -> pnl+0.05 USDC (breach line crossed)","tx":"0xaddddecb42ce086f5835335ce28df98db460af7f1240e83fd1bdc567eaa83d3b","status":"success","block":"66501325","blockTsMs":1791606430000}
+{"t":1791606431141,"step":"breach","run":1,"mode":"control","tBreach":1791606431141,"lossUsd6":61544}
+{"t":1791606491628,"step":"RESULT","run":1,"mode":"control","tBreach":1791606431141,"stillOpenAfterMs":60000,"sziAfter":49}
+{"t":1791606494895,"step":"control cleanup flatten","tx":"0x29c70de748ffd0d5ea8e8db9b83320bab2d5e7e28c5cd193122712af0678d73b","status":"success","block":"66501390","blockTsMs":1791606494000}
+{"t":1791606539376,"v":2,"step":"v2 deploy","address":"0x76022145833dd7416bc22eaaee558fe9cd6e5c87","tx":"0x37be95cffcf6c1782c36e463da6b7fae49578d55d0d9fcb48772d1b15a8d1a23"}
+{"t":1791606541927,"v":2,"step":"v2 fundPerp 14 (capital bookkeeping only; contract holds no USDC, CoreWriter transfer no-ops)","tx":"0x498aca7957c9d4d4409cf093224d39296f87fa2a0af8fa04bdc62fb81b13b647","status":"success"}
+{"t":1791606542412,"v":2,"step":"v2 sim 20x long","oracle":2494.3,"sz":0.1123,"sim":"leverage above backer limit"}
+{"t":1791606544808,"v":2,"step":"v2 REJECT on-chain 20x long","tx":"0x486cb12d2c9c1fd0474b9ad94b46a286f2beb957c2ebe810cb6729f864f5e9c4","status":"reverted"}
+{"t":1791606544974,"v":2,"step":"v2 sim fake $1 limit, 5x size at oracle","oracle":2494.3,"sz":0.0281,"sim":"leverage above backer limit"}
+{"t":1791606547646,"v":2,"step":"v2 REJECT on-chain fake $1 limit, 5x size at oracle","tx":"0xb60843935fba6037ca3a2b836bf41c431a73f435d383aba919c9ade989814e3e","status":"reverted"}
+{"t":1791606547811,"v":2,"step":"v2 sim within cap 2.5x","oracle":2494.3,"sz":0.014,"sim":"ok"}
+{"t":1791606655224,"v":"2.1","step":"v2 deploy","address":"0x3d67f0255be8e606aa4970a95729c2a97339fdb6","tx":"0x3ca3c66881c0c73ac654e89a878e6e73b356773ae63c16bd75a49e0480062c4e"}
+{"t":1791606657610,"v":"2.1","step":"v2 fundPerp 14 (capital bookkeeping only; contract holds no USDC, CoreWriter transfer no-ops)","tx":"0xed63a2fd9208844f493d96c17f1bcb8cfd7c7eee67af789d4e3333f72ef520e2","status":"success"}
+{"t":1791606657931,"v":"2.1","step":"v2 sim 20x long","oracle":2493.11,"sz":0.1123,"sim":"leverage above backer limit"}
+{"t":1791606664173,"v":"2.1","step":"v2 REJECT on-chain 20x long","tx":"0x1e075d40efea828fa974efa7545cff5dca7cec775a357510d25b90a81e8089d7","status":"reverted"}
+{"t":1791606664336,"v":"2.1","step":"v2 sim fake $1 limit, 5x size at oracle","oracle":2493.11,"sz":0.0281,"sim":"leverage above backer limit"}
+{"t":1791606666815,"v":"2.1","step":"v2 REJECT on-chain fake $1 limit, 5x size at oracle","tx":"0xd56cd8ff6c50a0a4e993043a055978d6d2cdcc019ae86897a75a2f54a387a9be","status":"reverted"}
+{"t":1791606666978,"v":"2.1","step":"v2 sim within cap 2.5x","oracle":2493.11,"sz":0.014,"sim":"ok"}

@@ -7,7 +7,7 @@ const key = JSON.parse(fs.readFileSync(process.env.BACKED_KEYFILE || '/Users/kam
 export const account = privateKeyToAccount(key.startsWith('0x') ? key : '0x' + key);
 const transport = http(undefined, { retryCount: 4, retryDelay: 1500 });
 export const pub = createPublicClient({ chain, transport });
-const wc = createWalletClient({ chain, transport, account });
+export const wc = createWalletClient({ chain, transport, account });
 export const txs = [];
 export async function handle(method, params = []) {
   switch (method) {

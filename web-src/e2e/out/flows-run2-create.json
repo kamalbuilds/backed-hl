@@ -1,0 +1,35 @@
+[
+ {
+  "name": "connect",
+  "ok": true,
+  "at": "2026-10-10T18:18:39.845Z",
+  "address": "0x263F74859F6c932Db0B4F11165580AE58984D8cc"
+ },
+ {
+  "name": "create vault",
+  "ok": true,
+  "at": "2026-10-10T18:20:04.711Z",
+  "text": "create confirmed 0x48461a…ebde",
+  "tx": "0x48461a5b7961c078cc6d8d4153312797b5a6bc509b9626aea0143c37dae5ebde"
+ },
+ {
+  "name": "new vault loaded",
+  "ok": true,
+  "at": "2026-10-10T18:20:08.714Z",
+  "vault": "0xa33D732D142BE60946a5F0Ae1a36E88185A78A5B"
+ },
+ {
+  "name": "send 11 USDC to vault (CoreWriter spotSend)",
+  "ok": true,
+  "at": "2026-10-10T18:20:17.167Z",
+  "text": "sendRawAction confirmed 0x1a866d…2547",
+  "tx": "0x1a866d3a1748a673becd9533039d0755b70cb2bb31fbf3c3e7884a9f78bd2547"
+ },
+ {
+  "name": "fundPerp 10 USDC",
+  "ok": false,
+  "at": "2026-10-10T18:20:58.447Z",
+  "text": "Not sent: An unknown RPC error occurred.",
+  "tx": null
+ }
+]

@@ -17,12 +17,17 @@ When equity crosses the loss line, anyone can call flatten and close every posit
 All of this is on HyperEVM testnet with real HyperCore fills.
 
 - Five funded breach runs. Median time from breach to flat position: 2.05 seconds. Four of five were under 2.4 seconds.
-- A browser click-through with a test wallet: create a vault, fund it, an allowed trade, a refused 20x, a breach and flatten, a gasless signed order sent by a relayer, then settle, which paid the backer back. Every step has a transaction on the site under "For judges".
+- A browser click-through with a test wallet, every button on the site: create a vault, fund it, an allowed trade, a refused 20x, a breach and flatten, a gasless signed order sent by a relayer, then settle, which paid the backer back. Every step has a transaction on the site under "For judges".
+- A daily loss limit tested live on 11 Oct: the contract flagged the breach and our public keeper had the vault flat about 2 seconds later. The flatten bounty (0.1 USDC) landed in the caller's account, and leftover USDC swept back to the backer.
 - 27 forge tests, including the two bugs a reviewer found: a trader realizing losses to dodge the line, and a vault frozen with a position still open. Both are fixed and tested.
 
 ## Business (20 s)
 
 Traders pay nothing up front. They keep the profit share the backer sets, and the contract pays it at settle. Backers pay a builder fee on orders the vault sends. Hyperliquid allows up to 0.1% on perps; we plan far less. Hyperliquid did about $206B in perp volume over the last 30 days (DefiLlama). At a 0.02% fee, $10M a month through BACKED vaults is $2,000 a month. That is arithmetic, not a forecast. The fee is planned and not in the contract yet.
+
+## What is not done yet (10 s)
+
+Testnet only. The builder fee is planned, not coded. A profitable settle split and a flatten retry after a missed price band are proven in simulation and tests, not yet on testnet.
 
 ## Ask (10 s)
 

@@ -1,0 +1,2 @@
+{ "name": "backed", "private": true, "type": "module", "dependencies": { "viem": "^2.57.4" },
+  "scripts": { "test": "forge test", "deploy": "node scripts/deploy.mjs", "rejections": "node scripts/rejections.mjs", "keeper": "node scripts/keeper.mjs", "sim": "node sim/run-sim.mjs", "retest": "node scripts/retest-funded.mjs" } }

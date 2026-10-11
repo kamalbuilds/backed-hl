@@ -1,0 +1,47 @@
+{"t":1791608709050,"net":"testnet","step":"note","msg":"capital already booked; equity floor relative to it"}
+{"t":1791608711971,"net":"testnet","step":"fundPerp 19.9","tx":"0xcbf0bbddaa25a2749f300551447c9e4c4123679cfcada3948d2a64801e911974","status":"success","block":"66503644","blockTsMs":1791608711000}
+{"t":1791608766590,"net":"testnet","step":"floor = equity - 2","tx":"0x6904bc51e879b7e3352c2c9062ca5ba9fc0bf9b5cbed2c769bf2a7c60e350cb5","status":"success","block":"66503651","blockTsMs":1791608718000}
+{"t":1791608770043,"net":"testnet","step":"open 0.018 ETH","tx":"0xb0402d229929ce891afeaa8dfcf6a7d012b5ee71892433b6f92dd958df2abbd0","status":"success","block":"66503703","blockTsMs":1791608769000}
+{"t":1791608770375,"net":"testnet","step":"LIVE stacked sim","sim":"leverage above backer limit"}
+{"t":1791608772775,"net":"testnet","step":"LIVE REJECT stacked order","tx":"0x043e5268038fafd6afe7b4bfeea7712db09095e735fd72283ad7815f6cec8362","status":"reverted","block":"66503706","blockTsMs":1791608772000}
+{"t":1791608775082,"net":"testnet","step":"close (reduce-only)","tx":"0x985509b4d132966429c32550a45f50b04925b1dbb72f711217fcd394e8e99af4","status":"success","block":"66503708","blockTsMs":1791608774000}
+{"t":1791608829713,"net":"testnet","step":"run 0 open 0.018 ETH","tx":"0xea2faae7dfa5e68e31beef8aaeac98082e4a4d1ef44d0e3d6f85ebfb67bd00a3","status":"success","block":"66503764","blockTsMs":1791608829000}
+{"t":1791608832842,"net":"testnet","step":"run 0 floor -> equity+0.05 (breach line crossed)","tx":"0x3ff04731c7afe3c379bfa310153841ab9ba5dcea65b3e74f56a6d05c88c73d11","status":"success","block":"66503767","blockTsMs":1791608832000}
+{"t":1791608834398,"net":"testnet","step":"flatten by script failed (keeper may have closed first)","err":"ContractFunctionExecutionError: RPC Request failed.\n\nURL: https://rpc.hyperliquid-testnet.xyz/evm\nRe"}
+{"t":1791609131552,"net":"testnet","step":"floor below equity","tx":"0x72c0b3671e90a1e429be64bdf352dd2b7e246f611cf0c17aaefb3e396c9ff31c","status":"success","block":"66504071","blockTsMs":1791609131000}
+{"t":1791609133843,"net":"testnet","step":"rearm","tx":"0xe1f7e47d5782a5d1f93dcb14af38ae25f8ee1bd31053dfaeb38f94d07d6feb7e","status":"success","block":"66504073","blockTsMs":1791609133000}
+{"t":1791609185005,"net":"testnet","step":"run 1 open 0.018 ETH","tx":"0xa88aa6f0baaa5109f7503b63c1c72be95fe5424da8d9f313338c0264d1b28963","status":"success","block":"66504125","blockTsMs":1791609184000}
+{"t":1791609188062,"net":"testnet","step":"run 1 floor -> equity+0.05 (breach line crossed)","tx":"0x665d375d1cfa4c01dff2a81ca10327962bd937e733198f64b2e7eb631a1eb9bb","status":"success","block":"66504128","blockTsMs":1791609187000}
+{"t":1791609188894,"net":"testnet","step":"flatten by script failed (keeper may have closed first)","err":"ContractFunctionExecutionError: Nonce provided for the transaction is lower than the current nonce o"}
+{"t":1791609190251,"net":"testnet","step":"RESULT live V3","run":1,"tBreach":1791609188223,"breachBlockTsMs":1791609187000,"fillTimeMs":1791609189429,"breachToFillMs":1206,"breachBlockToFillMs":2429,"breachToObservedFlatMs":1664}
+{"t":1791609242850,"net":"testnet","step":"floor below equity","tx":"0x34ae3cbab0159717c023968db9ec5d86b0815dc0eb1d954770d6f73da80dc187","status":"success","block":"66504135","blockTsMs":1791609194000}
+{"t":1791609246001,"net":"testnet","step":"rearm","tx":"0x5aded063fd2ee4d1527bd1932c7d8b6e215cabc74e9042db381acdc791d1523a","status":"success","block":"66504187","blockTsMs":1791609245000}
+{"t":1791609249472,"net":"testnet","step":"run 2 open 0.018 ETH","tx":"0x2f913cdc2581dceff6a726f233646d99d7c30826ef18b6120333b12ec3e1b567","status":"success","block":"66504190","blockTsMs":1791609248000}
+{"t":1791609252679,"net":"testnet","step":"run 2 floor -> equity+0.05 (breach line crossed)","tx":"0xc4ac8dbf2a920d52c2e174cc48efdc8f2c4a9ac53fb0e1a14199276b76600357","status":"success","block":"66504194","blockTsMs":1791609252000}
+{"t":1791609303873,"net":"testnet","step":"run 2 flatten (script)","tx":"0xf73fa91aeb2286478b62aca6b8dce90e1c0df7dcc9ac4f98e70db7b4e37afafa","status":"success","block":"66504246","blockTsMs":1791609303000}
+{"t":1791609304566,"net":"testnet","step":"RESULT live V3","run":2,"tBreach":1791609252846,"breachBlockTsMs":1791609252000,"fillTimeMs":1791609303404,"breachToFillMs":50558,"breachBlockToFillMs":51404,"breachToObservedFlatMs":51188,"flattenTx":"0xf73fa91aeb2286478b62aca6b8dce90e1c0df7dcc9ac4f98e70db7b4e37afafa"}
+{"t":1791609309818,"net":"testnet","step":"floor below equity","tx":"0x72ab98a5c6d9335edb5727a57e47f3c7212d31aea7af6dcb6ff9713a24fa9491","status":"success","block":"66504252","blockTsMs":1791609309000}
+{"t":1791609311558,"net":"testnet","step":"rearm","tx":"0xcacb2ed7a496adbcf090afed62dae5bd7d782cc8dbffedcb5f884396acc4fdd1","status":"success","block":"66504254","blockTsMs":1791609311000}
+{"t":1791609313627,"net":"testnet","step":"run 3 open 0.018 ETH","tx":"0x9e3751597c436a4376c5994332990c4881c8902f8f3be390646a01333e604c28","status":"success","block":"66504256","blockTsMs":1791609313000}
+{"t":1791609365140,"net":"testnet","step":"run 3 floor -> equity+0.05 (breach line crossed)","tx":"0x5cdcba556191afd629627f02b9a089fe82b6d6005b12d7d6391a36c5933c359c","status":"success","block":"66504308","blockTsMs":1791609364000}
+{"t":1791609367960,"net":"testnet","step":"run 3 flatten (script)","tx":"0xa4af9adc25894b47f38c26dc8bb90fa102d3dd357b170e5c639a64694c66f1ca","status":"success","block":"66504311","blockTsMs":1791609367000}
+{"t":1791609368497,"net":"testnet","step":"RESULT live V3","run":3,"tBreach":1791609365350,"breachBlockTsMs":1791609364000,"fillTimeMs":1791609367403,"breachToFillMs":2053,"breachBlockToFillMs":3403,"breachToObservedFlatMs":2808,"flattenTx":"0xa4af9adc25894b47f38c26dc8bb90fa102d3dd357b170e5c639a64694c66f1ca"}
+{"t":1791609374309,"net":"testnet","step":"floor below equity","tx":"0x4ac5fc0dd0abffbd0848fe850fa661ed7d284be9c3752b3760d75efbbe006da1","status":"success","block":"66504317","blockTsMs":1791609373000}
+{"t":1791609425311,"net":"testnet","step":"rearm","tx":"0xd7569c05158412de27dc0ee5f38663194d5c4689ef17b3374a00d0e33a85d11b","status":"success","block":"66504369","blockTsMs":1791609424000}
+{"t":1791609427733,"net":"testnet","step":"run 4 open 0.018 ETH","tx":"0x503a5e47977babb4f2272c96bb8bb60f8a594525dc7156959964b3523f01d90b","status":"success","block":"66504372","blockTsMs":1791609427000}
+{"t":1791609431927,"net":"testnet","step":"run 4 floor -> equity+0.05 (breach line crossed)","tx":"0x3177d37bae0f091ad6efb14edd44fe96d93063a6696f7450ba6b0f9346d7317c","status":"success","block":"66504376","blockTsMs":1791609431000}
+{"t":1791609433903,"net":"testnet","step":"flatten by script failed (keeper may have closed first)","err":"ContractFunctionExecutionError: RPC Request failed.\n\nURL: https://rpc.hyperliquid-testnet.xyz/evm\nRe"}
+{"t":1791609435285,"net":"testnet","step":"RESULT live V3","run":4,"tBreach":1791609432124,"breachBlockTsMs":1791609431000,"fillTimeMs":1791609434481,"breachToFillMs":2357,"breachBlockToFillMs":3481,"breachToObservedFlatMs":2838}
+{"t":1791609487705,"net":"testnet","step":"floor below equity","tx":"0xf24c0506423f3e641bccfb99750083111cb84e41d1c4ba3b762b1ff5c1543ca2","status":"success","block":"66504433","blockTsMs":1791609487000}
+{"t":1791609489666,"net":"testnet","step":"rearm","tx":"0x8b72688530975f294336a9539fb9e37ad17d0cd247e4b5aa7de1d5522f87fb41","status":"success","block":"66504435","blockTsMs":1791609489000}
+{"t":1791609492797,"net":"testnet","step":"retry: open","tx":"0x358091df31edcb32ba803b9f1a05ed1f85d31694c3877cbc797a337bb15efba8","status":"success","block":"66504438","blockTsMs":1791609492000}
+{"t":1791609543848,"net":"testnet","step":"retry: floor -> equity+0.05","tx":"0x824641a85df7635d676fd5e8e018a571665e6d8d394024937358f20b33968b2e","status":"success","block":"66504441","blockTsMs":1791609495000}
+{"t":1791609665322,"net":"testnet","step":"run 2 flatten inclusion","block":"66504246","blockTsMs":1791609303000,"note":"breach block ts 1791609252000"}
+{"t":1791609728259,"net":"testnet","step":"LIVE equity floor state","szi":"0","equityPnl":-915779,"floorPnl":-727669,"breached":true,"reason":1}
+{"t":1791609728445,"net":"testnet","step":"LIVE equity floor sim reopen","sim":"frozen"}
+{"t":1791609730614,"net":"testnet","step":"LIVE REJECT reopen after realized loss below the equity floor","tx":"0x1f82211443bdbcbe26785bbb8fa92e497f77e7956d994f4c1c06c46bb32237b1","status":"reverted","block":"66504680","blockTsMs":1791609730000}
+{"t":1791609792831,"net":"testnet","step":"LIVE equity floor sim rearm","sim":"still in breach"}
+{"t":1791609795757,"net":"testnet","step":"LIVE REJECT rearm while flat but realized equity below floor (equity floor)","tx":"0xf59917d7835f63910da888bbde57dc6d420f17c949202061a0d74b2ea21fac20","status":"reverted","block":"66504746","blockTsMs":1791609795000}
+{"t":1791609845054,"net":"testnet","step":"demo reset: floor -2","tx":"0xa6bab851da88f23c2d5435d0fa6b45bc8066445574759605771bd63ff9b04dd7","status":"success","block":"66504748","blockTsMs":1791609797000}
+{"t":1791609848009,"net":"testnet","step":"demo reset: rearm","tx":"0x8fcc3c426c8a2c649edeaf61685656fe2c003a2b9e70abf0bd68cc792cad18d9","status":"success","block":"66504799","blockTsMs":1791609847000}
+{"t":1791609848492,"net":"testnet","step":"demo state","breached":false,"eq":-915779}

@@ -1,0 +1,40 @@
+[
+ {
+  "name": "connect",
+  "ok": true,
+  "at": "2026-10-10T19:38:28.630Z",
+  "address": "0x263F74859F6c932Db0B4F11165580AE58984D8cc"
+ },
+ {
+  "name": "resumed vault",
+  "ok": true,
+  "at": "2026-10-10T19:38:33.724Z",
+  "vault": "0xa33D732D142BE60946a5F0Ae1a36E88185A78A5B"
+ },
+ {
+  "name": "20x refused by contract check",
+  "ok": true,
+  "at": "2026-10-10T19:40:02.044Z",
+  "text": "The contract refuses it: frozen"
+ },
+ {
+  "name": "20x send blocked before gas",
+  "ok": true,
+  "at": "2026-10-10T19:41:31.079Z",
+  "text": "Not sent: frozen",
+  "tx": null
+ },
+ {
+  "name": "settle and withdraw",
+  "ok": true,
+  "at": "2026-10-10T19:43:16.079Z",
+  "text": "settle confirmed 0xd764ed…9271",
+  "tx": "0xd764ed6fb754d3eed9179cb5001bc1f827accb6074ae36a2c0fc7131fe549271"
+ },
+ {
+  "name": "page errors",
+  "ok": true,
+  "at": "2026-10-10T19:43:24.154Z",
+  "errs": []
+ }
+]
