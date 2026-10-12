@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <rect width="1024" height="1024" fill="#08090a"/>
+  <g transform="translate(146.85 -4.76) scale(0.8994)">
+    <!-- the door: plain, no handle, no keyhole -->
+    <rect x="120" y="90" width="590" height="620" rx="56" fill="none" stroke="#f7f8f8" stroke-width="34"/>
+    <!-- the hinges -->
+    <g fill="none" stroke="#f7f8f8" stroke-width="34" stroke-linecap="round"><path d="M70 190 V270"/><path d="M70 570 V650"/></g>
+    <!-- the backer's protected block, below the loss line -->
+    <path d="M137 520 H693 V656 A36 36 0 0 1 657 692 H173 A36 36 0 0 1 137 656 Z" fill="#5e6ad2" stroke="#5e6ad2" stroke-width="2"/>
+    <!-- the equity marker, above the line -->
+    <circle cx="415" cy="388" r="34" fill="#f7f8f8" stroke="#f7f8f8" stroke-width="2"/>
+    <!-- the loss line: the only bolt, and it is code -->
+    <path d="M160 520 H750" fill="none" stroke="#eb5757" stroke-width="34" stroke-linecap="round"/>
+  </g>
+  <text x="512" y="880" text-anchor="middle" font-family="'Geist', sans-serif" font-weight="600" font-size="190" letter-spacing="4" fill="#f7f8f8">BACKED</text>
+</svg>
