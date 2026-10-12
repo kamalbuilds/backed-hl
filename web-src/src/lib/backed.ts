@@ -4,7 +4,7 @@ import { createPublicClient, createWalletClient, custom, http, defineChain, enco
 export const chain = defineChain({
   id: 998, name: 'HyperEVM Testnet', nativeCurrency: { name: 'HYPE', symbol: 'HYPE', decimals: 18 },
   rpcUrls: { default: { http: ['https://rpc.hyperliquid-testnet.xyz/evm'] } },
-  blockExplorers: { default: { name: 'purrsec', url: 'https://testnet.purrsec.com' } },
+  blockExplorers: { default: { name: 'Hyperliquid Explorer', url: 'https://app.hyperliquid-testnet.xyz/explorer' } },
 })
 export const EXPLORER = chain.blockExplorers.default.url
 // one JSON-RPC batch per tick: the public testnet RPC rate limits per request
@@ -18,7 +18,7 @@ const INFO = 'https://api.hyperliquid-testnet.xyz/info'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type Evidence = { factory: string; vault: string; groups: { title: string; kind: string; items: { label: string; tx: string | null }[] }[] }
-export type Data = { abi: { vault: any; factory: any }; evidence: Evidence; config: { factory: Address; liveVault: Address }; snapshot?: Vault & { at: number; vault: string } }
+export type Data = { abi: { vault: any; factory: any }; evidence: Evidence; config: { factory: Address; liveVault: Address; stoppedVault?: Address }; snapshot?: Vault & { at: number; vault: string } }
 export type Pos = { m: number; szi: number; px: number }
 export type Vault = { backer: string; trader: string; maxLev: number; cap: number; floor: number; breached: boolean; settled: boolean; reason: number; eq: number; markets: number[]; pos: Pos[]; dl: number; bo: number; sh: number }
 export type Fill = { time: number; coin: string; px: string; sz: string; dir: string; closedPnl: string; fee: string; hash: string }
