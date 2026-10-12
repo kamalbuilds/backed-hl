@@ -63,7 +63,7 @@ export function Checkpoints({ onAll, revertTx }: { onAll: () => void; revertTx?:
         <li><span className="cp-k">Over-cap order reverted</span>{revertTx ? <Tx hash={revertTx} /> : <span className="text-dim mono">see Incidents</span>}<span className="chip chip-danger"><span className="dot" />Reverted</span></li>
         <li><span className="cp-k">Flatten after stop</span><Tx hash={E2E.flatten} /><span className="chip chip-success"><span className="dot" />Flat</span></li>
       </ul>
-      <a className="cp-all" href="#judges" onClick={onAll}>All 10 steps and the real vs simulated table</a>
+      <a className="cp-all" href="#grid" onClick={onAll}>All 10 steps and the real vs simulated table</a>
     </section>
   )
 }

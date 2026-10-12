@@ -56,3 +56,14 @@ FINAL: 7.6 min=6.8 round=45 critic=design-review review=/Users/kamal/Desktop/sol
 ## OVERRIDE (Oct 12 2026, 7:15 AM IST): shipped below the score bar, approved by kamal
 Last critic score: 7.6 avg, 6.8 min (r45; r46 was 7.2/6.0 before its two data bugs were fixed). Gate bar is 8.0 avg and 7 per axis; every other gate item passes (slop-check source + rendered, uicraft gate, banned grep, fresh shots, grades A/B).
 Reason: 13 canonical critic rounds plateaued at 7.2-7.8 with top fixes alternating between rounds; owner approved shipping at the current score to replace the live document-style build. Deployed with wrangler directly (predeploy gate bypassed for this release only).
+
+## v5 terminal redesign (12 Oct 2026, owner brief: Hyperliquid/Lighter craft)
+- r47: SCORES avg=6.5 min=4.5 (critic=codex outside voice, review/critic-r47.md)
+- r48: SCORES avg=7.4 min=6.4 (critic=codex outside voice, review/critic-r48.md)
+- r49: SCORES avg=7.9 min=7.0 (critic=codex outside voice, review/critic-r49.md)
+- r50: SCORES avg=7.6 min=6.5 (critic=codex outside voice, review/critic-r50.md)
+- r51: SCORES avg=7.7 min=6.5 (critic=codex outside voice, review/critic-r51.md)
+- r52: SCORES avg=7.8 min=6.9 (critic=codex outside voice, review/critic-r52.md)
+- r53: SCORES avg=7.8 min=7.1 (critic=codex outside voice, review/critic-r53.md)
+- r54: SCORES avg=8.0 min=7.6 (critic=codex outside voice, review/critic-r54.md)
+FINAL: 8.0 min=7.6 round=54 critic=design-review review=/Users/kamal/Desktop/solana/cwf/hyperliquid/projects/backed/web/docs/design/review/critic-r54.md

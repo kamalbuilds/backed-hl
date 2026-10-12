@@ -110,7 +110,7 @@ export function Ticket({ s, vault, abi, onSent, readNote }: { s: Vault; vault: A
     <form className="ticket" onSubmit={(e) => { e.preventDefault(); send() }}>
       <div className="presets" aria-label="Try an order">
         {!canPreset && <span className="text-dim">Presets need the live ETH price and vault capital, which have not loaded.</span>}
-        <button type="button" className="pre-main" aria-label="Within cap (2.5x)" disabled={!canPreset} onClick={() => preset('ok')}><span className="pre-txt">Check an ETH long under the cap<span className="pre-sub">Sized to the room left under {s.maxLev}x, counting open positions. No wallet needed.</span></span><span className="pre-go" aria-hidden="true">&rarr;</span></button>
+        <button type="button" className="pre-main" aria-label="Within cap (2.5x)" disabled={!canPreset} onClick={() => preset('ok')}><span className="pre-txt">{s.breached || s.settled ? 'Check why this vault refuses orders' : 'Check an ETH long under the cap'}<span className="pre-sub">{s.breached || s.settled ? 'Simulates an in-cap ETH long; the contract refuses it because the vault is frozen. No wallet needed.' : `Sized to the room left under ${s.maxLev}x, counting open positions. No wallet needed.`}</span></span><span className="pre-go" aria-hidden="true">&rarr;</span></button>
         <div className="pre-row"><span className="pre-lbl">Or test a refusal</span>
           <button type="button" disabled={!canPreset} onClick={() => preset('lev')}>Over cap (20x)</button>
           <button type="button" disabled={!canPreset} onClick={() => preset('fake')}>Below oracle ($1)</button>
