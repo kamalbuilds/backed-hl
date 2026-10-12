@@ -119,6 +119,9 @@ export default function App() {
             </div>
             <p className="hero-sub-m">The payout is code and no key exists: the contract checks every order and pays the trader&rsquo;s share.</p>
             <p className="hero-sub">No gateway, no API wallet, a payout nobody can deny. A trader trades your USDC, every order goes through this contract, the profit split is fixed in its code, and below the loss line anyone can close the book.</p>
+            {data.config.stoppedVault && (vault.toLowerCase() === data.config.stoppedVault.toLowerCase()
+              ? <p className="card-sub" role="note">Stopped example: this vault crossed its loss line on 11 Oct, was flattened, and stays frozen, so new orders revert. <a className="tx" href="./">Open the live demo vault</a></p>
+              : vault.toLowerCase() === data.config.liveVault.toLowerCase() && <p className="card-sub" role="note">Live demo vault, armed and funded on 12 Oct. <a className="tx" href={`?vault=${data.config.stoppedVault}`}>See a stopped vault</a> that was flattened on 11 Oct.</p>)}
           </div>
         </section>
 

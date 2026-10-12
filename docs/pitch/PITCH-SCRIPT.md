@@ -26,8 +26,8 @@ Every claim has a transaction link on the live site, and anything simulated says
 
 ## Sources
 - Breach-to-flat latency, 5 funded testnet runs (1768 / 1206 / 50558* / 2053 / 2357 ms, median 2.05 s; *one flatten waited about 51 s for block inclusion): `evidence/testnet-live-runs.jsonl`, README "Feature status"
-- Permissionless flatten with 0.1 USDC bounty, 11 Oct 2026: https://testnet.purrsec.com/tx/0xde09fdff27bd02628d8a4b8fffc456a3726d299fcfdf3809876a34628e068004
-- Keeper flatten after a daily-loss breach (flat about 3 s after the flag): https://testnet.purrsec.com/tx/0x7e6b2c60ad8d06b597703ea04abf28f8d3cc1894cf9c83f022f7156d6b11f4df
+- Permissionless flatten with 0.1 USDC bounty, 11 Oct 2026: https://backed-2v9.pages.dev/#/tx/0xde09fdff27bd02628d8a4b8fffc456a3726d299fcfdf3809876a34628e068004
+- Keeper flatten after a daily-loss breach (flat about 3 s after the flag): https://backed-2v9.pages.dev/#/tx/0x7e6b2c60ad8d06b597703ea04abf28f8d3cc1894cf9c83f022f7156d6b11f4df
 - Four independent reviews and the fixes: `evidence/spikes/`, README "Built before vs during"; rule lock after the first trade: commit `e6e4894`, `test/BackedVaultV3.t.sol`
 - 7% of prop challenge buyers paid: Track360, cited in README "Business model"
 - Live app: https://backed-2v9.pages.dev · Code: https://github.com/kamalbuilds/backed-hl
