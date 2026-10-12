@@ -146,7 +146,7 @@ export function Ticket({ s, vault, abi, onSent, readNote }: { s: Vault; vault: A
         <div className="gate-head"><span>Contract checks</span><span className="gate-sub">{empty ? 'run when you set a size' : checks === null ? 'asking the contract\u2026' : 'simulated as the trader'}</span></div>
         {empty ? <p className="gate-idle">Choose an example or enter a size.</p> : <ul>
           {(checks && checks.length ? checks : (['Market', 'Leverage', 'Loss line', 'Frozen'] as const).map((k) => ({ k, v: checks ? 'no answer' : 'checking', ok: null as boolean | null }))).map((c) => (
-            <li key={c.k}><span className="gate-k">{c.k}</span><span className="gate-v">{c.v}</span><span className={`chip chip-${c.ok === null ? 'neutral' : c.ok ? 'success' : 'danger'}`}><span className="dot" />{c.ok === null ? 'Checking' : c.ok ? 'Pass' : 'Fail'}</span></li>
+            <li key={c.k}><span className="gate-k">{c.k}</span><span className="gate-v">{c.v}</span><span className={`chip chip-${c.ok === null ? 'neutral' : c.ok ? 'success' : 'danger'}`}><span className="dot" />{c.ok === null ? (phase === 'unknown' ? 'Unavailable' : 'Checking') : c.ok ? 'Pass' : 'Fail'}</span></li>
           ))}
         </ul>}
       </div>
@@ -155,14 +155,14 @@ export function Ticket({ s, vault, abi, onSent, readNote }: { s: Vault; vault: A
       {!empty && (() => {
         const q = s.pos.find((p) => p.m === f.asset), px = Number(f.px) || (q && q.px > 0 ? pxOf(q) : null)
         if (!px) return null
-        const sz = Number(f.sz), notional = sz * px, move = notional * 0.01, room = (s.eq - s.floor) / 1e6, after = room - move
+        const sz = Number(f.sz), notional = sz * px, total = levAfter != null && capUsd != null ? levAfter * capUsd : notional, move = total * 0.01, room = (s.eq - s.floor) / 1e6, after = room - move
         return (
           <div className="confirm" data-k="summary">
-            <div className="confirm-head"><span>Order summary</span><span className={`chip chip-${phase === 'ok' ? 'success' : phase === 'no' ? 'danger' : 'warn'}`}><span className="dot" />{phase === 'ok' ? 'Simulation passed' : phase === 'no' ? 'Contract will refuse' : 'Simulating'}</span></div>
+            <div className="confirm-head"><span>Order summary</span><span className={`chip chip-${phase === 'ok' ? 'success' : phase === 'no' ? 'danger' : 'warn'}`}><span className="dot" />{phase === 'ok' ? 'Simulation passed' : phase === 'no' ? 'Contract will refuse' : phase === 'unknown' ? 'Unavailable' : 'Simulating'}</span></div>
             <p className="confirm-plain">{f.buy ? 'Buy' : 'Sell'} <b className="mono">{sz} {MK[f.asset]}</b> (about <b className="mono">${notional.toFixed(2)}</b>) {f.px ? <>at up to <b className="mono">${Number(f.px).toLocaleString('en-US')}</b></> : 'at the oracle price, within 2%'}{f.ro ? ', reduce only' : ''}.</p>
             <dl className="confirm-grid">
               <div><dt>Exposure after fill</dt><dd className={`mono ${levAfter != null && levAfter > s.maxLev ? 'neg' : ''}`}>{levAfter != null ? `${levAfter.toFixed(2)}x of ${s.maxLev}x` : '\u2013'}</dd></div>
-              <div><dt>If {MK[f.asset]} moves 1% against you</dt><dd className="mono neg">{'\u2212'}${move.toFixed(2)}</dd></div>
+              <div><dt>If prices move 1% against the whole book (${total.toFixed(2)})</dt><dd className="mono neg">{'\u2212'}${move.toFixed(2)}</dd></div>
               <div><dt>Room to the loss line after that</dt><dd className={`mono ${after < 0 ? 'neg' : after < room * 0.5 ? 'warnc' : 'pos'}`}>{after.toFixed(2)} USDC</dd></div>
             </dl>
             <p className="confirm-foot">Nothing is sent until you confirm in your wallet. Below the line, anyone can close the position.</p>

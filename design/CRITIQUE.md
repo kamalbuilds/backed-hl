@@ -49,4 +49,10 @@ Ad-hoc strict critic (no product context, no grades): r22 6.0, r24 6.1, r26 6.5,
 | r45 | 7.6 | 6.8 | B / A | review/critic-r45.md |
 Plateau 7.3-7.8 over 12 canonical rounds; the critic's top fixes alternate between rounds. Score bar 8.0 not reached.
 
+| r46 | 7.2 | 6.0 | B / B | review/critic-r46.md (owner brief v4: order summary, states; found pct-unit and partial-scenario bugs, fixed in r47) |
+
 FINAL: 7.6 min=6.8 round=45 critic=design-review review=/Users/kamal/Desktop/solana/cwf/hyperliquid/projects/backed/web/docs/design/review/critic-r45.md
+
+## OVERRIDE (Oct 12 2026, 7:15 AM IST): shipped below the score bar, approved by kamal
+Last critic score: 7.6 avg, 6.8 min (r45; r46 was 7.2/6.0 before its two data bugs were fixed). Gate bar is 8.0 avg and 7 per axis; every other gate item passes (slop-check source + rendered, uicraft gate, banned grep, fresh shots, grades A/B).
+Reason: 13 canonical critic rounds plateaued at 7.2-7.8 with top fixes alternating between rounds; owner approved shipping at the current score to replace the live document-style build. Deployed with wrangler directly (predeploy gate bypassed for this release only).

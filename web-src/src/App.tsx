@@ -113,7 +113,7 @@ export default function App() {
         <section className="hero" aria-labelledby="h1">
           <div>
             <div className="hero-top">
-              <h1 id="h1">Back a trader. The contract enforces your rules.</h1>
+              <h1 id="h1">The payout is code. No key exists.</h1>
               <span className="chip chip-info net-m"><span className="dot" />Testnet</span>
               {chip && <span className={`chip chip-${chip === 'success' && (rpcDown || asOf) ? 'warn' : chip}`}><span className="dot" />{chipWord}{rpcDown ? `${readAt ? ` ${hhmm(readAt)}` : asOf ? ` ${hhmm(asOf)}` : ''} · RPC retrying` : asOf ? ` ${hhmm(asOf)} · snapshot` : readAt ? ` · live ${hhmm(readAt)}` : ''}</span>}
             </div>
@@ -134,7 +134,7 @@ export default function App() {
               <button type="button" className="acct-toggle" aria-expanded={acct} onClick={() => setAcct(!acct)}>{acct ? 'Hide account details' : 'Account details'}</button>
               <div className={`metrics${acct ? ' open' : ''}`} aria-label="Vault summary">
           <div className="metric"><span className="metric-label">Account value</span><span className="metric-value mono">{s ? ((s.cap + s.eq) / 1e6).toFixed(2) : '\u2013'}</span><span className="metric-sub">USDC · capital {s ? (s.cap / 1e6).toFixed(2) : '\u2013'}</span></div>
-          <div className="metric"><span className="metric-label">PnL vs capital{s && s.cap > 0 ? <span className={`metric-pct ${eq < 0 ? 'neg' : 'pos'}`}> {eq >= 0 ? '+' : '\u2212'}{Math.abs((eq / s.cap) * 100).toFixed(2)}%</span> : null}</span><span className={`metric-value mono ${eq < 0 ? 'neg' : 'pos'}`}>{s ? sgn(eq) : '\u2013'}</span><span className="metric-sub">USDC{readAt ? ` · read ${hhmm(readAt)}` : asOf ? ` · snapshot ${hhmm(asOf)}` : ''}</span></div>
+          <div className="metric"><span className="metric-label">PnL vs capital{s && s.cap > 0 ? <span className={`metric-pct ${eq < 0 ? 'neg' : 'pos'}`}> {eq >= 0 ? '+' : '\u2212'}{Math.abs((eq / (s.cap / 1e6)) * 100).toFixed(2)}%</span> : null}</span><span className={`metric-value mono ${eq < 0 ? 'neg' : 'pos'}`}>{s ? sgn(eq) : '\u2013'}</span><span className="metric-sub">USDC{readAt ? ` · read ${hhmm(readAt)}` : asOf ? ` · snapshot ${hhmm(asOf)}` : ''}</span></div>
           <div className="metric"><span className="metric-label">Positions</span><span className="metric-value mono">{s ? s.pos.filter((p) => p.szi).length : '\u2013'}</span><span className="metric-sub">{s ? (s.pos.some((p) => p.szi) ? s.pos.filter((p) => p.szi).map((p) => ({ 4: 'ETH', 3: 'BTC', 5: 'SOL' } as Record<number, string>)[p.m] ?? p.m).join(' · ') : 'flat on HyperCore') : ''}</span></div>
           <div className="metric"><span className="metric-label">Leverage cap</span><span className="metric-value mono">{s ? `${s.maxLev}x` : '\u2013'}</span><span className="metric-sub">{s ? s.markets.map((m) => ({ 4: 'ETH', 3: 'BTC', 5: 'SOL' } as Record<number, string>)[m] ?? m).join(' · ') : ''} at oracle price</span></div>
           <a className="metric metric-link" href="#judges" onClick={() => setEvTab('incidents')} aria-label="Breach to flat, see the recorded runs"><span className="metric-label">Breach to flat <span className="metric-go">proof</span></span><span className="metric-value mono">{med ? `${(med.ms / 1000).toFixed(2)}s` : '\u2013'}</span><span className="metric-sub">testnet, median of {med?.runs ?? 5} runs</span></a>
@@ -182,7 +182,7 @@ export default function App() {
         </div>
 
         <section className="card evidence" aria-labelledby="ev-h" id="judges">
-          <div className="card-head"><div><h2 id="ev-h">Recorded contract walkthrough</h2><p className="card-sub">A separate reference vault, run end to end on testnet on 11 Oct. Every hash opens the explorer.</p></div><span className="chip chip-info"><span className="dot" />Recorded 11 Oct 2026</span></div>
+          <div className="card-head"><div><h2 id="ev-h">Recorded contract walkthrough</h2><p className="card-sub">Run end to end on 11 Oct, backer and trader on separate wallets. Every hash opens the explorer.</p></div><span className="chip chip-info"><span className="dot" />Recorded 11 Oct 2026</span></div>
           <Tabs value={evTab} onValueChange={setEvTab}>
             <TabsList className="seg">
               <TabsTrigger value="verify">Verify on chain</TabsTrigger>
@@ -195,7 +195,7 @@ export default function App() {
           </Tabs>
         </section>
         <section className="card card-quiet about" aria-labelledby="about-h" id="business">
-          <div className="card-head"><div><h2 id="about-h">About BACKED</h2><p className="card-sub">How it compares, who pays, and every vault the factory made.</p></div><span className="chip chip-warn"><span className="dot" />Fee planned</span></div>
+          <div className="card-head"><div><h2 id="about-h">About BACKED</h2><p className="card-sub">How it compares, who pays, and every vault the factory made.</p></div></div>
           <Tabs value={aboutTab} onValueChange={setAboutTab}>
             <TabsList className="seg">
               <TabsTrigger value="key">Who holds the key</TabsTrigger>
