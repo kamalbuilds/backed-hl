@@ -40,7 +40,7 @@ export function Judges({ factory }: { factory: string }) {
         <li><span className="step-n">7</span><span className="run-what"><strong>Backer tightens the daily limit</strong><span>&ldquo;daily tightened&rdquo;</span></span><span className="run-tx"><Tx hash={E2E.daily} /></span><span className="chip chip-danger"><span className="dot" />Reverted</span></li>
         <li><span className="step-n">8</span><span className="run-what"><strong>Backer changes the capital</strong><span>&ldquo;rules locked&rdquo;</span></span><span className="run-tx"><Tx hash={E2E.capital} /></span><span className="chip chip-danger"><span className="dot" />Reverted</span></li>
         <li><span className="step-n">9</span><span className="run-what"><strong>Backer exit: stop, then flatten</strong><span>stop halts new orders, anyone flattens</span></span><span className="run-tx"><Tx hash={E2E.stop} /> <Tx hash={E2E.flatten} /></span><span className="chip chip-success"><span className="dot" />Flat</span></li>
-        <li><span className="step-n">10</span><span className="run-what"><strong>Settled from flat equity</strong><span>15.82 USDC to the backer; the trader share is 20% of profit</span></span><span className="run-tx"><Tx hash={E2E.settle} /></span><span className="chip chip-success"><span className="dot" />Mined</span></li>
+        <li><span className="step-n">10</span><span className="run-what"><strong>Paid out from flat equity</strong><span>15.82 USDC to the backer; the trader share is 20% of profit</span></span><span className="run-tx"><Tx hash={E2E.settle} /></span><span className="chip chip-success"><span className="dot" />Mined</span></li>
       </ol>
       </details>
       <details className="proof-more">
