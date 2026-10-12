@@ -11,7 +11,8 @@
     "data": "node ../../scripts/snapshot.mjs; node scripts/bundle-data.mjs",
     "gate": "bash /Users/kamal/Desktop/solana/cwf/docs/design/cwf-ui-gate.sh .. src",
     "predeploy": "npm run build && npm run gate",
-    "deploy": "wrangler pages deploy dist --project-name backed --branch main --commit-dirty=true"
+    "deploy": "wrangler pages deploy dist --project-name backed --branch main --commit-dirty=true",
+    "test:overlap": "node e2e/overlap.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",

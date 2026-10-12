@@ -315,7 +315,7 @@ body { background: var(--canvas); color: var(--ink); font: 400 14px/1.5 var(--fo
 .mono, code, .tx, .num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 a { color: var(--ink-muted); text-decoration: none; }
 a:hover { color: var(--ink); }
-.topbar { position: sticky; top: 0; z-index: 20; background: rgba(8,9,10,.86); border-bottom: 1px solid var(--hairline); }
+.topbar { position: sticky; top: 0; z-index: 20; background: var(--canvas); border-bottom: 1px solid var(--hairline); }
 .topbar-in { max-width: 1320px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; gap: 12px; }
 .word { display: inline-flex; align-items: center; gap: 8px; font: 600 15px/1 var(--font-sans); letter-spacing: -0.01em; margin-right: 4px; }
 .word-mark { width: 18px; height: 18px; border-radius: var(--radius-s); background: var(--accent-1); box-shadow: inset 0 -6px 0 rgba(0,0,0,.25); }

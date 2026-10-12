@@ -27,7 +27,7 @@ export function Equity({ readAt, fills, eq, floor, loaded, failed, bounties }: {
   if (!fills.length) return <div ref={ref} className="chart-wrap"><p className="chart-state">No fills on this vault yet. The line appears after the first trade.</p></div>
 
   const narrow = W < 560
-  const H = narrow ? 220 : 260, L = 56, R = narrow ? 76 : 120, T = 20, B = 34
+  const H = narrow ? 220 : 260, L = 56, R = narrow ? 76 : 120, T = 30, B = 34
   let cum = 0
   const pts = fills.map((f) => { const p = Number(f.closedPnl) - Number(f.fee); cum += p; return { t: f.time, v: cum, f, p } })
   const t0 = pts[0].t - 30000, t1 = pts[pts.length - 1].t + 30000
@@ -38,12 +38,16 @@ export function Equity({ readAt, fills, eq, floor, loaded, failed, bounties }: {
   const d = path.map((p, i) => (i ? `H${x(p.t).toFixed(1)}V${y(p.v).toFixed(1)}` : `M${x(p.t).toFixed(1)},${y(p.v).toFixed(1)}`)).join('')
   const area = `${d}H${x(t1).toFixed(1)}V${y(0).toFixed(1)}H${x(t0).toFixed(1)}Z`
   const yt = ticks(lo, hi, narrow ? 4 : 5)
-  const xt = Array.from({ length: narrow ? 3 : 5 }, (_, i) => t0 + ((t1 - t0) * i) / ((narrow ? 3 : 5) - 1))
+  const multiDay0 = dm(t0) !== dm(t1), nT = narrow ? 2 : W < 900 && multiDay0 ? 3 : 5
+  const xt = Array.from({ length: nT }, (_, i) => t0 + ((t1 - t0) * i) / (nT - 1))
   const multiDay = dm(t0) !== dm(t1)
   const low = pts.reduce((a, b) => (b.v < a.v ? b : a))
   const worst = pts.reduce((a, b) => (b.p < a.p ? b : a))
   const nx = W - R + 22
   const lowEnd = x(low.t) > W - R - 90
+  const fixedY = [y(0) - 7, y(floor) - 7], nearLeft = x(low.t) < L + 200
+  const clear = (yy: number) => !nearLeft || fixedY.every((f) => Math.abs(yy - f) > 16)
+  const lowY = [y(low.v) + 20, y(low.v) - 10, y(low.v) + 34, y(low.v) - 24].find(clear) ?? y(low.v) + 20
   const gap = eq - cum
   const h = hov != null ? pts[hov] : null
 
@@ -70,7 +74,7 @@ export function Equity({ readAt, fills, eq, floor, loaded, failed, bounties }: {
         ))}
         <line className="axis" x1={L} x2={L} y1={T} y2={H - B} />
         <line className="axis" x1={L} x2={W - R} y1={H - B} y2={H - B} />
-        <text className="ax ax-title" x={12} y={T - 6}>USDC</text>
+        <text className="ax ax-title" x={12} y={T - 16}>USDC</text>
         <path className="area" d={area} />
         <line className="zero" x1={L} x2={W - R} y1={y(0)} y2={y(0)} />
         <text className="lbl" x={L + 8} y={y(0) - 7}>starting capital, PnL 0</text>
@@ -78,7 +82,7 @@ export function Equity({ readAt, fills, eq, floor, loaded, failed, bounties }: {
         <text className="lbl lbl-alarm" x={L + 8} y={y(floor) - 7}>backer&rsquo;s line {sgn(floor)}</text>
         <path className="step" d={d} />
         {pts.map((p, i) => <circle key={i} className="fill-dot" cx={x(p.t)} cy={y(p.v)} r={2} />)}
-        <g className="anno"><circle cx={x(low.t)} cy={y(low.v)} r={4} /><text x={lowEnd ? x(low.t) - 10 : x(low.t)} y={lowEnd ? y(low.v) + 18 : y(low.v) + 20} textAnchor={lowEnd ? 'end' : 'middle'}>low {sgn(low.v)}</text></g>
+        <g className="anno"><circle cx={x(low.t)} cy={y(low.v)} r={4} /><text x={lowEnd ? x(low.t) - 10 : x(low.t)} y={lowY} textAnchor={lowEnd ? 'end' : 'middle'}>low {sgn(low.v)}</text></g>
         {worst.p < -0.05 && worst !== low && <g className="anno anno-loss"><circle cx={x(worst.t)} cy={y(worst.v)} r={4} /><text x={x(worst.t)} y={y(worst.v) - 10} textAnchor="middle">worst fill {sgn(worst.p)}</text></g>}
         <line className="readline" x1={W - R + 8} x2={W - R + 8} y1={T} y2={H - B} />
         {Math.abs(gap) > 0.05 && <line className="gapline" x1={nx} x2={nx} y1={y(cum)} y2={y(eq)} />}

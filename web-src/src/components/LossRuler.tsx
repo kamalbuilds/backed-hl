@@ -2,9 +2,10 @@
 import { sgn } from '@/lib/backed'
 
 export function LossRuler({ eq, floor, flash }: { eq: number; floor: number; flash: boolean }) {
-  const lo = Math.floor(Math.min(floor, eq) - 1), hi = Math.ceil(Math.max(1, eq + 0.5))
+  const span0 = Math.max(1, eq + 0.5) - (Math.min(floor, eq) - 1)
+  const step = [0.5, 1, 2, 5, 10, 20, 50, 100].find((x) => span0 / x <= 6) ?? 200
+  const lo = Math.floor((Math.min(floor, eq) - step / 2) / step) * step, hi = Math.ceil(Math.max(1, eq + step / 2) / step) * step
   const pct = (x: number) => ((x - lo) / (hi - lo)) * 100
-  const step = hi - lo > 6 ? 1 : 0.5
   const ticks: number[] = []
   for (let v = lo; v <= hi + 1e-9; v += step) ticks.push(Math.round(v * 100) / 100)
   const below = eq < floor
@@ -15,7 +16,7 @@ export function LossRuler({ eq, floor, flash }: { eq: number; floor: number; fla
       aria-valuemin={lo} aria-valuemax={hi} aria-valuenow={Number(eq.toFixed(2))}
     >
       <div className="ruler-track">
-        <div className="ruler-grad" aria-hidden="true">{Array.from({ length: Math.round((hi - lo) * 10) + 1 }, (_, i) => <i key={i} className={i % 10 === 0 ? 'g-major' : i % 5 === 0 ? 'g-mid' : ''} style={{ left: `${(i / ((hi - lo) * 10)) * 100}%` }} />)}</div>
+        <div className="ruler-grad" aria-hidden="true">{Array.from({ length: Math.round(((hi - lo) / step) * 10) + 1 }, (_, i) => <i key={i} className={i % 10 === 0 ? 'g-major' : i % 5 === 0 ? 'g-mid' : ''} style={{ left: `${(i / (((hi - lo) / step) * 10)) * 100}%` }} />)}</div>
         <div className="ruler-dead" style={{ width: `${pct(floor)}%` }} />
         <div className="ruler-line" style={{ left: `${pct(floor)}%` }}>
           <span className="ruler-line-label">backer&rsquo;s line {sgn(floor)}</span>
@@ -30,7 +31,7 @@ export function LossRuler({ eq, floor, flash }: { eq: number; floor: number; fla
       </div>
       <div className="ruler-ticks" aria-hidden="true">
         {ticks.map((t) => (
-          <span key={t} style={{ left: `${pct(t)}%` }} className={Number.isInteger(t) ? 'major' : ''}>
+          <span key={t} style={{ left: `${pct(t)}%` }} className={Number.isInteger(Math.round(((t - lo) / step) * 1e6) / 1e6) && (step >= 1 || Number.isInteger(t)) ? 'major' : ''}>
             {Number.isInteger(t) ? (t === 0 ? '0' : sgn(t).replace('.00', '')) : ''}
           </span>
         ))}
